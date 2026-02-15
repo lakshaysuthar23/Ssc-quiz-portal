@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSC Hot Seat - Delhi Sultanate</title>
+    <title>SSC Hot Seat: Delhi Sultanate Marathon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
@@ -14,41 +14,51 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
 
+    <!-- APP CONTAINER -->
     <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-auto md:max-h-[90vh]">
         
+        <!-- HEADER -->
         <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
             <div class="flex flex-col">
                 <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
-                <span class="text-xs text-slate-400">Delhi Sultanate • SSC</span>
+                <span class="text-xs text-slate-400">Delhi Sultanate • 75 Qs</span>
             </div>
             <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
                 ⏱️ <span id="timer">25</span>s
             </div>
         </div>
 
+        <!-- VIEW 1: START SCREEN -->
         <div id="start-view" class="h-full overflow-y-auto flex flex-col">
             <div class="p-8 flex flex-col items-center text-center shrink-0">
                 <div class="text-5xl mb-4">🏰</div>
-                <h1 class="text-2xl font-bold text-slate-800 mb-2">Delhi Sultanate Mock</h1>
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Delhi-Sultanate Marathon</h1>
                 <p class="text-slate-500 mb-6 text-sm">
-                    5 Questions • 25s per Q<br>
+                    75 Questions • 25s per Q<br>
                     <span class="text-green-600 font-bold">+1.0 Correct</span> • <span class="text-red-500 font-bold">-0.25 Wrong</span>
                 </p>
-                <input type="text" id="username" placeholder="Enter name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500">
-                <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg">Start Challenge</button>
+                
+                <input type="text" id="username" placeholder="Enter your name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-center font-bold text-slate-700">
+                
+                <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">
+                    Start Challenge
+                </button>
             </div>
+
             <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Leaderboard</h3>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Session Leaderboard</h3>
                 <div id="start-leaderboard-list" class="space-y-2">
                     <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
                 </div>
             </div>
         </div>
 
+        <!-- VIEW 2: QUIZ CONTENT -->
         <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
             <div class="w-full bg-slate-100 h-2 rounded-full mb-6 shrink-0">
                 <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -57,41 +67,130 @@
             <div id="options-container" class="space-y-3 pb-4"></div>
         </div>
 
+        <!-- VIEW 3: RESULT -->
         <div id="result-view" class="hidden flex-col h-full">
             <div class="p-8 text-center shrink-0 overflow-y-auto">
                 <div class="text-6xl mb-4">🏆</div>
-                <h2 class="text-xl font-bold text-slate-800 mb-1">Submitted!</h2>
-                <p class="text-slate-500 text-sm mb-6" id="result-name"></p>
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Submitted!</h2>
+                <p class="text-slate-500 text-sm mb-6" id="result-name">Well done</p>
+                
                 <div class="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
+                    <div class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Total Score</div>
                     <div id="final-score" class="text-5xl font-black text-blue-600 mb-2">0</div>
                     <div class="flex justify-center gap-4 text-xs font-bold">
                         <span class="text-green-600">✅ <span id="correct-count">0</span></span>
                         <span class="text-red-500">❌ <span id="wrong-count">0</span></span>
+                        <span class="text-slate-400">⚪ <span id="skip-count">0</span></span>
                     </div>
                 </div>
+
                 <div class="space-y-3">
-                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 text-slate-700 font-bold py-3 rounded-xl">Review Solutions</button>
-                    <button onclick="resetApp()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">Back to Home</button>
+                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3 rounded-xl transition-colors">
+                        📄 Review Solutions
+                    </button>
+                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors">
+                        🔄 End Test / Back to Home
+                    </button>
                 </div>
             </div>
         </div>
 
+        <!-- VIEW 4: REVIEW -->
         <div id="review-view" class="hidden flex-col h-full bg-slate-50">
             <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center shrink-0">
                 <h3 class="font-bold text-slate-700">Attempt History</h3>
-                <button onclick="closeReview()" class="text-sm text-blue-600 font-bold">Close</button>
+                <button onclick="closeReview()" class="text-sm text-blue-600 font-bold hover:underline">Close</button>
             </div>
             <div id="review-container" class="flex-1 p-4 overflow-y-auto space-y-4"></div>
         </div>
+
     </div>
 
     <script>
         const QUESTIONS = [
-            { q: "Who was the founder of the Slave (Mamluk) dynasty?", opts: ["Iltutmish", "Qutubuddin Aibak", "Balban", "Razia Sultan"], ans: 1 },
-            { q: "Which Sultan introduced the 'Market Control Policy'?", opts: ["Jalaluddin Khalji", "Alauddin Khalji", "Ghiyasuddin Tughlaq", "Firoz Shah Tughlaq"], ans: 1 },
-            { q: "Who was the first woman ruler of Delhi?", opts: ["Chand Bibi", "Nur Jahan", "Razia Sultan", "Mumtaz Mahal"], ans: 2 },
-            { q: "The 'Diwan-i-Kohi' (Agriculture dept) was established by:", opts: ["Firoz Tughlaq", "Ghiyasuddin Tughlaq", "Muhammad bin Tughlaq", "Alauddin Khalji"], ans: 2 },
-            { q: "Which Sultan shifted the capital from Delhi to Daulatabad?", opts: ["Ibrahim Lodi", "Sikandar Lodi", "Muhammad bin Tughlaq", "Balban"], ans: 2 }
+            // SLAVE DYNASTY
+            { q: "Who founded the Slave Dynasty?", opts: ["Iltutmish", "Qutb-ud-din Aibak", "Balban", "Razia Sultan"], ans: 1 },
+            { q: "Who was the first Sultan to make Delhi his capital?", opts: ["Qutb-ud-din Aibak", "Iltutmish", "Balban", "Alauddin Khalji"], ans: 1 },
+            { q: "Who completed the construction of Qutub Minar?", opts: ["Qutb-ud-din Aibak", "Iltutmish", "Firoz Shah Tughlaq", "Balban"], ans: 1 },
+            { q: "Who introduced the 'Iqta' system?", opts: ["Iltutmish", "Balban", "Alauddin Khalji", "Muhammad bin Tughlaq"], ans: 0 },
+            { q: "Who created the group of 40 nobles known as 'Turkan-i-Chahalgani'?", opts: ["Qutb-ud-din Aibak", "Iltutmish", "Balban", "Razia Sultan"], ans: 1 },
+            { q: "Who was the first and only female ruler of Medieval India?", opts: ["Chand Bibi", "Durgavati", "Razia Sultan", "Nur Jahan"], ans: 2 },
+            { q: "Who destroyed the 'Chahalgani'?", opts: ["Iltutmish", "Razia Sultan", "Balban", "Alauddin Khalji"], ans: 2 },
+            { q: "Who introduced the Persian festival 'Nauroz' in India?", opts: ["Balban", "Iltutmish", "Firoz Tughlaq", "Alauddin Khalji"], ans: 0 },
+            { q: "Who introduced 'Sijda' (Prostration) and 'Paibos' (Kissing feet)?", opts: ["Iltutmish", "Balban", "Alauddin Khalji", "Muhammad bin Tughlaq"], ans: 1 },
+            { q: "Which Sultan assumed the title of 'Zil-i-Ilahi' (Shadow of God)?", opts: ["Iltutmish", "Balban", "Alauddin Khalji", "Sikandar Lodi"], ans: 1 },
+            { q: "Who was known as 'Lakh Baksh'?", opts: ["Qutb-ud-din Aibak", "Iltutmish", "Balban", "Firoz Tughlaq"], ans: 0 },
+            { q: "Who died while playing Chaugan (Polo)?", opts: ["Qutb-ud-din Aibak", "Ghiyasuddin Tughlaq", "Iltutmish", "Alauddin Khalji"], ans: 0 },
+            { q: "The Silver coin 'Tanka' and Copper coin 'Jital' were introduced by:", opts: ["Qutb-ud-din Aibak", "Iltutmish", "Balban", "Alauddin Khalji"], ans: 1 },
+            { q: "Who was the last ruler of the Slave Dynasty?", opts: ["Kaiqubad", "Balban", "Nasiruddin Mahmud", "Iltutmish"], ans: 0 },
+            
+            // KHALJI DYNASTY
+            { q: "Who founded the Khalji Dynasty?", opts: ["Alauddin Khalji", "Jalaluddin Khalji", "Mubarak Shah", "Khusrau Shah"], ans: 1 },
+            { q: "Who introduced the 'Market Control Policy'?", opts: ["Jalaluddin Khalji", "Alauddin Khalji", "Balban", "Firoz Tughlaq"], ans: 1 },
+            { q: "Which Sultan called himself 'Sikandar-i-Sani' (Second Alexander)?", opts: ["Balban", "Alauddin Khalji", "Muhammad bin Tughlaq", "Sikandar Lodi"], ans: 1 },
+            { q: "Who was the first Sultan to have a standing army paid in cash?", opts: ["Iltutmish", "Balban", "Alauddin Khalji", "Firoz Tughlaq"], ans: 2 },
+            { q: "Who introduced 'Dagh' (branding of horses) and 'Chehra' (descriptive roll)?", opts: ["Balban", "Alauddin Khalji", "Sher Shah Suri", "Akbar"], ans: 1 },
+            { q: "Who was the general of Alauddin Khalji who conquered the Deccan?", opts: ["Zafar Khan", "Ulugh Khan", "Nusrat Khan", "Malik Kafur"], ans: 3 },
+            { q: "Who built the 'Alai Darwaza'?", opts: ["Iltutmish", "Alauddin Khalji", "Balban", "Firoz Tughlaq"], ans: 1 },
+            { q: "Who built the city of 'Siri'?", opts: ["Qutb-ud-din Aibak", "Alauddin Khalji", "Ghiyasuddin Tughlaq", "Firoz Tughlaq"], ans: 1 },
+            { q: "Which poet was known as the 'Parrot of India' (Tuti-e-Hind)?", opts: ["Alberuni", "Amir Khusrau", "Ibn Battuta", "Ziauddin Barani"], ans: 1 },
+            { q: "Amir Khusrau was a contemporary of which Sufi Saint?", opts: ["Moinuddin Chishti", "Nizamuddin Auliya", "Bakhtiyar Kaki", "Baba Farid"], ans: 1 },
+            { q: "Who was the ruler of Chittor when Alauddin attacked in 1303?", opts: ["Rana Sanga", "Rana Kumbha", "Ratan Singh", "Maharana Pratap"], ans: 2 },
+            
+            // TUGHLAQ DYNASTY
+            { q: "Who founded the Tughlaq Dynasty?", opts: ["Ghiyasuddin Tughlaq", "Muhammad bin Tughlaq", "Firoz Shah Tughlaq", "Nasiruddin Mahmud"], ans: 0 },
+            { q: "Who built the city of Tughlaqabad?", opts: ["Ghiyasuddin Tughlaq", "Muhammad bin Tughlaq", "Firoz Tughlaq", "Alauddin Khalji"], ans: 0 },
+            { q: "Which Sultan is known as the 'Wise Fool'?", opts: ["Ghiyasuddin Tughlaq", "Muhammad bin Tughlaq", "Firoz Tughlaq", "Sikandar Lodi"], ans: 1 },
+            { q: "Who shifted the capital from Delhi to Daulatabad (Devagiri)?", opts: ["Alauddin Khalji", "Muhammad bin Tughlaq", "Firoz Tughlaq", "Sikandar Lodi"], ans: 1 },
+            { q: "Who introduced the 'Token Currency' (Bronze/Copper coins)?", opts: ["Iltutmish", "Alauddin Khalji", "Muhammad bin Tughlaq", "Sher Shah Suri"], ans: 2 },
+            { q: "Who set up the department of agriculture 'Diwan-i-Kohi'?", opts: ["Alauddin Khalji", "Muhammad bin Tughlaq", "Firoz Tughlaq", "Balban"], ans: 1 },
+            { q: "Ibn Battuta, the Moroccan traveler, visited India during whose reign?", opts: ["Alauddin Khalji", "Muhammad bin Tughlaq", "Firoz Tughlaq", "Sikandar Lodi"], ans: 1 },
+            { q: "Who wrote the book 'Kitab-ul-Rihla'?", opts: ["Alberuni", "Amir Khusrau", "Ibn Battuta", "Ziauddin Barani"], ans: 2 },
+            { q: "Who founded the cities of Firozabad, Hissar, Jaunpur, and Fatehabad?", opts: ["Ghiyasuddin Tughlaq", "Muhammad bin Tughlaq", "Firoz Shah Tughlaq", "Sikandar Lodi"], ans: 2 },
+            { q: "Who established the department of charity 'Diwan-i-Khairat'?", opts: ["Iltutmish", "Firoz Shah Tughlaq", "Alauddin Khalji", "Sikandar Lodi"], ans: 1 },
+            { q: "Who established the department of slaves 'Diwan-i-Bandagan'?", opts: ["Balban", "Alauddin Khalji", "Firoz Shah Tughlaq", "Sikandar Lodi"], ans: 2 },
+            { q: "Who brought two Ashokan pillars from Topra and Meerut to Delhi?", opts: ["Alauddin Khalji", "Firoz Shah Tughlaq", "Muhammad bin Tughlaq", "Sikandar Lodi"], ans: 1 },
+            { q: "Who imposed 'Jizya' on Brahmins?", opts: ["Alauddin Khalji", "Firoz Shah Tughlaq", "Aurangzeb", "Sikandar Lodi"], ans: 1 },
+            { q: "During whose reign did Timur invade India (1398)?", opts: ["Firoz Shah Tughlaq", "Nasiruddin Mahmud Tughlaq", "Khizr Khan", "Bahlul Lodi"], ans: 1 },
+            
+            // SAYYID & LODI DYNASTIES
+            { q: "Who founded the Sayyid Dynasty?", opts: ["Khizr Khan", "Mubarak Shah", "Muhammad Shah", "Alam Shah"], ans: 0 },
+            { q: "Who founded the Lodi Dynasty?", opts: ["Bahlul Lodi", "Sikandar Lodi", "Ibrahim Lodi", "Daulat Khan Lodi"], ans: 0 },
+            { q: "Who founded the city of Agra in 1504?", opts: ["Bahlul Lodi", "Sikandar Lodi", "Ibrahim Lodi", "Akbar"], ans: 1 },
+            { q: "Who introduced 'Gaz-i-Sikandari' for measuring land?", opts: ["Alauddin Khalji", "Sikandar Lodi", "Sher Shah Suri", "Akbar"], ans: 1 },
+            { q: "Who was the last ruler of the Delhi Sultanate?", opts: ["Sikandar Lodi", "Ibrahim Lodi", "Bahlul Lodi", "Daulat Khan Lodi"], ans: 1 },
+            { q: "When was the First Battle of Panipat fought?", opts: ["1526", "1556", "1761", "1527"], ans: 0 },
+            { q: "Who defeated Ibrahim Lodi in the First Battle of Panipat?", opts: ["Rana Sanga", "Babur", "Humayun", "Sher Shah Suri"], ans: 1 },
+            { q: "The Lodi dynasty belonged to which ethnicity?", opts: ["Turks", "Afghans", "Mongols", "Arabs"], ans: 1 },
+            { q: "Who wrote 'Tarikh-i-Firoz Shahi'?", opts: ["Amir Khusrau", "Ziauddin Barani", "Ibn Battuta", "Minhaj-us-Siraj"], ans: 1 },
+            { q: "Who wrote 'Tabaqat-i-Nasiri'?", opts: ["Minhaj-us-Siraj", "Ziauddin Barani", "Amir Khusrau", "Alberuni"], ans: 0 },
+            
+            // ADMINISTRATION & TERMS
+            { q: "What was 'Diwan-i-Wizarat'?", opts: ["Military Dept", "Revenue & Finance Dept", "Foreign Affairs", "Royal Correspondence"], ans: 1 },
+            { q: "What was 'Diwan-i-Arz'?", opts: ["Finance Dept", "Military Dept", "Religious Dept", "Royal Household"], ans: 1 },
+            { q: "Who headed the 'Diwan-i-Arz'?", opts: ["Wazir", "Ariz-i-Mumalik", "Qazi-ul-Quzat", "Dabir-i-Mumalik"], ans: 1 },
+            { q: "What was 'Diwan-i-Insha'?", opts: ["Royal Correspondence", "Military Dept", "Agriculture Dept", "Charity Dept"], ans: 0 },
+            { q: "What was 'Diwan-i-Risalat'?", opts: ["Foreign/Religious Affairs", "Military", "Finance", "Justice"], ans: 0 },
+            { q: "What was 'Kharaj'?", opts: ["Land Tax", "Religious Tax", "War Booty", "House Tax"], ans: 0 },
+            { q: "What was 'Khums'?", opts: ["Land Tax", "War Booty", "Religious Tax", "Trade Tax"], ans: 1 },
+            { q: "What was 'Zakat'?", opts: ["Tax on Non-Muslims", "Religious Tax on Muslims", "Land Tax", "Irrigation Tax"], ans: 1 },
+            { q: "Who collected revenue at the village level?", opts: ["Muqti", "Chaudhary/Muqaddam", "Wazir", "Kotwal"], ans: 1 },
+            { q: "The term 'Sondhar' refers to:", opts: ["Agricultural Loans", "Military Rank", "Gold Coin", "Market Tax"], ans: 0 },
+            { q: "Who introduced the 'Hazar Sutun' (Palace of Thousand Pillars)?", opts: ["Alauddin Khalji", "Iltutmish", "Balban", "Firoz Tughlaq"], ans: 0 },
+            { q: "The 'Qutub Minar' was named after:", opts: ["Qutb-ud-din Aibak", "Qutbuddin Bakhtiyar Kaki", "Prophet Muhammad", "None"], ans: 1 },
+            { q: "Who added the fifth storey to Qutub Minar?", opts: ["Iltutmish", "Alauddin Khalji", "Firoz Shah Tughlaq", "Sikandar Lodi"], ans: 2 },
+            { q: "Who built the 'Adhai Din Ka Jhonpra' at Ajmer?", opts: ["Qutb-ud-din Aibak", "Iltutmish", "Alauddin Khalji", "Balban"], ans: 0 },
+            { q: "Who built the 'Hauz Khas'?", opts: ["Iltutmish", "Alauddin Khalji", "Firoz Tughlaq", "Sikandar Lodi"], ans: 1 },
+            { q: "Which Sultan destroyed the Jagannath Temple at Puri?", opts: ["Alauddin Khalji", "Firoz Shah Tughlaq", "Sikandar Lodi", "Aurangzeb"], ans: 1 },
+            { q: "Who wrote 'Padmavat'?", opts: ["Amir Khusrau", "Malik Muhammad Jayasi", "Abul Fazl", "Chand Bardai"], ans: 1 },
+            { q: "Who wrote 'Kitab-ul-Hind'?", opts: ["Ibn Battuta", "Alberuni", "Amir Khusrau", "Barani"], ans: 1 },
+            { q: "Who was known as the 'Prince of Moneyers'?", opts: ["Alauddin Khalji", "Muhammad bin Tughlaq", "Sher Shah Suri", "Akbar"], ans: 1 },
+            { q: "The Vijayanagara Empire was founded during the reign of:", opts: ["Alauddin Khalji", "Muhammad bin Tughlaq", "Firoz Tughlaq", "Sikandar Lodi"], ans: 1 },
+            { q: "The Bahmani Kingdom was founded during the reign of:", opts: ["Alauddin Khalji", "Muhammad bin Tughlaq", "Firoz Tughlaq", "Bahlul Lodi"], ans: 1 },
+            { q: "Who was the first Sultan to assume the title of 'Ghazi'?", opts: ["Ghiyasuddin Tughlaq", "Alauddin Khalji", "Balban", "Iltutmish"], ans: 0 },
+            { q: "Who abolished the 'Zakat' on grain?", opts: ["Alauddin Khalji", "Sikandar Lodi", "Firoz Tughlaq", "Bahlul Lodi"], ans: 1 },
+            { q: "Who was the 'Kotwal' of Delhi under Alauddin Khalji?", opts: ["Malik Kafur", "Ala-ul-Mulk", "Zafar Khan", "Ulugh Khan"], ans: 1 },
+            { q: "Which Sultanate ruler was killed by the collapse of a wooden pavilion?", opts: ["Qutb-ud-din Aibak", "Ghiyasuddin Tughlaq", "Jalaluddin Khalji", "Nasiruddin Mahmud"], ans: 1 }
         ];
 
         let currentQ = 0, timeLeft = 25, timerId = null, nextQTimer = null, isAnswered = false, userName = "", userAnswers = [], leaderboard = [], attemptHistory = [], previousView = null;
@@ -122,63 +221,4 @@
             optsContainer.innerHTML = '';
             q.opts.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = userAnswers[currentQ] === idx ? "btn-option w-full p-4 rounded-xl text-left font-bold border-2 border-blue-500 bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-500 text-sm" : "btn-option w-full p-4 rounded-xl text-left font-medium border-2 border-slate-200 bg-white text-slate-700 text-sm hover:border-blue-300";
-                btn.innerText = opt; btn.onclick = () => { if(!isAnswered) handleAnswer(currentQ, idx); };
-                optsContainer.appendChild(btn);
-            });
-            isAnswered = false; startTimer();
-        }
-
-        function handleAnswer(qIdx, selectedIdx) {
-            isAnswered = true; clearInterval(timerId); userAnswers[qIdx] = selectedIdx; renderQuestion();
-            nextQTimer = setTimeout(() => { if (currentQ < QUESTIONS.length - 1) { currentQ++; renderQuestion(); } else { calculateAndShowResults(); } }, 500);
-        }
-
-        function calculateAndShowResults() {
-            views.quiz.classList.replace('flex', 'hidden'); header.classList.add('hidden'); views.result.classList.replace('hidden', 'flex');
-            let marks = 0, correct = 0, wrong = 0, skipped = 0; attemptHistory = [];
-            userAnswers.forEach((sel, idx) => {
-                const isCorrect = sel === QUESTIONS[idx].ans;
-                if (isCorrect) { marks += 1; correct++; } else if (sel === -1) { skipped++; } else { marks -= 0.25; wrong++; }
-                attemptHistory.push({ qIdx: idx, selectedOpt: sel, correctOpt: QUESTIONS[idx].ans, isCorrect });
-            });
-            document.getElementById('result-name').innerText = `Candidate: ${userName}`;
-            document.getElementById('final-score').innerText = marks.toFixed(2);
-            document.getElementById('correct-count').innerText = correct;
-            document.getElementById('wrong-count').innerText = wrong;
-            leaderboard.push({ name: userName, score: marks, history: JSON.parse(JSON.stringify(attemptHistory)) });
-            leaderboard.sort((a, b) => b.score - a.score); updateLeaderboardUI();
-        }
-
-        function updateLeaderboardUI() {
-            let html = '', rank = 1;
-            leaderboard.forEach((e, i) => {
-                if (i > 0 && e.score < leaderboard[i - 1].score) rank = i + 1;
-                let med = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
-                html += `<div onclick="openLeaderboardHistory(${i})" class="cursor-pointer group hover:bg-blue-50 transition-colors flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm"><div class="flex items-center gap-3"><div class="w-8 text-center text-lg font-bold text-slate-500">${med}</div><div class="flex flex-col"><span class="font-semibold text-slate-700 group-hover:text-blue-600">${e.name}</span><span class="text-[10px] text-slate-400">View History</span></div></div><span class="font-bold text-slate-800">${e.score.toFixed(2)}</span></div>`;
-            });
-            startLeaderboardList.innerHTML = html || '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
-        }
-
-        function openLeaderboardHistory(idx) { previousView = views.start; views.start.classList.add('hidden'); showReview(leaderboard[idx].history); }
-        function showReviewFromResults() { previousView = views.result; views.result.classList.replace('flex', 'hidden'); showReview(attemptHistory); }
-
-        function showReview(hist) {
-            views.review.classList.replace('hidden', 'flex');
-            const cont = document.getElementById('review-container'); cont.innerHTML = '';
-            hist.forEach((h, i) => {
-                const q = QUESTIONS[h.qIdx];
-                let badge = h.isCorrect ? '<span class="text-green-600 bg-green-100 px-2 py-0.5 rounded font-bold text-xs">Correct (+1)</span>' : h.selectedOpt === -1 ? '<span class="text-slate-500 bg-slate-100 px-2 py-0.5 rounded font-bold text-xs">Skipped</span>' : '<span class="text-red-500 bg-red-100 px-2 py-0.5 rounded font-bold text-xs">Wrong (-0.25)</span>';
-                let opts = ''; q.opts.forEach((o, idx) => {
-                    let s = idx === h.correctOpt ? "border-green-200 bg-green-50 text-green-800 font-bold" : idx === h.selectedOpt ? "border-red-200 bg-red-50 text-red-800 line-through" : "border-slate-100 text-slate-500";
-                    opts += `<div class="p-2 rounded border ${s}">${o} ${idx === h.correctOpt ? '✅' : idx === h.selectedOpt ? '❌' : ''}</div>`;
-                });
-                cont.innerHTML += `<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 text-sm shrink-0"><div class="flex justify-between mb-2"><span class="font-bold text-slate-700">Q${i+1}</span>${badge}</div><p class="font-medium mb-2">${q.q}</p><div class="space-y-1">${opts}</div></div>`;
-            });
-        }
-
-        function closeReview() { views.review.classList.replace('flex', 'hidden'); previousView.classList.replace('hidden', 'flex'); }
-        function resetApp() { clearInterval(timerId); clearTimeout(nextQTimer); nameInput.value = ""; views.result.classList.replace('flex', 'hidden'); views.review.classList.replace('flex', 'hidden'); views.start.classList.remove('hidden'); }
-    </script>
-</body>
-</html>
+                btn.className = userAnswers[currentQ] === idx ? "btn-option w-full p-4 rounded-xl text-left font-bold border-2 border-blue-500 bg
