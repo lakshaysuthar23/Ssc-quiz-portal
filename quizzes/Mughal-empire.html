@@ -3,30 +3,1530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mughal Empire Quiz</title>
+    <title>SSC Mughal Marathon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
+        .btn-option { transition: all 0.15s ease; border-width: 2px; }
+        .btn-option:active { transform: scale(0.99); }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 h-screen overflow-hidden">
+
+    <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-[90vh]">
+        
+        <!-- HEADER -->
+        <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
+            <div class="flex flex-col">
+                <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase" id="mode-display">RAPID FIRE</span>
+            </div>
+            <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
+                ⏱️ <span id="timer">20</span>s
+            </div>
+        </div>
+
+        <!-- VIEW 1: START SCREEN -->
+        <div id="start-view" class="h-full overflow-hidden flex flex-col">
+            <div class="p-8 flex flex-col items-center text-center shrink-0 overflow-y-auto">
+                <div class="text-5xl mb-4">🕌</div>
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Mughal Empire</h1>
+                <p class="text-slate-500 mb-6 text-sm">
+                    200Qs Marathon<br>
+                    <span class="text-green-600 font-bold">+1.0</span> • <span class="text-red-500 font-bold">-0.25</span>
+                </p>
+                <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors">
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">Continue</button>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1 overflow-y-auto min-h-0">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leaderboard</h3>
+                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR HISTORY</button>
+                </div>
+                <div id="start-leaderboard-list" class="space-y-2 pb-4">
+                    <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: MODE SELECTION -->
+        <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
+            <div class="p-8 flex flex-col items-center text-center shrink-0">
+                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
+                <div class="flex flex-col gap-4 w-full">
+                    <div onclick="startRapidFire()" class="cursor-pointer group p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-orange-900 flex items-center gap-2">🔥 Rapid Fire</div>
+                        <p class="text-xs text-orange-700 mt-1 font-medium">20s Timer • Auto-Skip</p>
+                    </div>
+                    <div onclick="startPractice()" class="cursor-pointer group p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-green-900 flex items-center gap-2">📚 Practice Mode</div>
+                        <p class="text-xs text-green-700 mt-1 font-medium">No Timer • Navigation</p>
+                    </div>
+                </div>
+                <button onclick="backToStart()" class="mt-8 text-slate-400 hover:text-slate-600 font-bold text-sm">← Back</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: QUIZ -->
+        <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
+            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-6 shrink-0 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="mb-6 shrink-0">
+                <h2 id="question-text" class="text-lg font-bold text-slate-800 leading-relaxed">Loading...</h2>
+                <div id="pyq-tag" class="inline-block mt-2 px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-mono text-slate-500 font-medium"></div>
+            </div>
+            <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-100 pt-4 mt-2 flex gap-3">
+                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50">← Prev</button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow-sm">Submit</button>
+                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50 shadow-sm">Next →</button>
+            </div>
+            <div id="question-indicator" class="hidden shrink-0 text-center text-[10px] text-slate-400 font-bold mt-3">
+                <span id="current-q-num">1</span> / <span id="total-q-num">50</span>
+            </div>
+        </div>
+
+        <!-- VIEW 4: RESULT -->
+        <div id="result-view" class="hidden flex-col h-full overflow-y-auto">
+            <div class="p-8 text-center shrink-0">
+                <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Completed</h2>
+                <p class="text-slate-500 text-sm mb-6 font-medium" id="result-name">Well done</p>
+                <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200">
+                    <div class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">FINAL SCORE</div>
+                    <div id="final-score" class="text-6xl font-black text-blue-600 leading-none mb-4 tracking-tight">0</div>
+                    <div class="flex justify-center gap-6 text-sm font-bold border-t border-slate-200 pt-4">
+                        <span class="text-green-600 flex items-center gap-1">✅ <span id="correct-count">0</span></span>
+                        <span class="text-red-500 flex items-center gap-1">❌ <span id="wrong-count">0</span></span>
+                        <span class="text-slate-400 flex items-center gap-1">⚪ <span id="skip-count">0</span></span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-xl transition-colors text-sm">📄 Review Solutions</button>
+                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-md shadow-blue-200">🔄 Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: REVIEW HISTORY -->
+        <div id="review-view" class="hidden flex-col h-full bg-slate-50">
+            <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center shrink-0 shadow-sm z-10">
+                <h3 class="font-bold text-slate-700 text-sm">History: <span id="review-player-name" class="text-blue-600"></span></h3>
+                <button onclick="closeReview()" class="text-blue-600 font-bold text-xs hover:underline bg-blue-50 px-3 py-1 rounded-full">CLOSE</button>
+            </div>
+            <div id="review-container" class="flex-1 p-4 overflow-y-auto min-h-0 space-y-4"></div>
+        </div>
+    </div>
+
     <script>
         const MASTER_DATA = [
-            { question: 'Who was the first Mughal emperor?', answer: 'Babur' },
-            { question: 'Which Mughal emperor built the Taj Mahal?', answer: 'Shah Jahan' },
-            { question: 'What was the capital of the Mughal Empire?', answer: 'Agra' }
+            // EARLY MUGHALS
+            { q: "In the Battle of Khanwa (1527), Babur assumed which title after his victory over Rana Sanga?", tag: "SSC CPO 2020", opts: ["Ghazi", "Qalandar", "Chhatrapati", "Sultan-i-Azam"], ansText: "Ghazi", why: "Babur declared the war a 'Jihad' and assumed the title 'Ghazi' (Slayer of Infidels) to boost the morale of his soldiers against the Rajput confederacy." },
+            { q: "Which Mughal Emperor wrote his autobiography in Chagatai Turkic, which was later translated into Persian by Abdul Rahim Khan-i-Khana?", tag: "SSC CGL 2021", opts: ["Akbar", "Babur", "Humayun", "Jahangir"], ansText: "Babur", why: "'Tuzuk-i-Baburi' (Baburnama) is considered one of the finest autobiographies. Jahangir also wrote his autobiography but in Persian." },
+            { q: "Who defeated Humayun in the Battle of Chausa (1539) and Kannauj (1540), forcing him into exile?", tag: "SSC CHSL 2019", opts: ["Sher Shah Suri", "Bahadur Shah of Gujarat", "Islam Shah", "Rana Sanga"], ansText: "Sher Shah Suri", why: "Sher Khan (Sher Shah) destroyed Mughal power temporarily. Humayun fled to Iran and only returned in 1555." },
+            { q: "The 'Second Battle of Panipat' (1556) was fought between the forces of Akbar (led by Bairam Khan) and:", tag: "SSC MTS 2021", opts: ["Hemu", "Sher Shah Suri", "Sikandar Suri", "Rana Pratap"], ansText: "Hemu", why: "Hemu (Hemchandra Vikramaditya) had captured Delhi. His defeat and execution marked the real beginning of Akbar's reign." },
+            
+            // AKBAR (ADMIN & POLICIES)
+            { q: "Which statement is NOT correct regarding the Mansabdari System?", tag: "SSC CGL Mains", opts: ["It was hereditary", "It had two ranks: Zat and Sawar", "Mansabdars were paid in cash or Jagir", "Introduced by Akbar"], ansText: "It was hereditary", why: "Mansabdari was NOT hereditary. The King appointed Mansabdars, and their property could be escheated (confiscated) by the state upon death." },
+            { q: "The 'Ibadat Khana' at Fatehpur Sikri was established by Akbar in 1575 for the purpose of:", tag: "SSC CGL 2022", opts: ["Royal Treasury", "Religious Debates", "Military Planning", "Harem"], ansText: "Religious Debates", why: "Initially only for Muslims, it was later opened to Hindus, Jains, Christians, and Zoroastrians, leading to the development of 'Sulh-i-Kul'." },
+            { q: "Who translated the 'Mahabharata' into Persian as 'Razmnama' (Book of War)?", tag: "SSC CGL 2020", opts: ["Abul Fazl", "Badauni", "Faizi", "Todar Mal"], ansText: "Badauni", why: "A team of scholars including Badauni, Naqib Khan, and Faizi translated it. Badauni did it reluctantly as he was an orthodox Muslim." },
+            { q: "Which Mughal Emperor abolished the 'Pilgrimage Tax' (1563) and 'Jizya' (1564)?", tag: "SSC CHSL 2021", opts: ["Akbar", "Shah Jahan", "Jahangir", "Aurangzeb"], ansText: "Akbar", why: "These steps were foundational to his policy of religious tolerance and winning Rajput loyalty." },
+            { q: "The land revenue system 'Zabti' or 'Bandobast' was associated with which minister?", tag: "SSC CPO 2019", opts: ["Raja Todar Mal", "Birbal", "Man Singh", "Tansen"], ansText: "Raja Todar Mal", why: "Todar Mal (Finance Minister) implemented the system based on survey and measurement. It is often called 'Todar Mal's Bandobast'." },
+            
+            // JAHANGIR & SHAH JAHAN
+            { q: "Which English ambassador obtained the 'Farman' to establish a factory at Surat from Jahangir in 1615?", tag: "SSC CGL 2022", opts: ["Sir Thomas Roe", "Captain William Hawkins", "Ralph Fitch", "Job Charnock"], ansText: "Sir Thomas Roe", why: "Hawkins arrived earlier (1608) but failed to get a firm treaty. Sir Thomas Roe, sent by James I, succeeded in getting trading rights." },
+            { q: "Who was given the title 'Nadir-ul-Asr' (Wonder of the Age) by Jahangir for his mastery in painting birds and animals?", tag: "SSC Selection Post", opts: ["Ustad Mansur", "Abul Hasan", "Bishandas", "Daswant"], ansText: "Ustad Mansur", why: "Mansur was famous for his detailed studies of nature, including the famous Dodo bird and Siberian Crane." },
+            { q: "Which Mughal prince translated the Upanishads into Persian as 'Sirr-i-Akbar'?", tag: "SSC JE 2020", opts: ["Dara Shikoh", "Murad Baksh", "Shah Shuja", "Aurangzeb"], ansText: "Dara Shikoh", why: "Dara Shikoh believed the Upanishads were the 'Kitab al-Maknun' (Hidden Book) mentioned in the Quran." },
+            { q: "The 'Peacock Throne' (Takht-i-Taus) was kept in which building of the Red Fort?", tag: "SSC CGL 2019", opts: ["Diwan-i-Khas", "Diwan-i-Aam", "Rang Mahal", "Moti Masjid"], ansText: "Diwan-i-Khas", why: "It was placed in the Hall of Private Audience. Nadir Shah looted it in 1739." },
+            
+            // AURANGZEB
+            { q: "Which Mughal Emperor re-imposed Jizya in 1679?", tag: "SSC MTS 2019", opts: ["Aurangzeb", "Shah Jahan", "Jahangir", "Bahadur Shah I"], ansText: "Aurangzeb", why: "Aurangzeb reversed Akbar's policy and re-imposed Jizya on non-Muslims to align the state with orthodox Sharia law." },
+            { q: "The 'Biwi ka Maqbara' at Aurangabad is a replica of the Taj Mahal. It was built by:", tag: "SSC CGL 2021", opts: ["Azam Shah", "Aurangzeb", "Akbar II", "Shah Alam II"], ansText: "Azam Shah", why: "Built by Prince Azam Shah in memory of his mother Dilras Banu Begum (Rabia-ud-Daurani), wife of Aurangzeb." },
+            { q: "Which Sikh Guru was executed by Aurangzeb in 1675 at Chandni Chowk?", tag: "SSC CGL 2020", opts: ["Guru Tegh Bahadur", "Guru Gobind Singh", "Guru Arjan Dev", "Guru Hargobind"], ansText: "Guru Tegh Bahadur", why: "He was martyred for protecting the rights of Kashmiri Brahmins. Gurudwara Sis Ganj Sahib marks the spot." },
+            
+            // LATER MUGHALS & DECLINE
+            { q: "Who was the Mughal Emperor during the invasion of Nadir Shah (1739)?", tag: "SSC CGL 2022", opts: ["Muhammad Shah", "Shah Alam II", "Farrukhsiyar", "Jahandar Shah"], ansText: "Muhammad Shah", why: "Muhammad Shah 'Rangeela' was defeated at the Battle of Karnal. Nadir Shah took the Peacock Throne and Kohinoor." },
+            { q: "Which Mughal Emperor gave the title of 'Raja' to Ram Mohan Roy?", tag: "SSC CHSL 2020", opts: ["Akbar II", "Bahadur Shah Zafar", "Shah Alam II", "Alamgir II"], ansText: "Akbar II", why: "Akbar II sent Ram Mohan Roy to England to plead for an increase in the Emperor's pension." },
+            { q: "The 'Battle of Buxar' (1764) was fought during the reign of which Mughal Emperor?", tag: "SSC CGL 2019", opts: ["Shah Alam II", "Alamgir II", "Akbar II", "Bahadur Shah Zafar"], ansText: "Shah Alam II", why: "Shah Alam II, along with Shuja-ud-Daula (Awadh) and Mir Qasim (Bengal), was defeated by the British (Hector Munro)." },
+            
+            // ADMINISTRATION & TERMS
+            { q: "In Mughal administration, 'Muhtasib' was the officer in charge of:", tag: "SSC CGL Tier-2", opts: ["Public Morals", "Military Pay", "Royal Household", "Intelligence"], ansText: "Public Morals", why: "Muhtasibs enforced Islamic moral codes and checked weights and measures in markets." },
+            { q: "The term 'Khalisa' in Mughal land revenue system referred to:", tag: "SSC CPO 2021", opts: ["Crown Lands", "Land given to nobles", "Religious grants", "Barren land"], ansText: "Crown Lands", why: "Revenue from Khalisa land went directly to the Royal Treasury, unlike Jagir lands assigned to officers." },
+            { q: "What was 'Dam' in the Mughal currency system?", tag: "SSC MTS 2021", opts: ["Copper Coin", "Silver Coin", "Gold Coin", "Revenue Unit"], ansText: "Copper Coin", why: "40 Dams equalled 1 Silver Rupee. It was the common currency for the masses." },
+            
+            // STATEMENT BASED (NEW PATTERN)
+            { q: "Which of the following statements about the 'Jagirdari Crisis' is correct?", tag: "SSC Conceptual", opts: ["Shortage of Paibaqi land", "Excess of Jagirs", "Decrease in Mansabdars", "None of these"], ansText: "Shortage of Paibaqi land", why: "In the late 17th century, there were too many Mansabdars waiting for Jagirs, but insufficient 'Paibaqi' (assignable land) available, causing a crisis." },
+            { q: "Consider the following about Sher Shah Suri: 1. He introduced the Rupee. 2. He built the Grand Trunk Road. Which is correct?", tag: "SSC CGL 2023 Pattern", opts: ["Both 1 and 2", "Only 1", "Only 2", "Neither 1 nor 2"], ansText: "Both 1 and 2", why: "Sher Shah introduced the silver 'Rupaiya' (178 grains) and restored the Sadak-e-Azam (GT Road) from Sonargaon to Peshawar." },
+            
+            // ART & CULTURE
+            { q: "Which style of painting was introduced by the Mughals?", tag: "SSC CHSL 2020", opts: ["Miniature", "Mural", "Fresco", "Oil Painting"], ansText: "Miniature", why: "Mughal painting is a distinct style of South Asian miniature painting, blending Persian and Indian influences." },
+            { q: "The 'Buland Darwaza' was built to commemorate Akbar's victory over:", tag: "SSC CGL 2018", opts: ["Gujarat", "Bengal", "Kashmir", "Deccan"], ansText: "Gujarat", why: "Built in 1602 AD at Fatehpur Sikri, it is the highest gateway in the world, marking the Gujarat conquest (1572-73)." },
+            { q: "Who built the Red Fort in Delhi?", tag: "SSC MTS 2019", opts: ["Shah Jahan", "Akbar", "Aurangzeb", "Jahangir"], ansText: "Shah Jahan", why: "He shifted the capital from Agra to Delhi (Shahjahanabad) and built the Red Fort (Lal Qila) between 1638-1648." },
+            
+            // TOUGH/OBSCURE
+            { q: "Who was the only Mughal Emperor to have written a will partitioning the empire among his sons?", tag: "SSC CGL Tier-1", opts: ["Babur", "Humayun", "Aurangzeb", "Shah Jahan"], ansText: "Aurangzeb", why: "Aurangzeb left a will attempting to divide the empire to prevent a war of succession, but his sons fought anyway." },
+            { q: "Which Mughal Emperor was known as 'Rangeela'?", tag: "SSC CHSL 2021", opts: ["Muhammad Shah", "Farrukhsiyar", "Jahandar Shah", "Ahmad Shah"], ansText: "Muhammad Shah", why: "Muhammad Shah (1719-1748) was called 'Rangeela' due to his indulgence in luxury and arts while the empire crumbled." },
+            { q: "The practice of 'Jharokha Darshan' was introduced by Akbar but abolished by:", tag: "SSC CGL 2022", opts: ["Aurangzeb", "Shah Jahan", "Jahangir", "Bahadur Shah I"], ansText: "Aurangzeb", why: "Aurangzeb considered it un-Islamic (personality worship) and discontinued it in his 11th regnal year." },
+            
+            // BATTLES & TREATIES
+            { q: "The Treaty of Purandar (1665) was signed between Shivaji and:", tag: "SSC CGL 2020", opts: ["Raja Jai Singh", "Aurangzeb", "Shaista Khan", "Afzal Khan"], ansText: "Raja Jai Singh", why: "Jai Singh I of Amber represented Aurangzeb. Shivaji surrendered 23 forts and agreed to visit the Mughal court." },
+            { q: "The Battle of Haldighati (1576) was fought between the Mughals and:", tag: "SSC CGL 2019", opts: ["Maharana Pratap", "Rana Sanga", "Prithviraj Chauhan", "Rana Kumbha"], ansText: "Maharana Pratap", why: "Man Singh I led the Mughal forces. Though Pratap lost the field, he continued guerrilla warfare." },
+            { q: "Who issued a 'Mahzarnama' in 1579?", tag: "SSC CPO 2020", opts: ["Akbar", "Aurangzeb", "Shah Jahan", "Jahangir"], ansText: "Akbar", why: "Drafted by Faizi and Abul Fazl's father Mubarak, it declared Akbar as the supreme arbiter in religious matters (Imam-i-Adil)." },
+            { q: "The first English factory in Mughal India was established at:", tag: "SSC MTS 2021", opts: ["Surat", "Masulipatnam", "Bombay", "Calcutta"], ansText: "Surat", why: "Established in 1613 after Jahangir issued a Farman to Captain Thomas Best following the naval Battle of Swally." },
+            
+            // LITERATURE
+            { q: "Who translated 'Panchatantra' into Persian as 'Anwar-i-Suhaili'?", tag: "SSC CHSL 2018", opts: ["Husain ibn Ali Waiz", "Abul Fazl", "Faizi", "Badayuni"], ansText: "Husain ibn Ali Waiz", why: "Another version 'Iyar-i-Danish' was written by Abul Fazl. It is a collection of fables." },
+            { q: "The 'Padshahnama' is a chronicle of the reign of:", tag: "SSC CGL 2022", opts: ["Shah Jahan", "Akbar", "Aurangzeb", "Humayun"], ansText: "Shah Jahan", why: "Written by Abdul Hamid Lahori, it is the official history of Shah Jahan's reign." },
+            
+            // MISCELLANEOUS
+            { q: "Which crop was introduced in India during the Mughal period by the Portuguese?", tag: "SSC CGL 2021", opts: ["Tobacco", "Rice", "Wheat", "Barley"], ansText: "Tobacco", why: "Tobacco, potato, maize, and chili were introduced in the 16th/17th century. Jahangir initially tried to ban tobacco." },
+            { q: "The concept of 'Sulh-i-Kul' implies:", tag: "SSC CGL 2020", opts: ["Universal Peace", "Holy War", "Divine Right", "Taxation"], ansText: "Universal Peace", why: "It was Akbar's policy of absolute peace and non-discrimination between religions." },
+            { q: "Who was the revenue minister of Sher Shah Suri?", tag: "SSC CGL 2019", opts: ["Todar Mal", "Raja Ram", "Brahmajit Gaur", "None"], ansText: "Todar Mal", why: "Todar Mal learned his revenue expertise under Sher Shah before serving Akbar." },
+            { q: "Which Mughal Emperor had the longest reign?", tag: "SSC MTS 2022", opts: ["Aurangzeb", "Akbar", "Shah Jahan", "Jahangir"], ansText: "Aurangzeb", why: "Both Akbar and Aurangzeb ruled for approx 49-50 years, but Aurangzeb is often cited as slightly longer or equal." },
+            { q: "The city of 'Dinpanah' was built by:", tag: "SSC CHSL 2020", opts: ["Humayun", "Sher Shah", "Akbar", "Babur"], ansText: "Humayun", why: "Humayun built it in Delhi. Sher Shah destroyed it to build Shergarh (Purana Qila)." },
+            { q: "Who was the guardian/regent of Akbar during his early years?", tag: "SSC CGL 2018", opts: ["Bairam Khan", "Adham Khan", "Munim Khan", "Maham Anga"], ansText: "Bairam Khan", why: "He led the Mughal forces in the Second Battle of Panipat and managed the empire until 1560." },
+            { q: "Which Mughal princess wrote the biography of her father?", tag: "SSC CGL 2017", opts: ["Jahanara", "Zeb-un-Nisa", "Gulbadan Begum", "None"], ansText: "None", why: "Trick question. Gulbadan wrote about her BROTHER (Humayun). Jahanara wrote a biography of Moinuddin Chishti." },
+            { q: "The 'Tomb of Sher Shah' is located at:", tag: "SSC CPO 2019", opts: ["Sasaram", "Delhi", "Kalinjar", "Patna"], ansText: "Sasaram", why: "It is a masterpiece of Indo-Islamic architecture, standing in the middle of a lake in Bihar." },
+            { q: "Who assumed the title of 'Alamgir'?", tag: "SSC CGL 2021", opts: ["Aurangzeb", "Shah Jahan", "Akbar", "Jahangir"], ansText: "Aurangzeb", why: "He adopted the title 'Alamgir' (Conqueror of the World) upon ascending the throne." },
+            { q: "The 'Daswant' and 'Basawan' were famous painters in the court of:", tag: "SSC CGL 2020", opts: ["Akbar", "Jahangir", "Shah Jahan", "Humayun"], ansText: "Akbar", why: "They illustrated the Razmnama and other manuscripts." },
+            { q: "Which Mughal Emperor shifted the capital from Agra to Delhi (Shahjahanabad)?", tag: "SSC CGL 2019", opts: ["Shah Jahan", "Akbar", "Aurangzeb", "Jahangir"], ansText: "Shah Jahan", why: "He built the Red Fort and Jama Masjid there in 1638." },
+            { q: "Who led the Mughal army against Rani Durgavati of Gondwana?", tag: "SSC CGL 2022", opts: ["Asaf Khan", "Man Singh", "Adham Khan", "Shaista Khan"], ansText: "Asaf Khan", why: "Rani Durgavati fought bravely but stabbed herself to avoid capture in 1564." },
+            { q: "The 'Jat Rebellion' under Gokula occurred during the reign of:", tag: "SSC CGL Tier-2", opts: ["Aurangzeb", "Shah Jahan", "Jahangir", "Akbar"], ansText: "Aurangzeb", why: "It was a peasant uprising in the Mathura region in 1669 against agrarian policies and religious oppression." },
+            { q: "Who was the first Mughal Emperor to issue a gold coin called 'Mohur'?", tag: "SSC CPO 2021", opts: ["Akbar", "Sher Shah", "Babur", "Humayun"], ansText: "Akbar", why: "Akbar standardized the currency system with Mohur (Gold), Rupaiya (Silver), and Dam (Copper)." },
+            {
+        q: "Who was the Mughal Emperor when the 'Battle of Karnal' (1739) was fought against Nadir Shah?",
+        tag: "SSC CGL Tier-1 2021",
+        opts: ["Muhammad Shah", "Ahmad Shah", "Alamgir II", "Shah Alam II"],
+        ansText: "Muhammad Shah",
+        why: "Muhammad Shah 'Rangeela' was defeated by Nadir Shah, who then looted Delhi, taking the Peacock Throne and Kohinoor Diamond."
+    },
+    {
+        q: "The 'Hauz-i-Khas' in Delhi was originally built by Alauddin Khalji, but who repaired it and built a Madrasa there?",
+        tag: "SSC CPO 2020",
+        opts: ["Firoz Shah Tughlaq", "Akbar", "Humayun", "Shah Jahan"],
+        ansText: "Firoz Shah Tughlaq",
+        why: "Firoz Shah Tughlaq was a prolific builder who repaired many ancient structures, including the Hauz-i-Alai (Hauz Khas)."
+    },
+    {
+        q: "Which Mughal Emperor is associated with the 'Golden Bell' of Justice?",
+        tag: "SSC MTS 2019",
+        opts: ["Shah Jahan", "Jahangir", "Akbar", "Aurangzeb"],
+        ansText: "Shah Jahan",
+        why: "While Jahangir had the 'Chain of Justice', Shah Jahan also installed a Golden Bell in the Agra Fort for justice seekers."
+    },
+    {
+        q: "Who was the architect of the 'Taj Mahal'?",
+        tag: "SSC CHSL 2020",
+        opts: ["Ustad Ahmad Lahori", "Ustad Isa", "Mir Abdul Karim", "Bebadal Khan"],
+        ansText: "Ustad Ahmad Lahori",
+        why: "He was the chief architect. Shah Jahan conferred the title 'Nadir-ul-Asr' on him."
+    },
+    {
+        q: "Which Mughal Emperor abolished the custom of 'Sijda' (prostration) and 'Paibos'?",
+        tag: "SSC CGL 2022",
+        opts: ["Shah Jahan", "Aurangzeb", "Jahangir", "Akbar"],
+        ansText: "Shah Jahan",
+        why: "He replaced them with 'Chahar Taslim' and 'Zaminbos' (kissing the ground), finding Sijda too close to divine worship."
+    },
+    {
+        q: "The 'Jat' and 'Sawar' ranks were part of which system?",
+        tag: "SSC CGL 2019",
+        opts: ["Mansabdari System", "Zamindari System", "Jagirdari System", "Ryotwari System"],
+        ansText: "Mansabdari System",
+        why: "Jat determined personal rank/salary, while Sawar determined the number of cavalrymen to be maintained."
+    },
+    {
+        q: "Who wrote the book 'Muntakhab-ul-Lubab', a secret history of Aurangzeb's reign?",
+        tag: "SSC Selection Post Phase IX",
+        opts: ["Khafi Khan", "Ishwar Das", "Bhimsen", "Saqi Mustaid Khan"],
+        ansText: "Khafi Khan",
+        why: "Aurangzeb had banned history writing. Khafi Khan wrote this in secret ('Khafi' means concealed)."
+    },
+    {
+        q: "Which battle led to the establishment of the Suri Dynasty?",
+        tag: "SSC CGL 2021",
+        opts: ["Battle of Bilgram (Kannauj)", "Battle of Chausa", "Battle of Panipat", "Battle of Ghaghra"],
+        ansText: "Battle of Bilgram (Kannauj)",
+        why: "Fought in 1540, Sher Shah Suri decisively defeated Humayun, forcing him to flee India."
+    },
+    {
+        q: "The 'Shalimar Bagh' in Srinagar was built by:",
+        tag: "SSC CHSL 2018",
+        opts: ["Jahangir", "Shah Jahan", "Akbar", "Aurangzeb"],
+        ansText: "Jahangir",
+        why: "Built in 1619 for his wife Nur Jahan. It is a prime example of a Mughal Garden (Charbagh style)."
+    },
+    {
+        q: "Who was the only Hindu to hold the rank of 7000 Zat/Sawar under Akbar?",
+        tag: "SSC CGL Tier-1",
+        opts: ["Raja Man Singh", "Raja Todar Mal", "Birbal", "Bhagwan Das"],
+        ansText: "Raja Man Singh",
+        why: "Along with Mirza Aziz Koka, Man Singh was the only noble to hold the highest rank of 7000 during Akbar's time."
+    },
+    {
+        q: "Which Mughal Emperor prohibited the use of tobacco?",
+        tag: "SSC MTS 2021",
+        opts: ["Jahangir", "Akbar", "Aurangzeb", "Shah Jahan"],
+        ansText: "Jahangir",
+        why: "Noticing its harmful effects, Jahangir issued a decree banning tobacco in 1617, though it remained ineffective."
+    },
+    {
+        q: "The 'Pearl Mosque' (Moti Masjid) at Agra was built by:",
+        tag: "SSC CPO 2019",
+        opts: ["Shah Jahan", "Aurangzeb", "Akbar", "Jahangir"],
+        ansText: "Shah Jahan",
+        why: "Note the confusion: Moti Masjid in AGRA is by Shah Jahan. Moti Masjid in DELHI (Red Fort) is by Aurangzeb."
+    },
+    {
+        q: "Who was the 'Vakil' (Prime Minister) of Akbar during the early years of his reign?",
+        tag: "SSC CGL 2018",
+        opts: ["Bairam Khan", "Munim Khan", "Maham Anga", "Adham Khan"],
+        ansText: "Bairam Khan",
+        why: "He held the title 'Khan-i-Khanan' and acted as the regent for the young Emperor."
+    },
+    {
+        q: "Which Mughal prince was a devotee of the Qadiri Sufi order?",
+        tag: "SSC CHSL 2020",
+        opts: ["Dara Shikoh", "Aurangzeb", "Shah Shuja", "Murad"],
+        ansText: "Dara Shikoh",
+        why: "He was a disciple of Mullah Shah Badakhshi of the Qadiri order."
+    },
+    {
+        q: "The longest canal 'Nahr-i-Bihist' was brought into the Red Fort by:",
+        tag: "SSC JE 2020",
+        opts: ["Shah Jahan", "Akbar", "Firoz Tughlaq", "Aurangzeb"],
+        ansText: "Shah Jahan",
+        why: "He extended the Western Yamuna Canal to bring water to the Red Fort gardens."
+    },
+    {
+        q: "Who was known as 'Khurram' before becoming Emperor?",
+        tag: "SSC MTS 2019",
+        opts: ["Shah Jahan", "Jahangir", "Aurangzeb", "Humayun"],
+        ansText: "Shah Jahan",
+        why: "Prince Khurram ascended the throne in 1628 with the title Shah Jahan."
+    },
+    {
+        q: "Which Mughal Emperor died by falling from the stairs of his library 'Sher Mandal'?",
+        tag: "SSC CGL 2017",
+        opts: ["Humayun", "Babur", "Akbar", "Jahangir"],
+        ansText: "Humayun",
+        why: "He died in 1556, shortly after recapturing Delhi. Historian Lane-Poole said, 'He tumbled out of life as he had tumbled through it.'"
+    },
+    {
+        q: "The 'Razmnama' is a Persian translation of:",
+        tag: "SSC CGL 2021",
+        opts: ["Mahabharata", "Ramayana", "Atharva Veda", "Upanishads"],
+        ansText: "Mahabharata",
+        why: "Commissioned by Akbar to help Muslims understand Hindu culture."
+    },
+    {
+        q: "Who was the first Englishman to appear in the Mughal Court in 1608?",
+        tag: "SSC CPO 2020",
+        opts: ["Captain William Hawkins", "Sir Thomas Roe", "Paul Canning", "William Edwards"],
+        ansText: "Captain William Hawkins",
+        why: "He could speak Turkish and became a close friend of Jahangir, earning the title 'English Khan'."
+    },
+    {
+        q: "The 'Tomb of Akbar' is located at:",
+        tag: "SSC CHSL 2019",
+        opts: ["Sikandra", "Agra Fort", "Fatehpur Sikri", "Delhi"],
+        ansText: "Sikandra",
+        why: "Located in the suburbs of Agra. It was started by Akbar himself and completed by Jahangir."
+    },
+    {
+        q: "Who defeated the Mughals in the 'Battle of Karnal' (1739)?",
+        tag: "SSC CGL 2022",
+        opts: ["Nadir Shah", "Ahmad Shah Abdali", "Sher Shah Suri", "Hemmu"],
+        ansText: "Nadir Shah",
+        why: "The Persian ruler Nadir Shah defeated Muhammad Shah Rangeela in just 3 hours."
+    },
+    {
+        q: "Which Mughal Emperor was called 'Alamgir'?",
+        tag: "SSC MTS 2021",
+        opts: ["Aurangzeb", "Shah Jahan", "Jahangir", "Akbar"],
+        ansText: "Aurangzeb",
+        why: "He adopted the title meaning 'Conqueror of the World'."
+    },
+    {
+        q: "The 'Biwi Ka Maqbara' is located in:",
+        tag: "SSC GD 2021",
+        opts: ["Aurangabad", "Hyderabad", "Agra", "Bijapur"],
+        ansText: "Aurangabad",
+        why: "Often called the 'Poor Man's Taj', it is in Maharashtra."
+    },
+    {
+        q: "Who introduced the 'Polaj' and 'Parauti' classification of land?",
+        tag: "SSC CGL Tier-2",
+        opts: ["Akbar", "Sher Shah", "Alauddin Khalji", "Aurangzeb"],
+        ansText: "Akbar",
+        why: "Polaj (cultivated annually), Parauti (left fallow for 1 year), Chachar (3-4 years), Banjar (5+ years)."
+    },
+    {
+        q: "The 'Red Fort' in Agra was built by:",
+        tag: "SSC CGL 2018",
+        opts: ["Akbar", "Shah Jahan", "Sikandar Lodi", "Babur"],
+        ansText: "Akbar",
+        why: "Often confused with Delhi's Red Fort. Agra Fort was started by Akbar in 1565."
+    },
+    {
+        q: "Which painter painted the famous 'Falcon on a Bird Rest'?",
+        tag: "SSC Selection Post",
+        opts: ["Ustad Mansur", "Bishandas", "Manohar", "Abul Hasan"],
+        ansText: "Ustad Mansur",
+        why: "A masterpiece of Mughal natural history painting under Jahangir."
+    },
+    {
+        q: "Who wrote 'Padshahnama'?",
+        tag: "SSC CGL 2020",
+        opts: ["Abdul Hamid Lahori", "Abul Fazl", "Inayat Khan", "Gulbadan Begum"],
+        ansText: "Abdul Hamid Lahori",
+        why: "The official history of Shah Jahan's reign."
+    },
+    {
+        q: "What was the 'Sarkar' in Mughal administration?",
+        tag: "SSC CPO 2019",
+        opts: ["District", "Province", "Village", "Group of Villages"],
+        ansText: "District",
+        why: "Empire > Subah (Province) > Sarkar (District) > Pargana (Sub-district) > Gram (Village)."
+    },
+    {
+        q: "The 'Upnishads' were translated into Persian during the reign of:",
+        tag: "SSC CHSL 2021",
+        opts: ["Shah Jahan", "Akbar", "Jahangir", "Aurangzeb"],
+        ansText: "Shah Jahan",
+        why: "By his son Dara Shikoh."
+    },
+    {
+        q: "Which Mughal Emperor was a good Veena player?",
+        tag: "SSC CGL 2017",
+        opts: ["Aurangzeb", "Akbar", "Jahangir", "Shah Jahan"],
+        ansText: "Aurangzeb",
+        why: "Despite banning court music, he played the Veena in private."
+    },
+    {
+        q: "The 'Panch Mahal' is located in:",
+        tag: "SSC MTS 2019",
+        opts: ["Fatehpur Sikri", "Agra Fort", "Red Fort", "Lahore Fort"],
+        ansText: "Fatehpur Sikri",
+        why: "A five-storey palace built by Akbar, inspired by Buddhist viharas."
+    },
+    {
+        q: "Who was the Sikh Guru during the reign of Akbar?",
+        tag: "SSC CGL 2019",
+        opts: ["Guru Ram Das", "Guru Nanak", "Guru Gobind Singh", "Guru Tegh Bahadur"],
+        ansText: "Guru Ram Das",
+        why: "Akbar granted him the land where the Golden Temple (Amritsar) was built."
+    },
+    {
+        q: "The term 'Malfuzat' refers to:",
+        tag: "SSC History",
+        opts: ["Conversations of Sufi Saints", "Memoirs of Emperors", "Royal Orders", "Revenue Records"],
+        ansText: "Conversations of Sufi Saints",
+        why: "Important source of medieval history."
+    },
+    {
+        q: "Who built the 'Humayun's Tomb'?",
+        tag: "SSC CGL 2021",
+        opts: ["Haji Begum", "Humayun", "Akbar", "Gulbadan Begum"],
+        ansText: "Haji Begum",
+        why: "Built by his widow, Bega Begum (Haji Begum). It is a precursor to the Taj Mahal."
+    },
+    {
+        q: "Which Mughal Emperor shifted the capital from Agra to Delhi?",
+        tag: "SSC CPO 2020",
+        opts: ["Shah Jahan", "Akbar", "Jahangir", "Aurangzeb"],
+        ansText: "Shah Jahan",
+        why: "He founded the city of Shahjahanabad (Old Delhi) in 1638."
+    },
+    {
+        q: "The Battle of Samugarh (1658) was a war of succession between:",
+        tag: "SSC CGL Tier-1",
+        opts: ["Dara Shikoh and Aurangzeb", "Akbar and Hemu", "Humayun and Sher Shah", "Babur and Rana Sanga"],
+        ansText: "Dara Shikoh and Aurangzeb",
+        why: "Aurangzeb defeated Dara Shikoh, paving his way to the throne."
+    },
+    {
+        q: "Who was the 'Mir Bakshi'?",
+        tag: "SSC CHSL 2019",
+        opts: ["Head of Military Department", "Head of Finance", "Head of Religious Affairs", "Head of Royal Household"],
+        ansText: "Head of Military Department",
+        why: "He was responsible for the payment and branding of the army."
+    },
+    {
+        q: "Which foreign traveler described the 'Peacock Throne'?",
+        tag: "SSC CGL 2022",
+        opts: ["Jean-Baptiste Tavernier", "Francois Bernier", "Manucci", "Ralph Fitch"],
+        ansText: "Jean-Baptiste Tavernier",
+        why: "A French jeweler who visited Shah Jahan's court and described the throne's immense value."
+    },
+    {
+        q: "The 'Chain of Justice' is associated with:",
+        tag: "SSC MTS 2020",
+        opts: ["Jahangir", "Akbar", "Shah Jahan", "Humayun"],
+        ansText: "Jahangir",
+        why: "Zanjir-i-Adl."
+    },
+    {
+        q: "Who founded the 'Din-i-Ilahi'?",
+        tag: "SSC CGL 2016",
+        opts: ["Akbar", "Humayun", "Jahangir", "Shah Jahan"],
+        ansText: "Akbar",
+        why: "In 1582."
+    },
+    {
+        q: "Which Mughal Emperor gave land for the construction of the Golden Temple?",
+        tag: "SSC CPO 2021",
+        opts: ["Akbar", "Jahangir", "Shah Jahan", "Aurangzeb"],
+        ansText: "Akbar",
+        why: "He gave the land to Guru Ram Das."
+    },
+    {
+        q: "Who was the last Mughal Emperor?",
+        tag: "SSC GD 2021",
+        opts: ["Bahadur Shah Zafar", "Aurangzeb", "Shah Alam II", "Akbar II"],
+        ansText: "Bahadur Shah Zafar",
+        why: "Deposed by the British after the 1857 Revolt and exiled to Rangoon."
+    },
+    {
+        q: "The 'Buland Darwaza' is located in:",
+        tag: "SSC CHSL 2018",
+        opts: ["Fatehpur Sikri", "Agra", "Delhi", "Lahore"],
+        ansText: "Fatehpur Sikri",
+        why: "Built by Akbar to commemorate the Gujarat victory."
+    },
+    {
+        q: "Who was 'Mumtaz Mahal'?",
+        tag: "SSC MTS 2019",
+        opts: ["Arjumand Banu Begum", "Nur Jahan", "Jahanara", "Roshanara"],
+        ansText: "Arjumand Banu Begum",
+        why: "Wife of Shah Jahan; Taj Mahal was built in her memory."
+    },
+    {
+        q: "Which Mughal Emperor wrote 'Tuzuk-i-Jahangiri'?",
+        tag: "SSC CGL 2020",
+        opts: ["Jahangir", "Akbar", "Shah Jahan", "Aurangzeb"],
+        ansText: "Jahangir",
+        why: "His autobiography in Persian."
+    },
+    {
+        q: "Who defeated the Afghans in the 'Battle of Panipat' (1556)?",
+        tag: "SSC CGL 2019",
+        opts: ["Bairam Khan (for Akbar)", "Humayun", "Babur", "Shah Jahan"],
+        ansText: "Bairam Khan (for Akbar)",
+        why: "Defeated Hemu."
+    },
+    {
+        q: "The 'Jizya' was a tax on:",
+        tag: "SSC CPO 2020",
+        opts: ["Non-Muslims", "Trade", "Land", "Muslims"],
+        ansText: "Non-Muslims",
+        why: "A tax levied on Zimmis (non-Muslim subjects) for protection."
+    },
+    {
+        q: "Who built the 'Jama Masjid' in Delhi?",
+        tag: "SSC CHSL 2021",
+        opts: ["Shah Jahan", "Akbar", "Aurangzeb", "Jahangir"],
+        ansText: "Shah Jahan",
+        why: "Completed in 1656."
+    },
+    {
+        q: "Which Mughal Emperor spent his last years in the Deccan?",
+        tag: "SSC CGL 2022",
+        opts: ["Aurangzeb", "Akbar", "Jahangir", "Shah Jahan"],
+        ansText: "Aurangzeb",
+        why: "He spent the last 25 years of his life fighting the Marathas in the Deccan."
+    },
+    {
+        q: "Who was the Finance Minister of Akbar?",
+        tag: "SSC MTS 2020",
+        opts: ["Raja Todar Mal", "Birbal", "Man Singh", "Tansen"],
+        ansText: "Raja Todar Mal",
+        why: "Known for his revenue reforms."
+    }
+        {
+        q: "Who was the Mughal Emperor at the time of the 'Battle of Plassey' (1757)?",
+        tag: "SSC CGL 2020",
+        opts: ["Alamgir II", "Shah Alam II", "Muhammad Shah", "Ahmad Shah"],
+        ansText: "Alamgir II",
+        why: "Alamgir II (1754–1759) was the Emperor when the British defeated Siraj-ud-Daulah in Bengal."
+    },
+    {
+        q: "Which Mughal monument is known as 'Shan-i-Hind'?",
+        tag: "SSC CHSL 2021",
+        opts: ["Badshahi Mosque", "Jama Masjid (Delhi)", "Taj Mahal", "Red Fort"],
+        ansText: "Badshahi Mosque",
+        why: "Located in Lahore, built by Aurangzeb. It epitomizes Mughal grandeur."
+    },
+    {
+        q: "The 'Sayyid Brothers' (Abdullah Khan and Hussain Ali) are known in history as:",
+        tag: "SSC CPO 2019",
+        opts: ["King Makers", "Traitors", "Great Generals", "Revenue Experts"],
+        ansText: "King Makers",
+        why: "They played a decisive role in the succession of Later Mughal Emperors like Farrukhsiyar and Muhammad Shah."
+    },
+    {
+        q: "Who introduced the 'Taccavi' loans for farmers?",
+        tag: "SSC MTS 2021",
+        opts: ["Akbar", "Sher Shah Suri", "Aurangzeb", "Shah Jahan"],
+        ansText: "Sher Shah Suri",
+        why: "He introduced loans for peasants during natural calamities, later continued by Mughals."
+    },
+    {
+        q: "The 'Treaty of Amritsar' (1809) was signed between Ranjit Singh and whom?",
+        tag: "SSC CGL 2019",
+        opts: ["Charles Metcalfe", "Lord Dalhousie", "Lord Wellesley", "William Bentinck"],
+        ansText: "Charles Metcalfe",
+        why: "Though technically British era, it defined the Sutlej as the boundary between the Sikh Empire and British territories (Mughal successors)."
+    },
+    {
+        q: "Which painter was known as the 'Raphael of the East'?",
+        tag: "SSC Art & Culture",
+        opts: ["Bihzad", "Basawan", "Daswant", "Mansur"],
+        ansText: "Bihzad",
+        why: "A Persian painter whose style heavily influenced early Mughal art under Babur and Humayun."
+    },
+    {
+        q: "The term 'Deshmukh' in the Deccan was equivalent to which North Indian term?",
+        tag: "SSC CGL Tier-2",
+        opts: ["Chaudhary", "Patwari", "Qanungo", "Muqaddam"],
+        ansText: "Chaudhary",
+        why: "Deshmukhs were hereditary revenue officials in the Deccan, similar to Chaudharys in the North."
+    },
+    {
+        q: "Who built the 'Tomb of Safdarjung' in Delhi?",
+        tag: "SSC CHSL 2020",
+        opts: ["Shuja-ud-Daula", "Safdarjung", "Asaf-ud-Daula", "Shah Alam II"],
+        ansText: "Shuja-ud-Daula",
+        why: "Built by his son Shuja-ud-Daula in 1754. It is often considered the last flicker of Mughal architecture."
+    },
+    {
+        q: "Which Mughal Emperor was blinded by his noble Ghulam Qadir in 1788?",
+        tag: "SSC CPO 2022",
+        opts: ["Shah Alam II", "Alamgir II", "Akbar II", "Bahadur Shah II"],
+        ansText: "Shah Alam II",
+        why: "The Rohilla chief Ghulam Qadir blinded the Emperor, marking the absolute decline of Mughal authority."
+    },
+    {
+        q: "The 'Zinna-i-Nur' (Ladder of Light) mentioned in Mughal texts refers to:",
+        tag: "SSC Conceptual",
+        opts: ["Sunlight", "Divine Right of Kingship", "A specific minaret", "A book"],
+        ansText: "Divine Right of Kingship",
+        why: "Abul Fazl described kingship as 'Farr-i-Izadi' (Light of God) emanating from the sun."
+    },
+    {
+        q: "Who was the first Mughal ruler to separate religion from politics?",
+        tag: "SSC CGL 2018",
+        opts: ["Akbar", "Babur", "Humayun", "Jahangir"],
+        ansText: "Akbar",
+        why: "He established a secular state policy (Sulh-i-Kul) unlike the Delhi Sultanate or Aurangzeb."
+    },
+    {
+        q: "Which city was called 'Babur's favorite city'?",
+        tag: "SSC MTS 2020",
+        opts: ["Kabul", "Agra", "Samarkand", "Ferghana"],
+        ansText: "Kabul",
+        why: "He loved its climate and gardens and chose to be buried there."
+    },
+    {
+        q: "The 'Surat Treaty' (1775) involved which power and the British?",
+        tag: "SSC CGL 2021",
+        opts: ["Raghunath Rao (Maratha)", "Nizam of Hyderabad", "Tipu Sultan", "Shah Alam II"],
+        ansText: "Raghunath Rao (Maratha)",
+        why: "Raghunath Rao sought British help to become Peshwa, leading to the First Anglo-Maratha War."
+    },
+    {
+        q: "Who wrote 'Masir-i-Alamgiri'?",
+        tag: "SSC Selection Post",
+        opts: ["Saqi Mustaid Khan", "Khafi Khan", "Ishwar Das", "Bhimsen"],
+        ansText: "Saqi Mustaid Khan",
+        why: "It is the official history of Aurangzeb's reign written after his death."
+    },
+    {
+        q: "Which Mughal Emperor was also a great naturalist and described flora/fauna in his memoir?",
+        tag: "SSC CGL 2020",
+        opts: ["Jahangir", "Babur", "Humayun", "Shah Jahan"],
+        ansText: "Jahangir",
+        why: "His 'Tuzuk-i-Jahangiri' contains precise scientific descriptions of breeding of birds and plants."
+    },
+    {
+        q: "The 'Patta' and 'Qabuliyat' system was introduced by:",
+        tag: "SSC CHSL 2019",
+        opts: ["Sher Shah Suri", "Akbar", "Alauddin Khalji", "Ghiyasuddin Tughlaq"],
+        ansText: "Sher Shah Suri",
+        why: "Patta was the title deed given to the peasant, and Qabuliyat was the deed of agreement in return."
+    },
+    {
+        q: "Who was the 'Sadr-us-Sudur' in Mughal administration?",
+        tag: "SSC CPO 2021",
+        opts: ["Head of Religious Affairs", "Head of Artillery", "Head of Intelligence", "Prime Minister"],
+        ansText: "Head of Religious Affairs",
+        why: "He protected the laws of Sharia and managed religious endowments (Awqaf)."
+    },
+    {
+        q: "Which battle destroyed the Vijayanagara Empire (1565)?",
+        tag: "SSC CGL 2017",
+        opts: ["Battle of Talikota", "Battle of Raichur", "Battle of Khanwa", "Battle of Panipat"],
+        ansText: "Battle of Talikota",
+        why: "The Deccan Sultanates (offshoots of Bahmani) united to defeat Rama Raya. Not strictly Mughal, but contemporary."
+    },
+    {
+        q: "Who built the 'Old Fort' (Purana Qila) in Delhi?",
+        tag: "SSC MTS 2019",
+        opts: ["Sher Shah Suri", "Humayun", "Akbar", "Shah Jahan"],
+        ansText: "Sher Shah Suri",
+        why: "He built it on the site of Humayun's Dinpanah."
+    },
+    {
+        q: "The 'Nadir Shah' invasion took place in:",
+        tag: "SSC CHSL 2022",
+        opts: ["1739", "1761", "1757", "1857"],
+        ansText: "1739",
+        why: "He defeated the Mughals at Karnal and sacked Delhi."
+    },
+    {
+        q: "Who was the author of 'Tabakat-i-Akbari'?",
+        tag: "SSC CGL 2021",
+        opts: ["Nizamuddin Ahmad", "Abul Fazl", "Badauni", "Gulbadan Begum"],
+        ansText: "Nizamuddin Ahmad",
+        why: "Considered one of the most reliable factual accounts of Akbar's reign."
+    },
+    {
+        q: "Which Mughal Emperor was called 'Shah-i-Bekhabar'?",
+        tag: "SSC CPO 2020",
+        opts: ["Bahadur Shah I", "Jahandar Shah", "Shah Alam II", "Akbar II"],
+        ansText: "Bahadur Shah I",
+        why: "He was the son of Aurangzeb, known for being unaware of state affairs."
+    },
+    {
+        q: "The 'Jats' of Bharatpur rebelled under the leadership of:",
+        tag: "SSC History",
+        opts: ["Churaman and Badan Singh", "Gokula", "Rajarama", "All of the above"],
+        ansText: "All of the above",
+        why: "It was a sustained peasant revolt starting with Gokula, then Rajaram, and consolidated by Churaman."
+    },
+    {
+        q: "Who introduced the 'Zat' and 'Sawar' ranks?",
+        tag: "SSC CGL 2018",
+        opts: ["Akbar", "Sher Shah", "Babur", "Humayun"],
+        ansText: "Akbar",
+        why: "It was the foundation of his Mansabdari system."
+    },
+    {
+        q: "Which Mughal Emperor banned the 'Sati' practice?",
+        tag: "SSC MTS 2021",
+        opts: ["Aurangzeb", "Akbar", "Humayun", "Jahangir"],
+        ansText: "Aurangzeb",
+        why: "Akbar discouraged it, but Aurangzeb issued formal firmans banning it (though enforcement was difficult)."
+    },
+    {
+        q: "The 'Musamman Burj' (Jasmine Tower) where Shah Jahan was imprisoned is in:",
+        tag: "SSC CHSL 2020",
+        opts: ["Agra Fort", "Red Fort", "Lahore Fort", "Fatehpur Sikri"],
+        ansText: "Agra Fort",
+        why: "It offers a view of the Taj Mahal."
+    },
+    {
+        q: "Who was the finance minister of Sher Shah Suri?",
+        tag: "SSC CGL 2019",
+        opts: ["Todar Mal", "Raja Ram", "Man Singh", "Birbal"],
+        ansText: "Todar Mal",
+        why: "He served Sher Shah before Akbar."
+    },
+    {
+        q: "Which Mughal Emperor introduced 'Ilahi Era'?",
+        tag: "SSC CPO 2021",
+        opts: ["Akbar", "Jahangir", "Shah Jahan", "Aurangzeb"],
+        ansText: "Akbar",
+        why: "Introduced in 1584, it was a solar calendar."
+    },
+    {
+        q: "Who was the 'Mir Saman'?",
+        tag: "SSC CGL 2022",
+        opts: ["In-charge of Imperial Household", "Head of Army", "Chief Justice", "Revenue Minister"],
+        ansText: "In-charge of Imperial Household",
+        why: "He managed the factories (Karkhanas) and stores of the royal family."
+    },
+    {
+        q: "The 'Battle of Dharmat' (1658) was fought between:",
+        tag: "SSC JE 2020",
+        opts: ["Aurangzeb and Dara Shikoh", "Akbar and Hemu", "Babur and Rana Sanga", "Humayun and Sher Shah"],
+        ansText: "Aurangzeb and Dara Shikoh",
+        why: "Fought near Ujjain, Aurangzeb and Murad defeated the imperial army of Dara."
+    },
+    {
+        q: "Who wrote 'Padmavat'?",
+        tag: "SSC CGL 2016",
+        opts: ["Malik Muhammad Jayasi", "Amir Khusrau", "Abul Fazl", "Kabir"],
+        ansText: "Malik Muhammad Jayasi",
+        why: "Written in Avadhi language during Sher Shah's reign (1540)."
+    },
+    {
+        q: "Which Mughal Emperor was known for his 'Twelve Ordinances' (Dastur-ul-Amal)?",
+        tag: "SSC MTS 2019",
+        opts: ["Jahangir", "Akbar", "Aurangzeb", "Shah Jahan"],
+        ansText: "Jahangir",
+        why: "He issued these immediately after his accession to ensure justice and welfare."
+    },
+    {
+        q: "The 'Third Battle of Panipat' (1761) was fought between:",
+        tag: "SSC CHSL 2018",
+        opts: ["Marathas and Ahmad Shah Abdali", "Akbar and Hemu", "Babur and Lodi", "British and French"],
+        ansText: "Marathas and Ahmad Shah Abdali",
+        why: "The Marathas were defeated, checking their expansion into the North."
+    },
+    {
+        q: "Who built the 'Charminar' in Hyderabad?",
+        tag: "SSC CGL 2017",
+        opts: ["Muhammad Quli Qutb Shah", "Aurangzeb", "Akbar", "Tipu Sultan"],
+        ansText: "Muhammad Quli Qutb Shah",
+        why: "Built in 1591 to commemorate the end of a plague. Contemporary to Akbar."
+    },
+    {
+        q: "Which Mughal noble was known as 'Khan-i-Khanan'?",
+        tag: "SSC CPO 2020",
+        opts: ["Abdul Rahim", "Bairam Khan", "Man Singh", "Todar Mal"],
+        ansText: "Abdul Rahim",
+        why: "Son of Bairam Khan, a great poet and Hindi scholar."
+    },
+    {
+        q: "Who was the English ambassador to get trade privileges from Farrukhsiyar?",
+        tag: "SSC CGL 2021",
+        opts: ["John Surman", "Thomas Roe", "William Hawkins", "Clive"],
+        ansText: "John Surman",
+        why: "He obtained the 'Magna Carta of Company's Trade' in 1717."
+    },
+    {
+        q: "The 'Guru Granth Sahib' was compiled by:",
+        tag: "SSC MTS 2022",
+        opts: ["Guru Arjan Dev", "Guru Nanak", "Guru Gobind Singh", "Guru Tegh Bahadur"],
+        ansText: "Guru Arjan Dev",
+        why: "Compiled in 1604 (Adi Granth)."
+    },
+    {
+        q: "Which Mughal Emperor died in captivity?",
+        tag: "SSC CHSL 2019",
+        opts: ["Shah Jahan", "Bahadur Shah Zafar", "Farrukhsiyar", "Jahandar Shah"],
+        ansText: "Shah Jahan",
+        why: "Imprisoned by his son Aurangzeb in Agra Fort for 8 years until death."
+    },
+    {
+        q: "Who was the architect of 'Humayun's Tomb'?",
+        tag: "SSC CGL 2020",
+        opts: ["Mirak Mirza Ghiyas", "Ustad Ahmad Lahori", "Ustad Isa", "None"],
+        ansText: "Mirak Mirza Ghiyas",
+        why: "A Persian architect brought by Haji Begum."
+    },
+    {
+        q: "The 'Rupee' coin was first minted by:",
+        tag: "SSC CPO 2019",
+        opts: ["Sher Shah Suri", "Akbar", "Babur", "Alauddin Khalji"],
+        ansText: "Sher Shah Suri",
+        why: "Weight 178 grains silver."
+    },
+    {
+        q: "Which Mughal Emperor had the maximum number of Hindu nobles?",
+        tag: "SSC CGL 2022",
+        opts: ["Aurangzeb", "Akbar", "Jahangir", "Shah Jahan"],
+        ansText: "Aurangzeb",
+        why: "Despite his orthodox image, 33% of his nobles were Hindus (mostly Marathas)."
+    },
+    {
+        q: "Who founded the 'Khalsa Panth' in 1699?",
+        tag: "SSC MTS 2021",
+        opts: ["Guru Gobind Singh", "Guru Nanak", "Guru Tegh Bahadur", "Banda Bahadur"],
+        ansText: "Guru Gobind Singh",
+        why: "Created a brotherhood of warrior-saints."
+    },
+    {
+        q: "The 'Grand Trunk Road' connected:",
+        tag: "SSC CHSL 2020",
+        opts: ["Kolkata to Peshawar", "Delhi to Mumbai", "Chennai to Kolkata", "Agra to Surat"],
+        ansText: "Kolkata to Peshawar",
+        why: "Restored by Sher Shah Suri (Sonargaon to Peshawar)."
+    },
+    {
+        q: "Which Rajput ruler refused to accept Mughal suzerainty throughout his life?",
+        tag: "SSC CGL 2018",
+        opts: ["Maharana Pratap", "Man Singh", "Rana Sanga", "Jai Singh"],
+        ansText: "Maharana Pratap",
+        why: "Ruler of Mewar, fought Akbar at Haldighati."
+    },
+    {
+        q: "Who was the 'Wazir' of Mughal Empire during the Battle of Panipat (1556)?",
+        tag: "SSC CPO 2021",
+        opts: ["Bairam Khan", "Hemu", "Todar Mal", "Munim Khan"],
+        ansText: "Bairam Khan",
+        why: "He was the de facto ruler and Wazir for young Akbar."
+    },
+    {
+        q: "The 'Jana-gana-mana' was composed by Tagore. Who translated it into Hindi?",
+        tag: "SSC CGL (Static)",
+        opts: ["Abid Ali", "Bankim Chandra", "Subhash Bose", "Premchand"],
+        ansText: "Abid Ali",
+        why: "Captain Abid Ali of the INA translated it as 'Subh Sukh Chain'."
+    },
+    {
+        q: "Who was the 'Kotwal' in Mughal administration?",
+        tag: "SSC CGL 2019",
+        opts: ["Chief of City Police", "Village Headman", "Treasurer", "Military Commander"],
+        ansText: "Chief of City Police",
+        why: "Maintained law and order in cities."
+    },
+    {
+        q: "Which Mughal Emperor was called 'Prince of Builders'?",
+        tag: "SSC CHSL 2021",
+        opts: ["Shah Jahan", "Akbar", "Jahangir", "Aurangzeb"],
+        ansText: "Shah Jahan",
+        why: "Due to his massive architectural projects like Taj Mahal."
+    },
+    {
+        q: "The 'Battle of Samugarh' decided the fate of:",
+        tag: "SSC MTS 2020",
+        opts: ["Dara Shikoh", "Shuja", "Murad", "Aurangzeb"],
+        ansText: "Dara Shikoh",
+        why: "Decisive battle in the war of succession."
+    },
+    {
+        q: "Who was the first Mughal to use artillery (cannons) in India?",
+        tag: "SSC CGL 2017",
+        opts: ["Babur", "Humayun", "Akbar", "Sher Shah"],
+        ansText: "Babur",
+        why: "Used in the First Battle of Panipat (1526) by Ustad Ali and Mustafa."
+    }
+        {
+        q: "Who was the Mughal Emperor when the 'Nadir Shah' took away the Koh-i-Noor diamond?",
+        tag: "SSC CGL 2019",
+        opts: ["Muhammad Shah", "Shah Alam II", "Jahandar Shah", "Farrukhsiyar"],
+        ansText: "Muhammad Shah",
+        why: "Nadir Shah defeated him in 1739 and looted the Peacock Throne and Koh-i-Noor."
+    },
+    {
+        q: "Which Mughal Emperor was known as 'Shaikh'u Baba' by his father?",
+        tag: "SSC CHSL 2020",
+        opts: ["Jahangir", "Shah Jahan", "Humayun", "Akbar"],
+        ansText: "Jahangir",
+        why: "Akbar affectionately called Prince Salim 'Shaikh'u Baba' after the Sufi Saint Shaikh Salim Chishti."
+    },
+    {
+        q: "The 'Treaty of Purandar' (1665) was signed between Shivaji and which Mughal commander?",
+        tag: "SSC CPO 2018",
+        opts: ["Raja Jai Singh", "Shaista Khan", "Afzal Khan", "Jaswant Singh"],
+        ansText: "Raja Jai Singh",
+        why: "Jai Singh I of Amber represented Aurangzeb. Shivaji had to surrender 23 forts."
+    },
+    {
+        q: "Who wrote 'Masir-i-Alamgiri'?",
+        tag: "SSC History",
+        opts: ["Saqi Mustaid Khan", "Khafi Khan", "Abul Fazl", "Bimsen"],
+        ansText: "Saqi Mustaid Khan",
+        why: "It is a detailed history of Aurangzeb's reign, written after his death."
+    },
+    {
+        q: "The 'Jharokha Darshan' practice was discontinued by:",
+        tag: "SSC MTS 2021",
+        opts: ["Aurangzeb", "Shah Jahan", "Jahangir", "Akbar"],
+        ansText: "Aurangzeb",
+        why: "He considered it a form of idol worship (Un-Islamic) and stopped it in his 11th regnal year."
+    },
+    {
+        q: "Which Mughal Emperor granted the 'Diwani' of Bengal, Bihar, and Orissa to the British?",
+        tag: "SSC CGL 2017",
+        opts: ["Shah Alam II", "Alamgir II", "Akbar II", "Bahadur Shah Zafar"],
+        ansText: "Shah Alam II",
+        why: "After the Battle of Buxar, the Treaty of Allahabad (1765) was signed."
+    },
+    {
+        q: "Who built the 'Badshahi Mosque' in Lahore?",
+        tag: "SSC CHSL 2019",
+        opts: ["Aurangzeb", "Shah Jahan", "Jahangir", "Akbar"],
+        ansText: "Aurangzeb",
+        why: "It was the largest mosque in the world for a long time, built in 1673."
+    },
+    {
+        q: "The 'Satnami Rebellion' occurred during the reign of:",
+        tag: "SSC CPO 2020",
+        opts: ["Aurangzeb", "Akbar", "Jahangir", "Shah Jahan"],
+        ansText: "Aurangzeb",
+        why: "It was a peasant rebellion in Narnaul (Haryana) in 1672."
+    },
+    {
+        q: "Which Mughal noble was called 'King Maker' along with his brother?",
+        tag: "SSC CGL 2021",
+        opts: ["Hussain Ali Khan", "Zulfiqar Khan", "Chin Qilich Khan", "Sadat Khan"],
+        ansText: "Hussain Ali Khan",
+        why: "The Sayyid Brothers (Abdullah Khan and Hussain Ali) controlled the throne after Bahadur Shah I."
+    },
+    {
+        q: "Who was the author of 'Padshahnama'?",
+        tag: "SSC MTS 2020",
+        opts: ["Abdul Hamid Lahori", "Inayat Khan", "Abul Fazl", "Gulbadan Begum"],
+        ansText: "Abdul Hamid Lahori",
+        why: "The official history of Shah Jahan's reign."
+    },
+    {
+        q: "The 'Battle of Samugarh' (1658) was a war of succession among the sons of:",
+        tag: "SSC CHSL 2018",
+        opts: ["Shah Jahan", "Jahangir", "Akbar", "Humayun"],
+        ansText: "Shah Jahan",
+        why: "Fought between Dara Shikoh and Aurangzeb/Murad."
+    },
+    {
+        q: "Who founded the independent state of Hyderabad?",
+        tag: "SSC CGL 2020",
+        opts: ["Chin Qilich Khan (Nizam-ul-Mulk)", "Sadat Khan", "Murshid Quli Khan", "Hyder Ali"],
+        ansText: "Chin Qilich Khan (Nizam-ul-Mulk)",
+        why: "He established the Asaf Jahi dynasty in 1724 as Mughal power declined."
+    },
+    {
+        q: "The 'Bibi Ka Maqbara' is often called:",
+        tag: "SSC CPO 2019",
+        opts: ["Taj of the Deccan", "Pearl Mosque", "Black Taj", "Mini Qutub"],
+        ansText: "Taj of the Deccan",
+        why: "It bears a striking resemblance to the Taj Mahal but lacks its grandeur."
+    },
+    {
+        q: "Which Mughal Emperor was known for his interest in botany and zoology?",
+        tag: "SSC MTS 2019",
+        opts: ["Jahangir", "Babur", "Akbar", "Shah Jahan"],
+        ansText: "Jahangir",
+        why: "He recorded detailed descriptions of animals (like the Zebra) and plants in his memoir."
+    },
+    {
+        q: "Who was the first Mughal to celebrate 'Raksha Bandhan'?",
+        tag: "SSC History Trivia",
+        opts: ["Jahangir", "Humayun", "Akbar", "Babur"],
+        ansText: "Humayun",
+        why: "Legend says Rani Karnavati of Chittor sent him a Rakhi seeking protection."
+    },
+    {
+        q: "The 'Dahsala' system was a further development of which system?",
+        tag: "SSC CGL Tier-2",
+        opts: ["Zabti System", "Batai System", "Nasaq System", "Galla Bakshi"],
+        ansText: "Zabti System",
+        why: "Todar Mal improved the Zabti system into Dahsala (10-year average)."
+    },
+    {
+        q: "Who built the 'Nishat Bagh' in Srinagar?",
+        tag: "SSC CHSL 2021",
+        opts: ["Asaf Khan", "Jahangir", "Shah Jahan", "Nur Jahan"],
+        ansText: "Asaf Khan",
+        why: "Brother of Nur Jahan and father of Mumtaz Mahal."
+    },
+    {
+        q: "Which Mughal Emperor introduced the 'Do-Aspa Sih-Aspa' rank?",
+        tag: "SSC CGL 2019",
+        opts: ["Jahangir", "Akbar", "Shah Jahan", "Aurangzeb"],
+        ansText: "Jahangir",
+        why: "It allowed a Mansabdar to maintain more troops without raising their Zat rank."
+    },
+    {
+        q: "Who was the 'Mir-i-Saman'?",
+        tag: "SSC CPO 2021",
+        opts: ["In-charge of Imperial Household", "Head of Army", "Chief Justice", "Finance Minister"],
+        ansText: "In-charge of Imperial Household",
+        why: "Controlled the Karkhanas and royal supply chain."
+    },
+    {
+        q: "The 'Red Fort' in Delhi was constructed between:",
+        tag: "SSC MTS 2022",
+        opts: ["1638-1648", "1560-1570", "1605-1615", "1658-1668"],
+        ansText: "1638-1648",
+        why: "Built by Shah Jahan when he shifted the capital to Shahjahanabad."
+    },
+    {
+        q: "Who translated the 'Bhagavad Gita' into Persian?",
+        tag: "SSC CGL 2020",
+        opts: ["Dara Shikoh", "Abul Fazl", "Faizi", "Badauni"],
+        ansText: "Dara Shikoh",
+        why: "He also translated the Upanishads (Sirr-i-Akbar)."
+    },
+    {
+        q: "Which Mughal Emperor was defeated by the Marathas in the 'Battle of Delhi' (1737)?",
+        tag: "SSC CHSL 2020",
+        opts: ["Muhammad Shah", "Aurangzeb", "Shah Alam II", "Bahadur Shah I"],
+        ansText: "Muhammad Shah",
+        why: "Baji Rao I raided Delhi, exposing the weakness of the Mughal Empire."
+    },
+    {
+        q: "The term 'Urdu' is derived from which language?",
+        tag: "SSC GD 2021",
+        opts: ["Turkish", "Persian", "Arabic", "Hindi"],
+        ansText: "Turkish",
+        why: "It means 'Camp' or 'Army' (Ordu) in Turkish."
+    },
+    {
+        q: "Who was the Sikh Guru during the reign of Aurangzeb?",
+        tag: "SSC CGL 2018",
+        opts: ["Guru Tegh Bahadur", "Guru Nanak", "Guru Ram Das", "Guru Angad"],
+        ansText: "Guru Tegh Bahadur",
+        why: "Aurangzeb executed him in 1675."
+    },
+    {
+        q: "Which Mughal Emperor appointed the first 'Peshwa' Balaji Vishwanath?",
+        tag: "SSC CPO 2019",
+        opts: ["Farrukhsiyar", "Muhammad Shah", "Jahandar Shah", "Bahadur Shah I"],
+        ansText: "Farrukhsiyar",
+        why: "Through the treaty of 1714 (via Sayyid Brothers), Marathas got the right to collect Chauth/Sardeshmukhi."
+    },
+    {
+        q: "The 'Tomb of Akbar' at Sikandra has no:",
+        tag: "SSC Art & Culture",
+        opts: ["Dome", "Minarets", "Gardens", "Gateway"],
+        ansText: "Dome",
+        why: "Unique among Mughal tombs, it has a pyramidal structure instead of a main dome."
+    },
+    {
+        q: "Who was the 'Wazir' who blinded Shah Alam II?",
+        tag: "SSC CGL Tier-1",
+        opts: ["Ghulam Qadir", "Imad-ul-Mulk", "Safdarjung", "Najib-ud-Daula"],
+        ansText: "Ghulam Qadir",
+        why: "A Rohilla chief who committed this atrocity in 1788."
+    },
+    {
+        q: "Which Mughal Emperor was known as 'Prince of Builders'?",
+        tag: "SSC CHSL 2021",
+        opts: ["Shah Jahan", "Akbar", "Jahangir", "Aurangzeb"],
+        ansText: "Shah Jahan",
+        why: "For his immense contribution to architecture (Taj, Red Fort, Jama Masjid)."
+    },
+    {
+        q: "The 'Battle of Machhiwara' (1555) was fought between:",
+        tag: "SSC MTS 2020",
+        opts: ["Humayun and Afghans", "Akbar and Hemu", "Babur and Lodi", "Marathas and Abdali"],
+        ansText: "Humayun and Afghans",
+        why: "Humayun defeated the Suri forces to recapture Punjab."
+    },
+    {
+        q: "Who introduced the 'Ganj-i-Sawai' cannon?",
+        tag: "SSC Trick Question",
+        opts: ["None (It was a ship)", "Babur", "Akbar", "Aurangzeb"],
+        ansText: "None (It was a ship)",
+        why: "Ganj-i-Sawai was a famous armed trading ship of Aurangzeb, not a cannon."
+    },
+    {
+        q: "Which Mughal Emperor issued coins with Zodiac signs?",
+        tag: "SSC CGL 2017",
+        opts: ["Jahangir", "Akbar", "Shah Jahan", "Humayun"],
+        ansText: "Jahangir",
+        why: "He issued a famous series of gold and silver coins depicting zodiac signs."
+    },
+    {
+        q: "Who was the 'Diwan' of Akbar?",
+        tag: "SSC CPO 2020",
+        opts: ["Todar Mal", "Birbal", "Man Singh", "Faizi"],
+        ansText: "Todar Mal",
+        why: "He served as the Finance Minister (Diwan-i-Ashraf)."
+    },
+    {
+        q: "The 'Moti Masjid' in Lahore Fort was built by:",
+        tag: "SSC CHSL 2019",
+        opts: ["Shah Jahan", "Jahangir", "Aurangzeb", "Akbar"],
+        ansText: "Shah Jahan",
+        why: "Shah Jahan built the one in Agra and Lahore. Aurangzeb built the one in Delhi."
+    },
+    {
+        q: "Who was the author of 'Shahjahannama'?",
+        tag: "SSC CGL 2021",
+        opts: ["Inayat Khan", "Lahori", "Abul Fazl", "Bernier"],
+        ansText: "Inayat Khan",
+        why: "Another chronicle of Shah Jahan's reign."
+    },
+    {
+        q: "Which Mughal Emperor was buried at Kabul?",
+        tag: "SSC MTS 2018",
+        opts: ["Babur", "Humayun", "Jahangir", "Akbar"],
+        ansText: "Babur",
+        why: "First buried in Agra, then moved to Bagh-e-Babur in Kabul."
+    },
+    {
+        q: "The 'Battle of Sarai Ghat' (1671) was fought between Mughals and:",
+        tag: "SSC CGL 2022",
+        opts: ["Ahoms (Assam)", "Sikhs", "Marathas", "Rajputs"],
+        ansText: "Ahoms (Assam)",
+        why: "Lachit Borphukan (Ahom general) defeated the Mughal army led by Ram Singh I."
+    },
+    {
+        q: "Who introduced the 'Ilahi' coins?",
+        tag: "SSC CPO 2021",
+        opts: ["Akbar", "Sher Shah", "Jahangir", "Shah Jahan"],
+        ansText: "Akbar",
+        why: "Gold coins introduced by Akbar."
+    },
+    {
+        q: "The 'Khusrau Bagh' is located in:",
+        tag: "SSC CHSL 2020",
+        opts: ["Prayagraj (Allahabad)", "Agra", "Lahore", "Srinagar"],
+        ansText: "Prayagraj (Allahabad)",
+        why: "Burial place of Prince Khusrau (son of Jahangir)."
+    },
+    {
+        q: "Which Mughal Emperor assumed the title 'Ghazi' after the Battle of Khanwa?",
+        tag: "SSC CGL 2019",
+        opts: ["Babur", "Akbar", "Aurangzeb", "Humayun"],
+        ansText: "Babur",
+        why: "Signifying a holy warrior after defeating Rana Sanga."
+    },
+    {
+        q: "Who was the 'Mir-i-Atish'?",
+        tag: "SSC MTS 2021",
+        opts: ["Head of Artillery", "Head of Navy", "Head of Spies", "Head of Mint"],
+        ansText: "Head of Artillery",
+        why: "Responsible for cannons and firearms."
+    },
+    {
+        q: "The 'Din-i-Panah' was destroyed by:",
+        tag: "SSC CGL 2018",
+        opts: ["Sher Shah Suri", "Humayun", "Akbar", "Nadir Shah"],
+        ansText: "Sher Shah Suri",
+        why: "He built his own capital Shergarh on its ruins."
+    },
+    {
+        q: "Who was the first Mughal to accept the 'Subsidiary Alliance'?",
+        tag: "SSC History Conceptual",
+        opts: ["Shah Alam II", "Akbar II", "Bahadur Shah Zafar", "Nizam of Hyderabad"],
+        ansText: "Shah Alam II",
+        why: "Effectively accepted British protection after the Treaty of Allahabad/Delhi control."
+    },
+    {
+        q: "Which Mughal Emperor was known for his 'Meena Bazaar'?",
+        tag: "SSC CPO 2020",
+        opts: ["Humayun", "Akbar", "Shah Jahan", "Jahangir"],
+        ansText: "Humayun",
+        why: "First introduced by Humayun, later popularized by Akbar."
+    },
+    {
+        q: "The 'Battle of Haldighati' took place in:",
+        tag: "SSC CHSL 2018",
+        opts: ["1576", "1556", "1526", "1761"],
+        ansText: "1576",
+        why: "June 18, 1576."
+    },
+    {
+        q: "Who wrote 'Tabaqat-i-Nasiri' (Sultanate era text) often cited in Mughal history?",
+        tag: "SSC CGL 2020",
+        opts: ["Minhaj-us-Siraj", "Barani", "Amir Khusrau", "Isami"],
+        ansText: "Minhaj-us-Siraj",
+        why: "Though Sultanate, it is a key source for early Islamic history in India."
+    },
+    {
+        q: "Who was the 'Vakil' of Shah Jahan?",
+        tag: "SSC JE 2020",
+        opts: ["Asaf Khan", "Mahabat Khan", "Sadullah Khan", "Mir Jumla"],
+        ansText: "Asaf Khan",
+        why: "Nur Jahan's brother, held the highest post."
+    },
+    {
+        q: "Which Mughal Emperor was born in Amarkot?",
+        tag: "SSC MTS 2019",
+        opts: ["Akbar", "Jahangir", "Humayun", "Shah Jahan"],
+        ansText: "Akbar",
+        why: "Born in the palace of Rana Prasad in 1542 during Humayun's exile."
+    },
+    {
+        q: "The 'Pietra Dura' technique is most prominently used in:",
+        tag: "SSC CGL 2021",
+        opts: ["Taj Mahal", "Red Fort", "Humayun's Tomb", "Fatehpur Sikri"],
+        ansText: "Taj Mahal",
+        why: "Inlay work of semi-precious stones in marble."
+    },
+    {
+        q: "Who was the 'Subehdar' of Deccan appointed by Aurangzeb who later founded Hyderabad?",
+        tag: "SSC CPO 2021",
+        opts: ["Nizam-ul-Mulk", "Saadat Khan", "Murshid Quli Khan", "Alivardi Khan"],
+        ansText: "Nizam-ul-Mulk",
+        why: "Chin Qilich Khan (Asaf Jah I)."
+    },
+    {
+        q: "Which Mughal Emperor was called 'Khurram' in his childhood?",
+        tag: "SSC GD 2021",
+        opts: ["Shah Jahan", "Jahangir", "Akbar", "Aurangzeb"],
+        ansText: "Shah Jahan",
+        why: "Name given by his grandfather Akbar."
+    }
         ];
 
-        function startQuiz() {
-            var userName = document.getElementById('username').value;
-            if (userName) {
-                // Quiz logic here
-                alert('Welcome ' + userName + '! Let the quiz begin!');
-                // Further code to initiate quiz...
-            } else {
-                alert('Please enter your name to start the quiz.');
+        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid", userName = "";
+        let previousView = null;
+
+        const views = { start: document.getElementById('start-view'), mode: document.getElementById('mode-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
+
+        // --- LOCAL STORAGE LOGIC ---
+        function loadLeaderboard() {
+            const data = localStorage.getItem('ssc_mughal_marathon_lb');
+            if (data) leaderboard = JSON.parse(data);
+            updateLeaderboardUI();
+        }
+        function saveLeaderboard() {
+            localStorage.setItem('ssc_mughal_marathon_lb', JSON.stringify(leaderboard));
+        }
+        function clearLeaderboard() {
+            if(confirm("Clear history?")) {
+                leaderboard = [];
+                saveLeaderboard();
+                updateLeaderboardUI();
             }
         }
+        window.onload = loadLeaderboard;
+
+        // --- NAVIGATION ---
+        function goToModeSelection() {
+            userName = document.getElementById('username').value.trim();
+            if (!userName) return alert("Please enter your name");
+            views.start.classList.add('hidden');
+            views.mode.classList.remove('hidden');
+        }
+        function backToStart() { views.mode.classList.add('hidden'); views.start.classList.remove('hidden'); }
+        
+        function startRapidFire() { mode = "rapid"; initQuiz(); }
+        function startPractice() { mode = "practice"; initQuiz(); }
+
+        // --- QUIZ LOGIC ---
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+        function initQuiz() {
+            // Shuffle Logic
+            activeQ = shuffle(JSON.parse(JSON.stringify(MASTER_DATA))).map(q => {
+                let s = shuffle([...q.opts]);
+                return { ...q, opts: s, ans: s.indexOf(q.ansText) };
+            });
+            
+            currentIdx = 0; 
+            userAnswers = Array(activeQ.length).fill(-1);
+            
+            // UI Switch
+            views.mode.classList.add('hidden'); 
+            views.quiz.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.remove('hidden');
+            
+            document.getElementById('user-display').innerText = userName;
+            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'RAPID FIRE' : 'PRACTICE';
+            
+            if(mode === 'rapid') {
+                document.getElementById('nav-buttons').classList.add('hidden');
+                document.getElementById('question-indicator').classList.add('hidden');
+                document.getElementById('timer-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-buttons').classList.remove('hidden');
+                document.getElementById('question-indicator').classList.remove('hidden');
+                document.getElementById('timer-badge').classList.add('hidden');
+                document.getElementById('current-q-num').innerText = 1;
+                document.getElementById('total-q-num').innerText = activeQ.length;
+            }
+            
+            renderQ();
+        }
+
+        function renderQ() {
+            const q = activeQ[currentIdx];
+            document.getElementById('question-text').innerText = `Q${currentIdx+1}. ${q.q}`;
+            document.getElementById('pyq-tag').innerText = q.tag;
+            document.getElementById('progress-bar').style.width = `${((currentIdx+1)/activeQ.length)*100}%`;
+            
+            if(mode === 'practice') document.getElementById('current-q-num').innerText = currentIdx + 1;
+
+            const cont = document.getElementById('options-container');
+            cont.innerHTML = '';
+            
+            q.opts.forEach((o, i) => {
+                const btn = document.createElement('button');
+                let sel = userAnswers[currentIdx] === i;
+                btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-medium border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50`;
+                
+                if (sel) {
+                    btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-bold border-blue-500 bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-500`;
+                }
+
+                btn.innerText = o;
+                btn.onclick = () => handleSelect(i);
+                cont.appendChild(btn);
+            });
+
+            if(mode === 'practice') {
+                document.getElementById('prev-btn').disabled = currentIdx === 0;
+                document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
+            } else {
+                startTimer();
+            }
+        }
+
+        function handleSelect(i) {
+            userAnswers[currentIdx] = i;
+            renderQ();
+
+            if (mode === 'rapid') {
+                clearInterval(timerId);
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } 
+                    else finish();
+                }, 400);
+            } else {
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
+                }, 400);
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerId); 
+            let t = 20;
+            const el = document.getElementById('timer'); 
+            el.innerText = t;
+            
+            timerId = setInterval(() => {
+                t--; 
+                el.innerText = t;
+                if(t <= 0) { 
+                    clearInterval(timerId); 
+                    if(userAnswers[currentIdx] === -1) handleSelect(-1); 
+                }
+            }, 1000);
+        }
+
+        function prevQ() { if(currentIdx > 0) { currentIdx--; renderQ(); } }
+        function nextQ() { if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } }
+        function submitQuiz() { if(confirm("Submit Test?")) finish(); }
+
+        function finish() {
+            clearInterval(timerId);
+            views.quiz.classList.replace('flex', 'hidden'); 
+            views.result.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.add('hidden');
+
+            let m = 0, c = 0, w = 0, s = 0;
+            userAnswers.forEach((a, i) => {
+                if (a === activeQ[i].ans) { m += 1; c++; }
+                else if (a === -1) { s++; }
+                else { m -= 0.25; w++; }
+            });
+
+            document.getElementById('result-name').innerText = userName;
+            document.getElementById('final-score').innerText = m.toFixed(2);
+            document.getElementById('correct-count').innerText = c;
+            document.getElementById('wrong-count').innerText = w;
+            document.getElementById('skip-count').innerText = s;
+
+            leaderboard.push({
+                name: userName,
+                score: m,
+                date: new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
+                mode: mode,
+                qSet: activeQ, 
+                history: userAnswers
+            });
+            saveLeaderboard();
+            updateLeaderboardUI();
+        }
+
+        // --- RANKING LOGIC (DENSE RANK) ---
+        function updateLeaderboardUI() {
+            leaderboard.sort((a,b) => b.score - a.score);
+            const list = document.getElementById('start-leaderboard-list');
+            
+            if (leaderboard.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
+                return;
+            }
+
+            let currentRank = 1;
+            
+            list.innerHTML = leaderboard.map((e, i) => {
+                // Dense Rank Logic
+                if (i > 0 && e.score < leaderboard[i-1].score) {
+                    currentRank = currentRank + 1; // Increment only if score is strictly lower
+                }
+                // If score is same, currentRank remains same
+                
+                let icon = e.mode === 'rapid' ? '🔥' : '📚';
+                let medal = currentRank === 1 ? '🥇' : currentRank === 2 ? '🥈' : currentRank === 3 ? '🥉' : `<span class="text-slate-400 font-bold text-sm">#${currentRank}</span>`;
+
+                return `
+                <div onclick="viewHistory(${i})" class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition-colors group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 flex justify-center text-xl">${medal}</div>
+                        <div>
+                            <div class="font-bold text-slate-700 text-sm group-hover:text-blue-700">${e.name}</div>
+                            <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                <span>${icon}</span> ${e.date}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-slate-800 text-sm">${e.score.toFixed(2)}</div>
+                        <div class="text-[9px] text-blue-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">VIEW</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function viewHistory(idx) {
+            previousView = views.start;
+            views.start.classList.add('hidden');
+            renderReview(leaderboard[idx].history, leaderboard[idx].qSet, leaderboard[idx].name);
+        }
+
+        function showReviewFromResults() {
+            previousView = views.result;
+            views.result.classList.replace('flex', 'hidden');
+            renderReview(userAnswers, activeQ, userName);
+        }
+
+        function renderReview(answers, qData, pName) {
+            views.review.classList.replace('hidden', 'flex');
+            document.getElementById('review-player-name').innerText = pName; 
+            const cont = document.getElementById('review-container');
+            cont.innerHTML = '';
+
+            answers.forEach((ansIdx, i) => {
+                const q = qData[i];
+                let statusClass = ansIdx === q.ans ? 'text-green-600 bg-green-50 border-green-100' : ansIdx === -1 ? 'text-slate-500 bg-slate-50 border-slate-100' : 'text-red-500 bg-red-50 border-red-100';
+                let statusText = ansIdx === q.ans ? 'CORRECT (+1)' : ansIdx === -1 ? 'SKIPPED' : 'WRONG (-0.25)';
+
+                let optsHtml = q.opts.map((o, idx) => {
+                    let style = "border-slate-100 text-slate-500";
+                    let icon = "";
+                    if (idx === q.ans) { style = "bg-green-50 border-green-200 text-green-800 font-bold"; icon = "✅"; }
+                    else if (idx === ansIdx) { style = "bg-red-50 border-red-200 text-red-800 line-through"; icon = "❌"; }
+                    return `<div class="p-2.5 rounded-lg border text-xs flex justify-between items-center ${style}">${o} <span>${icon}</span></div>`;
+                }).join('');
+
+                cont.innerHTML += `
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm shrink-0">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-slate-400 text-xs">Q${i+1}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-1 leading-relaxed">${q.q}</p>
+                    <p class="text-[10px] text-slate-400 font-mono mb-3">${q.tag}</p>
+                    <div class="space-y-1.5 mb-3">${optsHtml}</div>
+                    <div class="mt-2 text-xs text-yellow-800 bg-yellow-50 border border-yellow-200 p-2.5 rounded-lg leading-relaxed flex gap-2">
+                        <span>💡</span>
+                        <span>${q.why}</span>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function closeReview() {
+            views.review.classList.replace('flex', 'hidden');
+            previousView.classList.remove('hidden');
+            if(previousView === views.result) previousView.classList.add('flex');
+        }
+
+        function resetApp() {
+            clearInterval(timerId);
+            document.getElementById('username').value = "";
+            views.result.classList.replace('flex', 'hidden');
+            views.start.classList.remove('hidden');
+            document.getElementById('header').classList.add('hidden');
+        }
     </script>
-</head>
-<body>
-    <h1>Mughal Empire Quiz</h1>
-    <input type="text" id="username" placeholder="Enter your name" />
-    <button onclick="startQuiz()">Start Quiz</button>
-    <div id="quiz-container"></div>
 </body>
 </html>
+```
