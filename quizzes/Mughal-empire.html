@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSC Mughal Empire - Certified PYQs</title>
+    <title>SSC Master Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
-        .btn-option { transition: all 0.2s; border-width: 2px; }
-        .btn-option:active { transform: scale(0.98); }
+        
+        /* UI STABILITY FIXES */
+        .btn-option { 
+            transition: all 0.15s ease;
+            border-width: 2px; /* Fixed border to prevent jumping */
+        }
+        .btn-option:active { transform: scale(0.99); }
+        
         .fade-in { animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
@@ -24,95 +33,143 @@
         <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
             <div class="flex flex-col">
                 <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
-                <span class="text-xs text-slate-400" id="mode-display">Rapid Fire</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase" id="mode-display">RAPID FIRE</span>
             </div>
             <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
                 ⏱️ <span id="timer">20</span>s
             </div>
         </div>
 
-        <!-- START SCREEN -->
+        <!-- VIEW 1: START SCREEN -->
         <div id="start-view" class="h-full overflow-y-auto flex flex-col">
             <div class="p-8 flex flex-col items-center text-center shrink-0">
                 <div class="text-5xl mb-4">🕌</div>
                 <h1 class="text-2xl font-bold text-slate-800 mb-2">Mughal Empire</h1>
                 <p class="text-slate-500 mb-6 text-sm">
-                    15 Certified SSC PYQs<br>
+                    15 SSC PYQs • Randomized<br>
                     <span class="text-green-600 font-bold">+1.0</span> • <span class="text-red-500 font-bold">-0.25</span>
                 </p>
-                <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500">
-                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg">
+                
+                <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors">
+                
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">
                     Continue
                 </button>
             </div>
+
+            <!-- Persistent Leaderboard -->
             <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Leaderboard</h3>
-                <div id="start-leaderboard-list" class="space-y-2"></div>
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leaderboard</h3>
+                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR</button>
+                </div>
+                <div id="start-leaderboard-list" class="space-y-2 pb-4">
+                    <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
+                </div>
             </div>
         </div>
 
-        <!-- MODE SELECTION -->
+        <!-- VIEW 2: MODE SELECTION -->
         <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
             <div class="p-8 flex flex-col items-center text-center shrink-0">
-                <h1 class="text-2xl font-bold text-slate-800 mb-6 text-center">Select Mode</h1>
+                <div class="text-5xl mb-2">⚡</div>
+                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
+                
                 <div class="flex flex-col gap-4 w-full">
-                    <div onclick="startRapidFire()" class="cursor-pointer p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 text-left">
-                        <div class="font-bold text-orange-900">🔥 Rapid Fire</div>
-                        <p class="text-xs text-orange-700 mt-1">20s per question. Fast pace.</p>
+                    <!-- Rapid Fire Option -->
+                    <div onclick="startRapidFire()" class="cursor-pointer group p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 hover:shadow-md transition-all text-left relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="font-bold text-orange-900 flex items-center gap-2">🔥 Rapid Fire</div>
+                            <p class="text-xs text-orange-700 mt-1 font-medium">20s Timer • Auto-Skip</p>
+                            <p class="text-[10px] text-orange-600/80 mt-2 leading-relaxed">Strict exam simulation. No going back. Speed is key.</p>
+                        </div>
                     </div>
-                    <div onclick="startPractice()" class="cursor-pointer p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 text-left">
-                        <div class="font-bold text-green-900">📚 Practice</div>
-                        <p class="text-xs text-green-700 mt-1">No timer. Full navigation.</p>
+
+                    <!-- Practice Option -->
+                    <div onclick="startPractice()" class="cursor-pointer group p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 hover:shadow-md transition-all text-left relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="font-bold text-green-900 flex items-center gap-2">📚 Practice Mode</div>
+                            <p class="text-xs text-green-700 mt-1 font-medium">No Timer • Navigation</p>
+                            <p class="text-[10px] text-green-600/80 mt-2 leading-relaxed">Take your time. Use Prev/Next buttons. Best for learning.</p>
+                        </div>
                     </div>
                 </div>
-                <button onclick="backToStart()" class="mt-6 text-sm text-slate-400 font-bold">← Back</button>
+                
+                <button onclick="backToStart()" class="mt-8 text-slate-400 hover:text-slate-600 font-bold text-sm">← Back</button>
             </div>
         </div>
 
-        <!-- QUIZ VIEW -->
+        <!-- VIEW 3: QUIZ -->
         <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
-            <div class="w-full bg-slate-100 h-2 rounded-full mb-6 shrink-0">
-                <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            <!-- Progress -->
+            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-6 shrink-0 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
-            <div class="mb-6">
+
+            <!-- Question Area -->
+            <div class="mb-6 shrink-0">
                 <h2 id="question-text" class="text-lg font-bold text-slate-800 leading-relaxed">Loading...</h2>
-                <div id="pyq-tag" class="text-[10px] font-mono text-slate-400 mt-2 bg-slate-50 inline-block px-2 py-0.5 rounded border border-slate-100"></div>
+                <!-- PYQ Tag -->
+                <div id="pyq-tag" class="inline-block mt-2 px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-mono text-slate-500 font-medium"></div>
             </div>
+
+            <!-- Options -->
             <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
             
-            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-200 pt-4 flex gap-3">
-                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 text-slate-600 font-bold py-2 rounded-lg text-sm">← Prev</button>
-                <button onclick="submitQuiz()" class="flex-1 bg-green-600 text-white font-bold py-2 rounded-lg text-sm">Submit</button>
-                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">Next →</button>
+            <!-- Navigation (Practice Only) -->
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-100 pt-4 mt-2 flex gap-3">
+                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50">← Prev</button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow-sm">Submit</button>
+                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50 shadow-sm">Next →</button>
+            </div>
+
+            <!-- Q Counter -->
+            <div id="question-indicator" class="hidden shrink-0 text-center text-[10px] text-slate-400 font-bold mt-3">
+                <span id="current-q-num">1</span> / <span id="total-q-num">15</span>
             </div>
         </div>
 
-        <!-- RESULT VIEW -->
-        <div id="result-view" class="hidden flex-col h-full overflow-y-auto p-8 text-center">
-            <div class="text-6xl mb-4">🏆</div>
-            <h2 id="result-name" class="text-xl font-bold text-slate-800 mb-1"></h2>
-            <div class="bg-slate-50 rounded-xl p-6 my-6 border border-slate-100">
-                <div class="text-[56px] font-black text-blue-600 leading-none mb-4" id="final-score">0</div>
-                <div class="flex justify-center gap-6 text-sm font-bold">
-                    <span class="text-green-600">✅ <span id="correct-count">0</span></span>
-                    <span class="text-red-500">❌ <span id="wrong-count">0</span></span>
+        <!-- VIEW 4: RESULT -->
+        <div id="result-view" class="hidden flex-col h-full overflow-y-auto">
+            <div class="p-8 text-center shrink-0">
+                <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Completed</h2>
+                <p class="text-slate-500 text-sm mb-6 font-medium" id="result-name">Well done</p>
+                
+                <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200">
+                    <div class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">FINAL SCORE</div>
+                    <div id="final-score" class="text-6xl font-black text-blue-600 leading-none mb-4 tracking-tight">0</div>
+                    <div class="flex justify-center gap-6 text-sm font-bold border-t border-slate-200 pt-4">
+                        <span class="text-green-600 flex items-center gap-1">✅ <span id="correct-count">0</span></span>
+                        <span class="text-red-500 flex items-center gap-1">❌ <span id="wrong-count">0</span></span>
+                        <span class="text-slate-400 flex items-center gap-1">⚪ <span id="skip-count">0</span></span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-xl transition-colors text-sm">
+                        📄 Review Solutions
+                    </button>
+                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-md shadow-blue-200">
+                        🔄 Back to Home
+                    </button>
                 </div>
             </div>
-            <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 py-3 rounded-xl font-bold mb-3">Review Solutions</button>
-            <button onclick="resetApp()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Back to Home</button>
         </div>
 
-        <!-- REVIEW VIEW -->
+        <!-- VIEW 5: REVIEW HISTORY -->
         <div id="review-view" class="hidden flex-col h-full bg-slate-50">
-            <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center">
-                <h3 class="font-bold">History</h3>
-                <button onclick="closeReview()" class="text-blue-600 font-bold text-sm">Close</button>
+            <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center shrink-0 shadow-sm z-10">
+                <h3 class="font-bold text-slate-700 text-sm">Attempt History</h3>
+                <button onclick="closeReview()" class="text-blue-600 font-bold text-xs hover:underline bg-blue-50 px-3 py-1 rounded-full">CLOSE</button>
             </div>
             <div id="review-container" class="flex-1 p-4 overflow-y-auto space-y-4"></div>
         </div>
+
     </div>
 
     <script>
+        // --- MASTER DATA: 15 SSC PYQs ---
         const MASTER_DATA = [
             { q: "Which Mughal Emperor was defeated by Sher Shah Suri in the Battle of Kannauj (1540)?", tag: "SSC CHSL 12/04/2021 (Shift-1)", opts: ["Babur", "Humayun", "Akbar", "Jahangir"], ansText: "Humayun", why: "Humayun fled India after this defeat, leading to the Suri interregnum." },
             { q: "Who was the author of 'Ain-i-Akbari'?", tag: "SSC MTS 05/10/2021 (Shift-2)", opts: ["Badauni", "Abul Fazl", "Faizi", "Gulbadan Begum"], ansText: "Abul Fazl", why: "It is part of the larger work 'Akbarnama'." },
@@ -131,37 +188,75 @@
             { q: "Who was the last powerful Mughal Emperor?", tag: "SSC CGL 03/12/2022 (Shift-4)", opts: ["Bahadur Shah I", "Aurangzeb", "Shah Alam II", "Bahadur Shah Zafar"], ansText: "Aurangzeb", why: "The empire began to disintegrate rapidly after his death in 1707." }
         ];
 
-        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid";
+        // --- STATE & VARS ---
+        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid", userName = "";
+        let previousView = null;
+
         const views = { start: document.getElementById('start-view'), mode: document.getElementById('mode-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
 
-        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+        // --- LOCAL STORAGE LOGIC ---
+        function loadLeaderboard() {
+            const data = localStorage.getItem('ssc_mughal_lb_v4');
+            if (data) leaderboard = JSON.parse(data);
+            updateLeaderboardUI();
+        }
+        function saveLeaderboard() {
+            localStorage.setItem('ssc_mughal_lb_v4', JSON.stringify(leaderboard));
+        }
+        function clearLeaderboard() {
+            if(confirm("Clear history?")) {
+                leaderboard = [];
+                saveLeaderboard();
+                updateLeaderboardUI();
+            }
+        }
+        window.onload = loadLeaderboard;
 
-        function goToModeSelection() { 
-            if(!document.getElementById('username').value.trim()) return;
-            views.start.classList.add('hidden'); views.mode.classList.remove('hidden'); 
+        // --- NAVIGATION ---
+        function goToModeSelection() {
+            userName = document.getElementById('username').value.trim();
+            if (!userName) return alert("Please enter your name");
+            views.start.classList.add('hidden');
+            views.mode.classList.remove('hidden');
         }
         function backToStart() { views.mode.classList.add('hidden'); views.start.classList.remove('hidden'); }
+        
         function startRapidFire() { mode = "rapid"; initQuiz(); }
         function startPractice() { mode = "practice"; initQuiz(); }
 
+        // --- QUIZ LOGIC ---
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
         function initQuiz() {
+            // Shuffle Logic
             activeQ = shuffle(JSON.parse(JSON.stringify(MASTER_DATA))).map(q => {
                 let s = shuffle([...q.opts]);
                 return { ...q, opts: s, ans: s.indexOf(q.ansText) };
             });
-            currentIdx = 0; userAnswers = Array(activeQ.length).fill(-1);
-            views.mode.classList.add('hidden'); views.quiz.classList.replace('hidden', 'flex');
+            
+            currentIdx = 0; 
+            userAnswers = Array(activeQ.length).fill(-1);
+            
+            // UI Switch
+            views.mode.classList.add('hidden'); 
+            views.quiz.classList.replace('hidden', 'flex');
             document.getElementById('header').classList.remove('hidden');
-            document.getElementById('user-display').innerText = document.getElementById('username').value;
-            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'Rapid Fire' : 'Practice';
+            
+            document.getElementById('user-display').innerText = userName;
+            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'RAPID FIRE' : 'PRACTICE';
             
             if(mode === 'rapid') {
                 document.getElementById('nav-buttons').classList.add('hidden');
+                document.getElementById('question-indicator').classList.add('hidden');
                 document.getElementById('timer-badge').classList.remove('hidden');
             } else {
                 document.getElementById('nav-buttons').classList.remove('hidden');
+                document.getElementById('question-indicator').classList.remove('hidden');
                 document.getElementById('timer-badge').classList.add('hidden');
+                document.getElementById('current-q-num').innerText = 1;
+                document.getElementById('total-q-num').innerText = activeQ.length;
             }
+            
             renderQ();
         }
 
@@ -171,39 +266,71 @@
             document.getElementById('pyq-tag').innerText = q.tag;
             document.getElementById('progress-bar').style.width = `${((currentIdx+1)/activeQ.length)*100}%`;
             
+            if(mode === 'practice') document.getElementById('current-q-num').innerText = currentIdx + 1;
+
             const cont = document.getElementById('options-container');
             cont.innerHTML = '';
+            
             q.opts.forEach((o, i) => {
                 const btn = document.createElement('button');
-                btn.className = `btn-option w-full p-4 rounded-xl text-left border-2 text-sm ${userAnswers[currentIdx] === i ? 'border-blue-500 bg-blue-50 font-bold' : 'border-slate-200 bg-white'}`;
+                // LOGIC: If selected, Blue Border + Blue BG. Else Gray Border + White BG.
+                let sel = userAnswers[currentIdx] === i;
+                btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-medium border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50`;
+                
+                if (sel) {
+                    btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-bold border-blue-500 bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-500`;
+                }
+
                 btn.innerText = o;
-                btn.onclick = () => selectOpt(i);
+                btn.onclick = () => handleSelect(i);
                 cont.appendChild(btn);
             });
 
-            if(mode === 'rapid') startTimer();
-            document.getElementById('prev-btn').disabled = currentIdx === 0;
-            document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
+            // Nav buttons state
+            if(mode === 'practice') {
+                document.getElementById('prev-btn').disabled = currentIdx === 0;
+                document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
+            } else {
+                startTimer();
+            }
+        }
+
+        function handleSelect(i) {
+            userAnswers[currentIdx] = i;
+            
+            // Visual Update immediately (Better UI)
+            renderQ();
+
+            // Auto-advance logic
+            if (mode === 'rapid') {
+                clearInterval(timerId);
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } 
+                    else finish();
+                }, 400);
+            } else {
+                // Practice Mode Auto-Advance (Requested Feature)
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
+                }, 400);
+            }
         }
 
         function startTimer() {
-            clearInterval(timerId); let t = 20;
-            const el = document.getElementById('timer'); el.innerText = t;
+            clearInterval(timerId); 
+            let t = 20;
+            const el = document.getElementById('timer'); 
+            el.innerText = t;
+            
             timerId = setInterval(() => {
-                t--; el.innerText = t;
-                if(t <= 0) { clearInterval(timerId); selectOpt(-1); }
+                t--; 
+                el.innerText = t;
+                if(t <= 0) { 
+                    clearInterval(timerId); 
+                    // Record skip (-1) if not answered, but don't overwrite if answered
+                    if(userAnswers[currentIdx] === -1) handleSelect(-1); 
+                }
             }, 1000);
-        }
-
-        function selectOpt(i) {
-            userAnswers[currentIdx] = i;
-            if(mode === 'rapid') {
-                clearInterval(timerId);
-                setTimeout(() => {
-                    if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
-                    else finish();
-                }, 400);
-            } else renderQ();
         }
 
         function prevQ() { if(currentIdx > 0) { currentIdx--; renderQ(); } }
@@ -212,38 +339,133 @@
 
         function finish() {
             clearInterval(timerId);
-            views.quiz.classList.replace('flex', 'hidden'); views.result.classList.replace('hidden', 'flex');
-            let m = 0, c = 0, w = 0;
+            views.quiz.classList.replace('flex', 'hidden'); 
+            views.result.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.add('hidden');
+
+            let m = 0, c = 0, w = 0, s = 0;
             userAnswers.forEach((a, i) => {
-                if(a === activeQ[i].ans) { m += 1; c++; }
-                else if(a !== -1) { m -= 0.25; w++; }
+                if (a === activeQ[i].ans) { m += 1; c++; }
+                else if (a === -1) { s++; }
+                else { m -= 0.25; w++; }
             });
-            document.getElementById('result-name').innerText = document.getElementById('username').value;
+
+            document.getElementById('result-name').innerText = userName;
             document.getElementById('final-score').innerText = m.toFixed(2);
             document.getElementById('correct-count').innerText = c;
             document.getElementById('wrong-count').innerText = w;
-            leaderboard.push({ name: document.getElementById('username').value, score: m, qSet: activeQ, history: userAnswers });
-            updateLeaderboard();
+            document.getElementById('skip-count').innerText = s;
+
+            // Save to Leaderboard
+            leaderboard.push({
+                name: userName,
+                score: m,
+                date: new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
+                mode: mode,
+                qSet: activeQ, // Store questions for history
+                history: userAnswers
+            });
+            saveLeaderboard();
+            updateLeaderboardUI();
         }
 
-        function updateLeaderboard() {
+        // --- LEADERBOARD & HISTORY ---
+        function updateLeaderboardUI() {
             leaderboard.sort((a,b) => b.score - a.score);
-            const cont = document.getElementById('start-leaderboard-list');
-            cont.innerHTML = leaderboard.map((e,i) => `<div class="flex justify-between p-3 bg-white border rounded-lg text-sm"><span>#${i+1} ${e.name}</span><b>${e.score.toFixed(2)}</b></div>`).join('');
+            const list = document.getElementById('start-leaderboard-list');
+            
+            if (leaderboard.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
+                return;
+            }
+
+            list.innerHTML = leaderboard.map((e, i) => {
+                let rank = i + 1;
+                // Dense Rank Logic
+                if (i > 0 && e.score === leaderboard[i-1].score) rank = i; // simple same rank display logic
+                
+                let icon = e.mode === 'rapid' ? '🔥' : '📚';
+                let medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `<span class="text-slate-400 font-bold text-sm">#${i+1}</span>`;
+
+                return `
+                <div onclick="viewHistory(${i})" class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition-colors group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 flex justify-center text-xl">${medal}</div>
+                        <div>
+                            <div class="font-bold text-slate-700 text-sm group-hover:text-blue-700">${e.name}</div>
+                            <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                <span>${icon}</span> ${e.date}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-slate-800 text-sm">${e.score.toFixed(2)}</div>
+                        <div class="text-[9px] text-blue-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">VIEW</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function viewHistory(idx) {
+            previousView = views.start;
+            views.start.classList.add('hidden');
+            renderReview(leaderboard[idx].history, leaderboard[idx].qSet);
         }
 
         function showReviewFromResults() {
-            views.result.classList.replace('flex', 'hidden'); views.review.classList.replace('hidden', 'flex');
-            const cont = document.getElementById('review-container'); cont.innerHTML = '';
-            activeQ.forEach((q, i) => {
-                let h = userAnswers[i];
-                let status = h === q.ans ? 'text-green-600' : h === -1 ? 'text-slate-400' : 'text-red-500';
-                cont.innerHTML += `<div class="bg-white p-4 rounded-xl border"><div class="text-xs font-bold ${status} mb-1">${h === q.ans ? 'CORRECT' : h === -1 ? 'SKIPPED' : 'WRONG'}</div><p class="text-sm font-bold mb-2">${q.q}</p><div class="text-[10px] text-slate-400 mb-2">${q.tag}</div><div class="space-y-1">${q.opts.map((o, idx) => `<div class="p-2 rounded text-xs border ${idx === q.ans ? 'bg-green-50 border-green-200 font-bold' : idx === h ? 'bg-red-50 border-red-200' : 'border-slate-100'}">${o}</div>`).join('')}</div><div class="mt-2 text-[10px] text-blue-700 italic bg-blue-50 p-2 rounded">💡 ${q.why}</div></div>`;
+            previousView = views.result;
+            views.result.classList.replace('flex', 'hidden');
+            renderReview(userAnswers, activeQ);
+        }
+
+        function renderReview(answers, qData) {
+            views.review.classList.replace('hidden', 'flex');
+            const cont = document.getElementById('review-container');
+            cont.innerHTML = '';
+
+            answers.forEach((ansIdx, i) => {
+                const q = qData[i];
+                let statusClass = ansIdx === q.ans ? 'text-green-600 bg-green-50 border-green-100' : ansIdx === -1 ? 'text-slate-500 bg-slate-50 border-slate-100' : 'text-red-500 bg-red-50 border-red-100';
+                let statusText = ansIdx === q.ans ? 'CORRECT (+1)' : ansIdx === -1 ? 'SKIPPED' : 'WRONG (-0.25)';
+
+                let optsHtml = q.opts.map((o, idx) => {
+                    let style = "border-slate-100 text-slate-500";
+                    let icon = "";
+                    if (idx === q.ans) { style = "bg-green-50 border-green-200 text-green-800 font-bold"; icon = "✅"; }
+                    else if (idx === ansIdx) { style = "bg-red-50 border-red-200 text-red-800 line-through"; icon = "❌"; }
+                    return `<div class="p-2.5 rounded-lg border text-xs flex justify-between items-center ${style}">${o} <span>${icon}</span></div>`;
+                }).join('');
+
+                cont.innerHTML += `
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-slate-400 text-xs">Q${i+1}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-2 leading-relaxed">${q.q}</p>
+                    <div class="space-y-1.5 mb-3">${optsHtml}</div>
+                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                        <p class="text-[10px] text-slate-400 font-mono mb-1 uppercase tracking-wider">Explanation</p>
+                        <p class="text-xs text-blue-900 leading-relaxed">${q.why}</p>
+                        <p class="text-[9px] text-slate-400 mt-2 text-right">${q.tag}</p>
+                    </div>
+                </div>`;
             });
         }
 
-        function closeReview() { views.review.classList.replace('flex', 'hidden'); views.result.classList.replace('hidden', 'flex'); }
-        function resetApp() { views.result.classList.replace('flex', 'hidden'); views.start.classList.remove('hidden'); document.getElementById('header').classList.add('hidden'); }
+        function closeReview() {
+            views.review.classList.replace('flex', 'hidden');
+            previousView.classList.remove('hidden');
+            if(previousView === views.result) previousView.classList.add('flex');
+        }
+
+        function resetApp() {
+            clearInterval(timerId);
+            document.getElementById('username').value = "";
+            views.result.classList.replace('flex', 'hidden');
+            views.start.classList.remove('hidden');
+            document.getElementById('header').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
