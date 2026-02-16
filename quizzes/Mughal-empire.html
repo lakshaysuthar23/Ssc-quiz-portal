@@ -8,10 +8,9 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
         
-        /* UI STABILITY FIXES */
         .btn-option { 
             transition: all 0.15s ease;
-            border-width: 2px; /* Fixed border to prevent jumping */
+            border-width: 2px;
         }
         .btn-option:active { transform: scale(0.99); }
         
@@ -25,9 +24,10 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
+<body class="flex flex-col items-center justify-center min-h-screen p-4 h-screen overflow-hidden">
 
-    <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-auto md:max-h-[90vh]">
+    <!-- MAIN CONTAINER: Fixed Height on Desktop for Scrolling -->
+    <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-[90vh]">
         
         <!-- HEADER -->
         <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
@@ -41,8 +41,8 @@
         </div>
 
         <!-- VIEW 1: START SCREEN -->
-        <div id="start-view" class="h-full overflow-y-auto flex flex-col">
-            <div class="p-8 flex flex-col items-center text-center shrink-0">
+        <div id="start-view" class="h-full overflow-hidden flex flex-col">
+            <div class="p-8 flex flex-col items-center text-center shrink-0 overflow-y-auto">
                 <div class="text-5xl mb-4">🕌</div>
                 <h1 class="text-2xl font-bold text-slate-800 mb-2">Mughal Empire</h1>
                 <p class="text-slate-500 mb-6 text-sm">
@@ -58,10 +58,10 @@
             </div>
 
             <!-- Persistent Leaderboard -->
-            <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1">
+            <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1 overflow-y-auto min-h-0">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leaderboard</h3>
-                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR</button>
+                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR HISTORY</button>
                 </div>
                 <div id="start-leaderboard-list" class="space-y-2 pb-4">
                     <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
@@ -160,10 +160,11 @@
         <!-- VIEW 5: REVIEW HISTORY -->
         <div id="review-view" class="hidden flex-col h-full bg-slate-50">
             <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center shrink-0 shadow-sm z-10">
-                <h3 class="font-bold text-slate-700 text-sm">Attempt History</h3>
+                <h3 class="font-bold text-slate-700 text-sm">History: <span id="review-player-name" class="text-blue-600"></span></h3>
                 <button onclick="closeReview()" class="text-blue-600 font-bold text-xs hover:underline bg-blue-50 px-3 py-1 rounded-full">CLOSE</button>
             </div>
-            <div id="review-container" class="flex-1 p-4 overflow-y-auto space-y-4"></div>
+            <!-- Added flex-1 and min-h-0 to ensure proper scrolling on all devices -->
+            <div id="review-container" class="flex-1 p-4 overflow-y-auto min-h-0 space-y-4"></div>
         </div>
 
     </div>
@@ -382,7 +383,7 @@
             list.innerHTML = leaderboard.map((e, i) => {
                 let rank = i + 1;
                 // Dense Rank Logic
-                if (i > 0 && e.score === leaderboard[i-1].score) rank = i; // simple same rank display logic
+                if (i > 0 && e.score === leaderboard[i-1].score) rank = i; 
                 
                 let icon = e.mode === 'rapid' ? '🔥' : '📚';
                 let medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `<span class="text-slate-400 font-bold text-sm">#${i+1}</span>`;
@@ -409,17 +410,18 @@
         function viewHistory(idx) {
             previousView = views.start;
             views.start.classList.add('hidden');
-            renderReview(leaderboard[idx].history, leaderboard[idx].qSet);
+            renderReview(leaderboard[idx].history, leaderboard[idx].qSet, leaderboard[idx].name);
         }
 
         function showReviewFromResults() {
             previousView = views.result;
             views.result.classList.replace('flex', 'hidden');
-            renderReview(userAnswers, activeQ);
+            renderReview(userAnswers, activeQ, userName);
         }
 
-        function renderReview(answers, qData) {
+        function renderReview(answers, qData, pName) {
             views.review.classList.replace('hidden', 'flex');
+            document.getElementById('review-player-name').innerText = pName; // Show Name in Header
             const cont = document.getElementById('review-container');
             cont.innerHTML = '';
 
@@ -437,17 +439,18 @@
                 }).join('');
 
                 cont.innerHTML += `
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm shrink-0">
                     <div class="flex justify-between items-center mb-2">
                         <span class="font-bold text-slate-400 text-xs">Q${i+1}</span>
                         <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass}">${statusText}</span>
                     </div>
-                    <p class="font-bold text-slate-800 mb-2 leading-relaxed">${q.q}</p>
+                    <p class="font-bold text-slate-800 mb-1 leading-relaxed">${q.q}</p>
+                    <p class="text-[10px] text-slate-400 font-mono mb-3">${q.tag}</p> <!-- PYQ Tag moved here -->
                     <div class="space-y-1.5 mb-3">${optsHtml}</div>
-                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-100">
-                        <p class="text-[10px] text-slate-400 font-mono mb-1 uppercase tracking-wider">Explanation</p>
-                        <p class="text-xs text-blue-900 leading-relaxed">${q.why}</p>
-                        <p class="text-[9px] text-slate-400 mt-2 text-right">${q.tag}</p>
+                    <!-- Simplified Explanation UI -->
+                    <div class="mt-2 text-xs text-yellow-800 bg-yellow-50 border border-yellow-200 p-2.5 rounded-lg leading-relaxed flex gap-2">
+                        <span>💡</span>
+                        <span>${q.why}</span>
                     </div>
                 </div>`;
             });
