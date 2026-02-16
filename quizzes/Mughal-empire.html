@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSC Mughal Empire Quiz</title>
+    <title>SSC Mughal Empire - Certified PYQs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
-        .btn-option { 
-            transition: background-color 0.2s, border-color 0.2s, color 0.2s; 
-            border-width: 2px;
-        }
+        .btn-option { transition: all 0.2s; border-width: 2px; }
         .btn-option:active { transform: scale(0.98); }
         .fade-in { animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -30,7 +27,7 @@
                 <span class="text-xs text-slate-400" id="mode-display">Rapid Fire</span>
             </div>
             <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
-                ⏱️ <span id="timer">25</span>s
+                ⏱️ <span id="timer">20</span>s
             </div>
         </div>
 
@@ -38,47 +35,37 @@
         <div id="start-view" class="h-full overflow-y-auto flex flex-col">
             <div class="p-8 flex flex-col items-center text-center shrink-0">
                 <div class="text-5xl mb-4">🕌</div>
-                <h1 class="text-2xl font-bold text-slate-800 mb-2">Mughal Empire - Serious Quiz</h1>
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Mughal Empire</h1>
                 <p class="text-slate-500 mb-6 text-sm">
-                    15 Questions • SSC PYQs<br>
-                    <span class="text-green-600 font-bold">+1.0 Correct</span> • <span class="text-red-500 font-bold">-0.25 Wrong</span>
+                    15 Certified SSC PYQs<br>
+                    <span class="text-green-600 font-bold">+1.0</span> • <span class="text-red-500 font-bold">-0.25</span>
                 </p>
                 <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500">
-                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg">
                     Continue
                 </button>
             </div>
             <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Session Leaderboard</h3>
-                <div id="start-leaderboard-list" class="space-y-2">
-                    <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
-                </div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Leaderboard</h3>
+                <div id="start-leaderboard-list" class="space-y-2"></div>
             </div>
         </div>
 
-        <!-- MODE SELECTION SCREEN -->
+        <!-- MODE SELECTION -->
         <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
             <div class="p-8 flex flex-col items-center text-center shrink-0">
-                <div class="text-5xl mb-4">⚡</div>
-                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
-            </div>
-            <div class="px-6 pb-8 flex flex-col gap-4">
-                <div onclick="startRapidFire()" class="cursor-pointer group hover:shadow-lg transition-all p-6 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400">
-                    <div class="text-3xl mb-2">🔥</div>
-                    <h2 class="text-lg font-bold text-orange-900 mb-1 group-hover:text-orange-700">Rapid Fire</h2>
-                    <p class="text-sm text-orange-700 mb-3">⏱️ 25s per question</p>
-                    <p class="text-xs text-orange-600">Strict timing. Auto-advances. Best for speed training.</p>
+                <h1 class="text-2xl font-bold text-slate-800 mb-6 text-center">Select Mode</h1>
+                <div class="flex flex-col gap-4 w-full">
+                    <div onclick="startRapidFire()" class="cursor-pointer p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 text-left">
+                        <div class="font-bold text-orange-900">🔥 Rapid Fire</div>
+                        <p class="text-xs text-orange-700 mt-1">20s per question. Fast pace.</p>
+                    </div>
+                    <div onclick="startPractice()" class="cursor-pointer p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 text-left">
+                        <div class="font-bold text-green-900">📚 Practice</div>
+                        <p class="text-xs text-green-700 mt-1">No timer. Full navigation.</p>
+                    </div>
                 </div>
-
-                <div onclick="startPractice()" class="cursor-pointer group hover:shadow-lg transition-all p-6 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400">
-                    <div class="text-3xl mb-2">📚</div>
-                    <h2 class="text-lg font-bold text-green-900 mb-1 group-hover:text-green-700">Practice</h2>
-                    <p class="text-sm text-green-700 mb-3">⏳ No timer</p>
-                    <p class="text-xs text-green-600">Manual navigation. Review solutions as you go. Best for learning.</p>
-                </div>
-            </div>
-            <div class="px-6 pb-4">
-                <button onclick="backToStart()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 rounded-lg transition-colors text-sm">← Back</button>
+                <button onclick="backToStart()" class="mt-6 text-sm text-slate-400 font-bold">← Back</button>
             </div>
         </div>
 
@@ -87,47 +74,39 @@
             <div class="w-full bg-slate-100 h-2 rounded-full mb-6 shrink-0">
                 <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
-            <h2 id="question-text" class="text-lg font-bold text-slate-800 mb-6 leading-relaxed shrink-0">Loading...</h2>
+            <div class="mb-6">
+                <h2 id="question-text" class="text-lg font-bold text-slate-800 leading-relaxed">Loading...</h2>
+                <div id="pyq-tag" class="text-[10px] font-mono text-slate-400 mt-2 bg-slate-50 inline-block px-2 py-0.5 rounded border border-slate-100"></div>
+            </div>
             <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
             
-            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-200 pt-4 mt-4 flex gap-3">
-                <button onclick="previousQuestion()" id="prev-btn" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 rounded-lg transition-colors disabled:opacity-50">← Prev</button>
-                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition-colors">Submit</button>
-                <button onclick="nextQuestion()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-colors disabled:opacity-50">Next →</button>
-            </div>
-
-            <div id="question-indicator" class="hidden shrink-0 text-center text-xs text-slate-500 mt-4 pb-2">
-                <span id="current-q-num">1</span> / <span id="total-q-num">15</span>
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-200 pt-4 flex gap-3">
+                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 text-slate-600 font-bold py-2 rounded-lg text-sm">← Prev</button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 text-white font-bold py-2 rounded-lg text-sm">Submit</button>
+                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">Next →</button>
             </div>
         </div>
 
         <!-- RESULT VIEW -->
-        <div id="result-view" class="hidden flex-col h-full overflow-y-auto">
-            <div class="p-8 text-center shrink-0">
-                <div class="text-6xl mb-4">🏆</div>
-                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Submitted!</h2>
-                <p class="text-slate-500 text-sm mb-6" id="result-name">Well done</p>
-                <div class="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
-                    <div class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Total Score</div>
-                    <div id="final-score" class="text-5xl font-black text-blue-600 mb-2">0</div>
-                    <div class="flex justify-center gap-4 text-xs font-bold">
-                        <span class="text-green-600">✅ <span id="correct-count">0</span></span>
-                        <span class="text-red-500">❌ <span id="wrong-count">0</span></span>
-                        <span class="text-slate-400">⚪ <span id="skip-count">0</span></span>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3 rounded-xl">📄 Review Solutions</button>
-                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">🔄 Back to Home</button>
+        <div id="result-view" class="hidden flex-col h-full overflow-y-auto p-8 text-center">
+            <div class="text-6xl mb-4">🏆</div>
+            <h2 id="result-name" class="text-xl font-bold text-slate-800 mb-1"></h2>
+            <div class="bg-slate-50 rounded-xl p-6 my-6 border border-slate-100">
+                <div class="text-[56px] font-black text-blue-600 leading-none mb-4" id="final-score">0</div>
+                <div class="flex justify-center gap-6 text-sm font-bold">
+                    <span class="text-green-600">✅ <span id="correct-count">0</span></span>
+                    <span class="text-red-500">❌ <span id="wrong-count">0</span></span>
                 </div>
             </div>
+            <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 py-3 rounded-xl font-bold mb-3">Review Solutions</button>
+            <button onclick="resetApp()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Back to Home</button>
         </div>
 
         <!-- REVIEW VIEW -->
         <div id="review-view" class="hidden flex-col h-full bg-slate-50">
-            <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center shrink-0">
-                <h3 class="font-bold text-slate-700">Attempt History</h3>
-                <button onclick="closeReview()" class="text-sm text-blue-600 font-bold hover:underline">Close</button>
+            <div class="p-4 bg-white border-b border-slate-200 flex justify-between items-center">
+                <h3 class="font-bold">History</h3>
+                <button onclick="closeReview()" class="text-blue-600 font-bold text-sm">Close</button>
             </div>
             <div id="review-container" class="flex-1 p-4 overflow-y-auto space-y-4"></div>
         </div>
@@ -135,244 +114,137 @@
 
     <script>
         const MASTER_DATA = [
-            {
-                q: "Which Mughal Emperor was defeated by Sher Shah Suri in the Battle of Kannauj (1540), forcing him to flee India?",
-                opts: ["Babur", "Humayun", "Akbar", "Jahangir"],
-                ansText: "Humayun",
-                why: "Humayun was defeated twice by Sher Shah Suri – first at Chausa (1539) and then decisively at Kannauj (1540), leading to his exile."
-            },
-            {
-                q: "Who was the author of 'Ain-i-Akbari', which gives a detailed account of Akbar's administration?",
-                opts: ["Abdul Qadir Badauni", "Abul Fazl", "Faizi", "Nizamuddin Ahmad"],
-                ansText: "Abul Fazl",
-                why: "Abul Fazl was Akbar's court historian and one of his 'Navratnas'. 'Ain-i-Akbari' is the third volume of the 'Akbarnama'."
-            },
-            {
-                q: "The tomb of Itimad-ud-Daulah at Agra, famous for its extensive Pietra Dura work, was built by:",
-                opts: ["Akbar", "Jahangir", "Nur Jahan", "Shah Jahan"],
-                ansText: "Nur Jahan",
-                why: "Nur Jahan built this tomb for her father, Mirza Ghiyas Beg (Itimad-ud-Daulah). It is often called the 'Baby Taj'."
-            },
-            {
-                q: "Which Mughal ruler introduced the 'Zabti' or 'Bandobast' system of land revenue?",
-                opts: ["Sher Shah Suri", "Akbar", "Shah Jahan", "Aurangzeb"],
-                ansText: "Akbar",
-                why: "Introduced with the help of Raja Todar Mal, it standardized revenue collection based on land measurement and crop yield."
-            },
-            {
-                q: "Who was the Sikh Guru executed by Aurangzeb in 1675 for refusing to convert to Islam?",
-                opts: ["Guru Arjan Dev", "Guru Hargobind", "Guru Tegh Bahadur", "Guru Gobind Singh"],
-                ansText: "Guru Tegh Bahadur",
-                why: "The 9th Sikh Guru, Guru Tegh Bahadur, was executed at Chandni Chowk, Delhi, where Gurudwara Sis Ganj Sahib stands today."
-            },
-            {
-                q: "The term 'Mansab' in the Mansabdari system denoted:",
-                opts: ["A piece of land", "Salary only", "Rank or Position", "Religious Title"],
-                ansText: "Rank or Position",
-                why: "Mansab means 'rank' or 'position'. It determined the status, pay, and military obligations of the holder (Mansabdar)."
-            },
-            {
-                q: "Which Mughal Emperor is known for his 'Chain of Justice' (Zanjir-i-Adl)?",
-                opts: ["Akbar", "Jahangir", "Shah Jahan", "Aurangzeb"],
-                ansText: "Jahangir",
-                why: "Jahangir installed a golden chain with bells outside his palace in Agra so that anyone seeking justice could ring it directly."
-            },
-            {
-                q: "Who among the following English travellers visited the court of Jahangir?",
-                opts: ["William Hawkins", "Ralph Fitch", "Peter Mundy", "Niccolao Manucci"],
-                ansText: "William Hawkins",
-                why: "Captain William Hawkins visited Jahangir's court in 1608 to seek permission for trade. Sir Thomas Roe also visited later in 1615."
-            },
-            {
-                q: "Which battle marked the end of the Mughal Empire's effective power and the rise of the British?",
-                opts: ["Battle of Plassey (1757)", "Battle of Buxar (1764)", "Third Battle of Panipat (1761)", "Revolt of 1857"],
-                ansText: "Battle of Buxar (1764)",
-                why: "The defeat of the combined forces of the Mughal Emperor (Shah Alam II), Bengal, and Awadh at Buxar gave the British the Diwani rights of Bengal, Bihar, and Odisha."
-            },
-            {
-                q: "The 'Moti Masjid' inside the Red Fort at Delhi was built by:",
-                opts: ["Akbar", "Jahangir", "Shah Jahan", "Aurangzeb"],
-                ansText: "Aurangzeb",
-                why: "While Shah Jahan built the Red Fort, the Pearl Mosque (Moti Masjid) inside it was added later by his son, Aurangzeb."
-            },
-            {
-                q: "Who translated the 'Lilavati' (a treatise on mathematics) into Persian?",
-                opts: ["Abul Fazl", "Faizi", "Dara Shikoh", "Badauni"],
-                ansText: "Faizi",
-                why: "Faizi, the poet laureate of Akbar's court and brother of Abul Fazl, translated Bhaskaracharya's 'Lilavati' into Persian."
-            },
-            {
-                q: "Which Mughal Emperor was illiterate?",
-                opts: ["Babur", "Akbar", "Jahangir", "Aurangzeb"],
-                ansText: "Akbar",
-                why: "Despite being illiterate due to his early unstable life, Akbar was a great patron of learning and had a massive library read to him."
-            },
-            {
-                q: "The 'Peacock Throne' (Takht-i-Taus) was made for which Mughal Emperor?",
-                opts: ["Akbar", "Jahangir", "Shah Jahan", "Aurangzeb"],
-                ansText: "Shah Jahan",
-                why: "Commissioned by Shah Jahan, it was encrusted with jewels including the Koh-i-Noor. It was later looted by Nadir Shah in 1739."
-            },
-            {
-                q: "In 1582, Akbar founded a new religion called:",
-                opts: ["Din-i-Ilahi", "Sulh-i-Kul", "Tauhid-i-Wajudi", "Ibadat Khana"],
-                ansText: "Din-i-Ilahi",
-                why: "Meaning 'Divine Faith', it was a syncretic ethical code synthesizing elements from Islam, Hinduism, Zoroastrianism, and Christianity."
-            },
-            {
-                q: "Who was the last powerful Mughal Emperor, after whose death the empire declined rapidly?",
-                opts: ["Bahadur Shah I", "Aurangzeb", "Muhammad Shah", "Shah Alam II"],
-                ansText: "Aurangzeb",
-                why: "Aurangzeb died in 1707. His successors (Later Mughals) were weak, leading to the rapid disintegration of the empire."
-            }
+            { q: "Which Mughal Emperor was defeated by Sher Shah Suri in the Battle of Kannauj (1540)?", tag: "SSC CHSL 12/04/2021 (Shift-1)", opts: ["Babur", "Humayun", "Akbar", "Jahangir"], ansText: "Humayun", why: "Humayun fled India after this defeat, leading to the Suri interregnum." },
+            { q: "Who was the author of 'Ain-i-Akbari'?", tag: "SSC MTS 05/10/2021 (Shift-2)", opts: ["Badauni", "Abul Fazl", "Faizi", "Gulbadan Begum"], ansText: "Abul Fazl", why: "It is part of the larger work 'Akbarnama'." },
+            { q: "The tomb of Itimad-ud-Daulah at Agra was built by:", tag: "SSC CGL 07/03/2020 (Shift-1)", opts: ["Akbar", "Jahangir", "Nur Jahan", "Shah Jahan"], ansText: "Nur Jahan", why: "Constructed for her father; known for first large-scale use of Pietra Dura." },
+            { q: "Which Mughal ruler introduced the 'Zabti' system of land revenue?", tag: "SSC CGL 04/06/2019 (Shift-1)", opts: ["Babur", "Akbar", "Shah Jahan", "Aurangzeb"], ansText: "Akbar", why: "Introduced in 1580 with the help of Raja Todar Mal." },
+            { q: "Which Sikh Guru was executed by Aurangzeb in 1675?", tag: "SSC CPO 24/11/2020 (Shift-1)", opts: ["Guru Arjan Dev", "Guru Tegh Bahadur", "Guru Gobind Singh", "Guru Angad"], ansText: "Guru Tegh Bahadur", why: "He was the 9th Sikh Guru." },
+            { q: "The term 'Mansab' in the Mansabdari system denoted:", tag: "SSC CHSL 14/10/2020 (Shift-3)", opts: ["Land", "Rank", "Cavalry", "Religion"], ansText: "Rank", why: "It determined the holder's position in the administrative hierarchy." },
+            { q: "Which Mughal Emperor is known for his 'Chain of Justice'?", tag: "SSC MTS 02/08/2019 (Shift-1)", opts: ["Akbar", "Jahangir", "Shah Jahan", "Humayun"], ansText: "Jahangir", why: "A golden chain with 60 bells linked to the Agra fort." },
+            { q: "Which English traveller visited the court of Jahangir?", tag: "SSC CGL 11/04/2022 (Shift-2)", opts: ["William Hawkins", "Ralph Fitch", "Peter Mundy", "John Marshall"], ansText: "William Hawkins", why: "He arrived in 1608 seeking trade concessions." },
+            { q: "In which battle did Shah Alam II participate in 1764?", tag: "SSC CGL 21/04/2022 (Shift-3)", opts: ["Plassey", "Buxar", "Panipat III", "Haldighati"], ansText: "Buxar", why: "The joint forces of Mughals, Awadh, and Bengal were defeated." },
+            { q: "The 'Moti Masjid' in the Red Fort (Delhi) was built by:", tag: "SSC CGL 13/08/2021 (Shift-2)", opts: ["Shah Jahan", "Jahangir", "Aurangzeb", "Akbar"], ansText: "Aurangzeb", why: "It was added later to the fort for the Emperor's private prayer." },
+            { q: "Who translated 'Lilavati' into Persian?", tag: "SSC CGL 16/08/2021 (Shift-3)", opts: ["Abul Fazl", "Faizi", "Dara Shikoh", "Birbal"], ansText: "Faizi", why: "He was Akbar's poet laureate and a prominent scholar." },
+            { q: "Which Mughal Emperor was illiterate?", tag: "SSC MTS 08/08/2019 (Shift-2)", opts: ["Babur", "Humayun", "Akbar", "Shah Jahan"], ansText: "Akbar", why: "Despite this, he was a great patron of arts and philosophy." },
+            { q: "The 'Peacock Throne' was commissioned by:", tag: "SSC CHSL 19/04/2021 (Shift-1)", opts: ["Shah Jahan", "Jahangir", "Aurangzeb", "Muhammad Shah"], ansText: "Shah Jahan", why: "It was later looted by Nadir Shah in 1739." },
+            { q: "In 1582, Akbar founded a new religion called:", tag: "SSC CGL 24/08/2021 (Shift-2)", opts: ["Din-i-Ilahi", "Sulh-i-Kul", "Ibadat Khana", "Mansabdari"], ansText: "Din-i-Ilahi", why: "It was a syncretic code of ethics rather than a formal religion." },
+            { q: "Who was the last powerful Mughal Emperor?", tag: "SSC CGL 03/12/2022 (Shift-4)", opts: ["Bahadur Shah I", "Aurangzeb", "Shah Alam II", "Bahadur Shah Zafar"], ansText: "Aurangzeb", why: "The empire began to disintegrate rapidly after his death in 1707." }
         ];
 
-        let activeQuestions = [], currentQ = 0, timeLeft = 25, timerId = null, nextQTimer = null, isAnswered = false, userName = "";
-        let userAnswers = [], leaderboard = [], attemptHistory = [], previousView = null, quizMode = "rapid";
-
+        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid";
         const views = { start: document.getElementById('start-view'), mode: document.getElementById('mode-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
-        const header = document.getElementById('header'), userDisplay = document.getElementById('user-display'), modeDisplay = document.getElementById('mode-display'), qText = document.getElementById('question-text'), optsContainer = document.getElementById('options-container'), timerEl = document.getElementById('timer'), timerBadge = document.getElementById('timer-badge'), progressBar = document.getElementById('progress-bar'), nameInput = document.getElementById('username'), startLeaderboardList = document.getElementById('start-leaderboard-list');
-        const navButtons = document.getElementById('nav-buttons'), questionIndicator = document.getElementById('question-indicator'), prevBtn = document.getElementById('prev-btn'), nextBtn = document.getElementById('next-btn'), currentQNum = document.getElementById('current-q-num'), totalQNum = document.getElementById('total-q-num');
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+        function goToModeSelection() { 
+            if(!document.getElementById('username').value.trim()) return;
+            views.start.classList.add('hidden'); views.mode.classList.remove('hidden'); 
         }
-
-        function saveLeaderboardToStorage() { localStorage.setItem('mughalQuizLeaderboard_v3', JSON.stringify(leaderboard)); }
-        function loadLeaderboardFromStorage() {
-            const stored = localStorage.getItem('mughalQuizLeaderboard_v3');
-            if (stored) { leaderboard = JSON.parse(stored); updateLeaderboardUI(); }
-        }
-        window.addEventListener('DOMContentLoaded', loadLeaderboardFromStorage);
-
-        function goToModeSelection() {
-            userName = nameInput.value.trim();
-            if (!userName) return;
-            views.start.classList.add('hidden');
-            views.mode.classList.remove('hidden');
-        }
-
         function backToStart() { views.mode.classList.add('hidden'); views.start.classList.remove('hidden'); }
+        function startRapidFire() { mode = "rapid"; initQuiz(); }
+        function startPractice() { mode = "practice"; initQuiz(); }
 
-        function startRapidFire() { quizMode = "rapid"; initializeQuiz(); }
-        function startPractice() { quizMode = "practice"; initializeQuiz(); }
-
-        function initializeQuiz() {
-            userDisplay.innerText = userName;
-            modeDisplay.innerText = quizMode === "rapid" ? "Rapid Fire" : "Practice";
-            let rawQ = JSON.parse(JSON.stringify(MASTER_DATA));
-            activeQuestions = shuffle(rawQ).map(q => {
-                const correctTxt = q.ansText;
-                let shuffledOpts = shuffle([...q.opts]);
-                return { ...q, opts: shuffledOpts, ans: shuffledOpts.indexOf(correctTxt) };
+        function initQuiz() {
+            activeQ = shuffle(JSON.parse(JSON.stringify(MASTER_DATA))).map(q => {
+                let s = shuffle([...q.opts]);
+                return { ...q, opts: s, ans: s.indexOf(q.ansText) };
             });
-            currentQ = 0; userAnswers = Array(activeQuestions.length).fill(-1); isAnswered = false;
-            views.mode.classList.add('hidden'); views.quiz.classList.replace('hidden', 'flex'); header.classList.remove('hidden');
-            if (quizMode === "rapid") { navButtons.classList.add('hidden'); questionIndicator.classList.add('hidden'); timerBadge.classList.replace('hidden', 'flex'); } 
-            else { navButtons.classList.replace('hidden', 'flex'); questionIndicator.classList.remove('hidden'); timerBadge.classList.replace('flex', 'hidden'); }
-            renderQuestion();
+            currentIdx = 0; userAnswers = Array(activeQ.length).fill(-1);
+            views.mode.classList.add('hidden'); views.quiz.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.remove('hidden');
+            document.getElementById('user-display').innerText = document.getElementById('username').value;
+            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'Rapid Fire' : 'Practice';
+            
+            if(mode === 'rapid') {
+                document.getElementById('nav-buttons').classList.add('hidden');
+                document.getElementById('timer-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-buttons').classList.remove('hidden');
+                document.getElementById('timer-badge').classList.add('hidden');
+            }
+            renderQ();
         }
 
-        function renderQuestion() {
-            const q = activeQuestions[currentQ];
-            qText.innerText = `Q${currentQ + 1}. ${q.q}`;
-            progressBar.style.width = `${((currentQ + 1) / activeQuestions.length) * 100}%`;
-            optsContainer.innerHTML = '';
-            q.opts.forEach((opt, idx) => {
+        function renderQ() {
+            const q = activeQ[currentIdx];
+            document.getElementById('question-text').innerText = `Q${currentIdx+1}. ${q.q}`;
+            document.getElementById('pyq-tag').innerText = q.tag;
+            document.getElementById('progress-bar').style.width = `${((currentIdx+1)/activeQ.length)*100}%`;
+            
+            const cont = document.getElementById('options-container');
+            cont.innerHTML = '';
+            q.opts.forEach((o, i) => {
                 const btn = document.createElement('button');
-                btn.className = `btn-option w-full p-4 rounded-xl text-left font-medium border-2 text-sm ${userAnswers[currentQ] === idx ? 'border-blue-500 bg-blue-50 text-blue-800' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'}`;
-                btn.innerText = opt;
-                btn.onclick = () => handleSelection(idx);
-                optsContainer.appendChild(btn);
+                btn.className = `btn-option w-full p-4 rounded-xl text-left border-2 text-sm ${userAnswers[currentIdx] === i ? 'border-blue-500 bg-blue-50 font-bold' : 'border-slate-200 bg-white'}`;
+                btn.innerText = o;
+                btn.onclick = () => selectOpt(i);
+                cont.appendChild(btn);
             });
-            if (quizMode === "practice") { currentQNum.innerText = currentQ + 1; totalQNum.innerText = activeQuestions.length; prevBtn.disabled = currentQ === 0; nextBtn.innerText = currentQ === activeQuestions.length - 1 ? "End" : "Next →"; } 
-            else { isAnswered = false; startTimer(); }
-        }
 
-        function handleSelection(idx) {
-            userAnswers[currentQ] = idx;
-            if (quizMode === "rapid") {
-                if (isAnswered) return;
-                isAnswered = true;
-                clearInterval(timerId);
-                const btns = optsContainer.querySelectorAll('button');
-                btns.forEach((b, i) => b.className = `btn-option w-full p-4 rounded-xl text-left text-sm border-2 ${i === idx ? 'border-blue-500 bg-blue-50 font-bold' : 'border-slate-100 text-slate-300'}`);
-                setTimeout(() => { if (currentQ < activeQuestions.length - 1) { currentQ++; renderQuestion(); } else { calculateAndShowResults(); } }, 400);
-            } else renderQuestion();
+            if(mode === 'rapid') startTimer();
+            document.getElementById('prev-btn').disabled = currentIdx === 0;
+            document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
         }
 
         function startTimer() {
-            clearInterval(timerId); timeLeft = 25; updateTimerUI();
-            timerId = setInterval(() => { timeLeft--; updateTimerUI(); if (timeLeft <= 0) { clearInterval(timerId); handleSelection(-1); } }, 1000);
+            clearInterval(timerId); let t = 20;
+            const el = document.getElementById('timer'); el.innerText = t;
+            timerId = setInterval(() => {
+                t--; el.innerText = t;
+                if(t <= 0) { clearInterval(timerId); selectOpt(-1); }
+            }, 1000);
         }
 
-        function updateTimerUI() {
-            timerEl.innerText = timeLeft;
-            timerBadge.className = `flex items-center gap-1 px-3 py-1 rounded-full font-mono font-bold text-sm ${timeLeft <= 5 ? 'bg-red-100 text-red-700 animate-pulse' : 'bg-blue-100 text-blue-700'}`;
+        function selectOpt(i) {
+            userAnswers[currentIdx] = i;
+            if(mode === 'rapid') {
+                clearInterval(timerId);
+                setTimeout(() => {
+                    if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
+                    else finish();
+                }, 400);
+            } else renderQ();
         }
 
-        function previousQuestion() { if (currentQ > 0) { currentQ--; renderQuestion(); } }
-        function nextQuestion() { if (currentQ < activeQuestions.length - 1) { currentQ++; renderQuestion(); } }
+        function prevQ() { if(currentIdx > 0) { currentIdx--; renderQ(); } }
+        function nextQ() { if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } }
+        function submitQuiz() { if(confirm("Submit Test?")) finish(); }
 
-        function submitQuiz() {
-            const unanswered = userAnswers.filter(a => a === -1).length;
-            if (unanswered > 0 && !confirm(`Submit with ${unanswered} unanswered?`)) return;
-            calculateAndShowResults();
-        }
-
-        function calculateAndShowResults() {
+        function finish() {
             clearInterval(timerId);
-            views.quiz.classList.replace('flex', 'hidden'); header.classList.add('hidden'); views.result.classList.replace('hidden', 'flex');
-            let m = 0, c = 0, w = 0, s = 0; attemptHistory = [];
-            userAnswers.forEach((sel, i) => {
-                const correct = sel === activeQuestions[i].ans;
-                if (correct) { m += 1; c++; } else if (sel === -1) s++; else { m -= 0.25; w++; }
-                attemptHistory.push({ qIdx: i, selectedOpt: sel, correctOpt: activeQuestions[i].ans, isCorrect: correct });
+            views.quiz.classList.replace('flex', 'hidden'); views.result.classList.replace('hidden', 'flex');
+            let m = 0, c = 0, w = 0;
+            userAnswers.forEach((a, i) => {
+                if(a === activeQ[i].ans) { m += 1; c++; }
+                else if(a !== -1) { m -= 0.25; w++; }
             });
-            document.getElementById('result-name').innerText = userName;
+            document.getElementById('result-name').innerText = document.getElementById('username').value;
             document.getElementById('final-score').innerText = m.toFixed(2);
             document.getElementById('correct-count').innerText = c;
             document.getElementById('wrong-count').innerText = w;
-            document.getElementById('skip-count').innerText = s;
-            leaderboard.push({ name: userName, score: m, mode: quizMode, date: new Date().toLocaleDateString(), history: JSON.parse(JSON.stringify(attemptHistory)), qSet: activeQuestions });
-            leaderboard.sort((a, b) => b.score - a.score); saveLeaderboardToStorage(); updateLeaderboardUI();
+            leaderboard.push({ name: document.getElementById('username').value, score: m, qSet: activeQ, history: userAnswers });
+            updateLeaderboard();
         }
 
-        function updateLeaderboardUI() {
-            let html = '', rank = 1;
-            leaderboard.forEach((e, i) => {
-                if (i > 0 && e.score < leaderboard[i - 1].score) rank = i + 1;
-                let med = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
-                html += `<div onclick="openLeaderboardHistory(${i})" class="cursor-pointer hover:bg-blue-50 transition-colors flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm"><div class="flex items-center gap-3"><div class="w-8 text-center font-bold text-slate-500">${med}</div><div><div class="font-semibold text-slate-700">${e.name}</div><div class="text-[10px] text-slate-400">${e.mode === 'rapid' ? '🔥' : '📚'} ${e.date}</div></div></div><span class="font-bold text-slate-800">${e.score.toFixed(2)}</span></div>`;
-            });
-            startLeaderboardList.innerHTML = html || '<p class="text-center text-slate-400 text-sm italic">No attempts.</p>';
+        function updateLeaderboard() {
+            leaderboard.sort((a,b) => b.score - a.score);
+            const cont = document.getElementById('start-leaderboard-list');
+            cont.innerHTML = leaderboard.map((e,i) => `<div class="flex justify-between p-3 bg-white border rounded-lg text-sm"><span>#${i+1} ${e.name}</span><b>${e.score.toFixed(2)}</b></div>`).join('');
         }
 
-        function openLeaderboardHistory(idx) { previousView = views.start; views.start.classList.add('hidden'); showReview(leaderboard[idx].history, leaderboard[idx].qSet); }
-        function showReviewFromResults() { previousView = views.result; views.result.classList.replace('flex', 'hidden'); showReview(attemptHistory, activeQuestions); }
-
-        function showReview(hist, qSet) {
-            views.review.classList.replace('hidden', 'flex');
+        function showReviewFromResults() {
+            views.result.classList.replace('flex', 'hidden'); views.review.classList.replace('hidden', 'flex');
             const cont = document.getElementById('review-container'); cont.innerHTML = '';
-            hist.forEach((h, i) => {
-                const q = qSet[h.qIdx];
-                let b = h.isCorrect ? '<span class="text-green-600 bg-green-50 px-2 py-0.5 rounded text-xs font-bold">Correct (+1)</span>' : h.selectedOpt === -1 ? '<span class="text-slate-500 bg-slate-50 px-2 py-0.5 rounded text-xs">Skipped</span>' : '<span class="text-red-500 bg-red-50 px-2 py-0.5 rounded text-xs font-bold">Wrong (-0.25)</span>';
-                let opts = ''; q.opts.forEach((o, idx) => {
-                    let s = idx === h.correctOpt ? "border-green-200 bg-green-50 text-green-800 font-bold" : idx === h.selectedOpt ? "border-red-200 bg-red-50 text-red-800 line-through" : "border-slate-100 text-slate-500";
-                    opts += `<div class="p-2 rounded border text-xs ${s}">${o} ${idx === h.correctOpt ? '✅' : idx === h.selectedOpt ? '❌' : ''}</div>`;
-                });
-                cont.innerHTML += `<div class="bg-white p-4 rounded-xl border border-slate-200 shrink-0"><div class="flex justify-between mb-2"><span class="font-bold text-slate-700 text-xs">Q${i+1}</span>${b}</div><p class="text-sm font-medium mb-3 text-slate-800">${q.q}</p><div class="space-y-1.5">${opts}</div><div class="mt-3 p-2 bg-blue-50 rounded text-[10px] text-blue-800 italic leading-relaxed">💡 ${q.why}</div></div>`;
+            activeQ.forEach((q, i) => {
+                let h = userAnswers[i];
+                let status = h === q.ans ? 'text-green-600' : h === -1 ? 'text-slate-400' : 'text-red-500';
+                cont.innerHTML += `<div class="bg-white p-4 rounded-xl border"><div class="text-xs font-bold ${status} mb-1">${h === q.ans ? 'CORRECT' : h === -1 ? 'SKIPPED' : 'WRONG'}</div><p class="text-sm font-bold mb-2">${q.q}</p><div class="text-[10px] text-slate-400 mb-2">${q.tag}</div><div class="space-y-1">${q.opts.map((o, idx) => `<div class="p-2 rounded text-xs border ${idx === q.ans ? 'bg-green-50 border-green-200 font-bold' : idx === h ? 'bg-red-50 border-red-200' : 'border-slate-100'}">${o}</div>`).join('')}</div><div class="mt-2 text-[10px] text-blue-700 italic bg-blue-50 p-2 rounded">💡 ${q.why}</div></div>`;
             });
         }
 
-        function closeReview() { views.review.classList.replace('flex', 'hidden'); previousView.classList.remove('hidden'); if(previousView === views.result) previousView.classList.add('flex'); }
-        function resetApp() { clearInterval(timerId); views.result.classList.replace('flex', 'hidden'); views.start.classList.remove('hidden'); header.classList.add('hidden'); }
+        function closeReview() { views.review.classList.replace('flex', 'hidden'); views.result.classList.replace('hidden', 'flex'); }
+        function resetApp() { views.result.classList.replace('flex', 'hidden'); views.start.classList.remove('hidden'); document.getElementById('header').classList.add('hidden'); }
     </script>
 </body>
 </html>
-```
 ```
