@@ -31,10 +31,10 @@
         <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
             <div class="flex flex-col">
                 <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
-                <span class="text-xs text-slate-400">Mughal Empire</span>
+                <span class="text-xs text-slate-400" id="mode-display">Rapid Fire</span>
             </div>
             <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
-                ⏱️ <span id="timer">25</span>s
+                ⏱️ <span id="timer">18</span>s
             </div>
         </div>
 
@@ -48,8 +48,8 @@
                     <span class="text-green-600 font-bold">+1.0 Correct</span> • <span class="text-red-500 font-bold">-0.25 Wrong</span>
                 </p>
                 <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500">
-                <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">
-                    Start Challenge
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">
+                    Continue
                 </button>
             </div>
             <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1">
@@ -60,13 +60,61 @@
             </div>
         </div>
 
+        <!-- MODE SELECTION SCREEN -->
+        <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
+            <div class="p-8 flex flex-col items-center text-center shrink-0">
+                <div class="text-5xl mb-4">⚡</div>
+                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
+            </div>
+            <div class="px-6 pb-8 flex flex-col gap-4">
+                <!-- Rapid Fire Card -->
+                <div onclick="startRapidFire()" class="cursor-pointer group hover:shadow-lg transition-all p-6 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400">
+                    <div class="text-3xl mb-2">🔥</div>
+                    <h2 class="text-lg font-bold text-orange-900 mb-1 group-hover:text-orange-700">Rapid Fire</h2>
+                    <p class="text-sm text-orange-700 mb-3">⏱️ 18 seconds per question</p>
+                    <p class="text-xs text-orange-600 leading-relaxed">Fast-paced mode with automatic progression. Auto-skips if time runs out. No navigation allowed.</p>
+                </div>
+
+                <!-- Practice Card -->
+                <div onclick="startPractice()" class="cursor-pointer group hover:shadow-lg transition-all p-6 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400">
+                    <div class="text-3xl mb-2">📚</div>
+                    <h2 class="text-lg font-bold text-green-900 mb-1 group-hover:text-green-700">Practice</h2>
+                    <p class="text-sm text-green-700 mb-3">⏳ Unlimited time</p>
+                    <p class="text-xs text-green-600 leading-relaxed">Take your time. Navigate between questions with Previous/Next buttons. Review before submitting.</p>
+                </div>
+            </div>
+            <div class="px-6 pb-4">
+                <button onclick="backToStart()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 rounded-lg transition-colors text-sm">
+                    ← Back
+                </button>
+            </div>
+        </div>
+
         <!-- QUIZ VIEW -->
         <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
             <div class="w-full bg-slate-100 h-2 rounded-full mb-6 shrink-0">
                 <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
             <h2 id="question-text" class="text-lg font-bold text-slate-800 mb-6 leading-relaxed shrink-0">Loading...</h2>
-            <div id="options-container" class="space-y-3 pb-4"></div>
+            <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
+            
+            <!-- Navigation & Submission (Hidden for Rapid Fire) -->
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-200 pt-4 mt-4 flex gap-3">
+                <button onclick="previousQuestion()" id="prev-btn" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 rounded-lg transition-colors disabled:opacity-50">
+                    ← Previous
+                </button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition-colors">
+                    ✓ Submit
+                </button>
+                <button onclick="nextQuestion()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-colors disabled:opacity-50">
+                    Next →
+                </button>
+            </div>
+
+            <!-- Question Indicator for Practice Mode -->
+            <div id="question-indicator" class="hidden shrink-0 text-center text-xs text-slate-500 mt-4 pb-2">
+                <span id="current-q-num">1</span> / <span id="total-q-num">5</span>
+            </div>
         </div>
 
         <!-- RESULT VIEW -->
@@ -137,13 +185,20 @@
         ];
 
         // STATE
-        let activeQuestions = [];
-        let currentQ = 0, timeLeft = 25, timerId = null, nextQTimer = null, isAnswered = false, userName = "";
+        let activeQuestions = [], currentQ = 0, timeLeft = 18, timerId = null, nextQTimer = null, isAnswered = false, userName = "";
         let userAnswers = [], leaderboard = [], attemptHistory = [], previousView = null;
+        let quizMode = "rapid"; // "rapid" or "practice"
 
         // DOM
-        const views = { start: document.getElementById('start-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
-        const header = document.getElementById('header'), userDisplay = document.getElementById('user-display'), qText = document.getElementById('question-text'), optsContainer = document.getElementById('options-container'), timerEl = document.getElementById('timer'), timerBadge = document.getElementById('timer-badge'), progressBar = document.getElementById('progress-bar'), nameInput = document.getElementById('username'), startLeaderboardList = document.getElementById('start-leaderboard-list');
+        const views = { 
+            start: document.getElementById('start-view'), 
+            mode: document.getElementById('mode-view'), 
+            quiz: document.getElementById('quiz-view'), 
+            result: document.getElementById('result-view'), 
+            review: document.getElementById('review-view') 
+        };
+        const header = document.getElementById('header'), userDisplay = document.getElementById('user-display'), modeDisplay = document.getElementById('mode-display'), qText = document.getElementById('question-text'), optsContainer = document.getElementById('options-container'), timerEl = document.getElementById('timer'), timerBadge = document.getElementById('timer-badge'), progressBar = document.getElementById('progress-bar'), nameInput = document.getElementById('username'), startLeaderboardList = document.getElementById('start-leaderboard-list');
+        const navButtons = document.getElementById('nav-buttons'), questionIndicator = document.getElementById('question-indicator'), prevBtn = document.getElementById('prev-btn'), nextBtn = document.getElementById('next-btn'), currentQNum = document.getElementById('current-q-num'), totalQNum = document.getElementById('total-q-num');
 
         // UTILS: Fisher-Yates Shuffle
         function shuffle(array) {
@@ -156,9 +211,53 @@
             return array;
         }
 
-        function startQuiz() {
+        // LOCALSTORAGE FUNCTIONS
+        function saveLeaderboardToStorage() {
+            localStorage.setItem('mughalQuizLeaderboard', JSON.stringify(leaderboard));
+        }
+
+        function loadLeaderboardFromStorage() {
+            const stored = localStorage.getItem('mughalQuizLeaderboard');
+            if (stored) {
+                leaderboard = JSON.parse(stored);
+                updateLeaderboardUI();
+            }
+        }
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLeaderboardFromStorage();
+        });
+
+        // MODE SELECTION FLOW
+        function goToModeSelection() {
             userName = nameInput.value.trim() || "Candidate";
+            if (userName.length === 0) {
+                alert("Please enter your name");
+                return;
+            }
+            views.start.classList.add('hidden');
+            views.mode.classList.remove('hidden');
+        }
+
+        function backToStart() {
+            views.mode.classList.add('hidden');
+            views.start.classList.remove('hidden');
+        }
+
+        function startRapidFire() {
+            quizMode = "rapid";
+            initializeQuiz();
+        }
+
+        function startPractice() {
+            quizMode = "practice";
+            initializeQuiz();
+        }
+
+        function initializeQuiz() {
             userDisplay.innerText = userName;
+            modeDisplay.innerText = quizMode === "rapid" ? "Rapid Fire" : "Practice Mode";
             
             // 1. Shuffle Questions
             let rawQ = JSON.parse(JSON.stringify(MASTER_DATA)); // Deep copy
@@ -174,33 +273,36 @@
             userAnswers = Array(activeQuestions.length).fill(-1); 
             isAnswered = false;
             
-            views.start.classList.add('hidden');
-            views.quiz.classList.remove('hidden'); views.quiz.classList.add('flex');
+            views.mode.classList.add('hidden');
+            views.quiz.classList.remove('hidden');
+            views.quiz.classList.add('flex');
             header.classList.remove('hidden');
+            
+            // Show/hide navigation based on mode
+            if (quizMode === "rapid") {
+                navButtons.classList.add('hidden');
+                questionIndicator.classList.add('hidden');
+                timerBadge.classList.remove('hidden');
+            } else {
+                navButtons.classList.remove('hidden');
+                questionIndicator.classList.remove('hidden');
+                timerBadge.classList.add('hidden');
+            }
+            
             renderQuestion();
-        }
-
-        function startTimer() {
-            clearInterval(timerId); timeLeft = 25; updateTimerUI();
-            timerId = setInterval(() => { timeLeft--; updateTimerUI(); if (timeLeft <= 0) { clearInterval(timerId); handleAnswer(currentQ, -1); } }, 1000);
-        }
-
-        function updateTimerUI() {
-            timerEl.innerText = timeLeft;
-            timerBadge.className = timeLeft <= 5 ? "flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full font-mono font-bold text-sm animate-pulse" : "flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm";
         }
 
         function renderQuestion() {
             const q = activeQuestions[currentQ];
             qText.innerText = `Q${currentQ + 1}. ${q.q}`;
-            progressBar.style.width = `${(currentQ / activeQuestions.length) * 100}%`;
+            progressBar.style.width = `${((currentQ + 1) / activeQuestions.length) * 100}%`;
             optsContainer.innerHTML = '';
             
             q.opts.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 let css = "btn-option w-full p-4 rounded-xl text-left font-medium border-2 text-sm ";
                 
-                // Selection Color Logic (Only Blue Highlight)
+                // Selection Color Logic
                 if (userAnswers[currentQ] === idx) {
                     css += "border-blue-500 bg-blue-50 text-blue-800 shadow-sm"; 
                 } else {
@@ -212,13 +314,54 @@
                 btn.onclick = () => { if(!isAnswered) handleAnswer(currentQ, idx); };
                 optsContainer.appendChild(btn);
             });
-            isAnswered = false; startTimer();
+            
+            isAnswered = false;
+            
+            // Update question indicator for Practice mode
+            if (quizMode === "practice") {
+                currentQNum.innerText = currentQ + 1;
+                totalQNum.innerText = activeQuestions.length;
+                updateNavigationButtons();
+            } else {
+                startTimer();
+            }
+        }
+
+        function updateNavigationButtons() {
+            prevBtn.disabled = currentQ === 0;
+            nextBtn.disabled = currentQ === activeQuestions.length - 1;
+        }
+
+        function previousQuestion() {
+            if (currentQ > 0) {
+                currentQ--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQ < activeQuestions.length - 1) {
+                currentQ++;
+                renderQuestion();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerId); timeLeft = 18; updateTimerUI();
+            timerId = setInterval(() => { timeLeft--; updateTimerUI(); if (timeLeft <= 0) { clearInterval(timerId); handleAnswer(currentQ, -1); } }, 1000);
+        }
+
+        function updateTimerUI() {
+            timerEl.innerText = timeLeft;
+            timerBadge.className = timeLeft <= 5 ? "flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full font-mono font-bold text-sm animate-pulse" : "flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm";
         }
 
         function handleAnswer(qIdx, selectedIdx) {
-            isAnswered = true; clearInterval(timerId); userAnswers[qIdx] = selectedIdx;
+            isAnswered = true; 
+            clearInterval(timerId); 
+            userAnswers[qIdx] = selectedIdx;
             
-            // Visual Update without Layout Shift
+            // Visual Update
             const btns = optsContainer.querySelectorAll('button');
             btns.forEach((btn, idx) => {
                 if(idx === selectedIdx) {
@@ -228,18 +371,50 @@
                 }
             });
 
-            nextQTimer = setTimeout(() => {
-                if (currentQ < activeQuestions.length - 1) { currentQ++; renderQuestion(); } else { calculateAndShowResults(); }
-            }, 400);
+            if (quizMode === "rapid") {
+                nextQTimer = setTimeout(() => {
+                    if (currentQ < activeQuestions.length - 1) { 
+                        currentQ++; 
+                        renderQuestion(); 
+                    } else { 
+                        calculateAndShowResults(); 
+                    }
+                }, 400);
+            } else if (quizMode === "practice") {
+                // Auto-advance to next question in practice mode
+                nextQTimer = setTimeout(() => {
+                    if (currentQ < activeQuestions.length - 1) {
+                        currentQ++;
+                        renderQuestion();
+                    }
+                }, 400);
+            }
+        }
+
+        function submitQuiz() {
+            // Check if all questions are answered
+            const unanswered = userAnswers.filter(a => a === -1).length;
+            if (unanswered > 0) {
+                const confirm = window.confirm(`${unanswered} question(s) not answered. Submit anyway?`);
+                if (!confirm) return;
+            }
+            calculateAndShowResults();
         }
 
         function calculateAndShowResults() {
-            views.quiz.classList.replace('flex', 'hidden'); header.classList.add('hidden'); views.result.classList.replace('hidden', 'flex');
-            let marks = 0, correct = 0, wrong = 0, skipped = 0; attemptHistory = [];
+            views.quiz.classList.replace('flex', 'hidden'); 
+            header.classList.add('hidden'); 
+            views.result.classList.remove('hidden');
+            views.result.classList.add('flex');
+            
+            let marks = 0, correct = 0, wrong = 0, skipped = 0; 
+            attemptHistory = [];
             
             userAnswers.forEach((sel, idx) => {
                 const isCorrect = sel === activeQuestions[idx].ans;
-                if (isCorrect) { marks += 1; correct++; } else if (sel === -1) { skipped++; } else { marks -= 0.25; wrong++; }
+                if (isCorrect) { marks += 1; correct++; } 
+                else if (sel === -1) { skipped++; } 
+                else { marks -= 0.25; wrong++; }
                 attemptHistory.push({ qIdx: idx, selectedOpt: sel, correctOpt: activeQuestions[idx].ans, isCorrect });
             });
 
@@ -249,8 +424,19 @@
             document.getElementById('wrong-count').innerText = wrong;
             document.getElementById('skip-count').innerText = skipped;
 
-            leaderboard.push({ name: userName, score: marks, history: JSON.parse(JSON.stringify(attemptHistory)), qSet: activeQuestions });
-            leaderboard.sort((a, b) => b.score - a.score); updateLeaderboardUI();
+            leaderboard.push({ 
+                name: userName, 
+                score: marks, 
+                mode: quizMode,
+                date: new Date().toLocaleString(),
+                history: JSON.parse(JSON.stringify(attemptHistory)), 
+                qSet: activeQuestions 
+            });
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            // Save to localStorage
+            saveLeaderboardToStorage();
+            updateLeaderboardUI();
         }
 
         function updateLeaderboardUI() {
@@ -258,28 +444,29 @@
             leaderboard.forEach((e, i) => {
                 if (i > 0 && e.score < leaderboard[i - 1].score) rank = i + 1;
                 let med = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
-                html += `<div onclick="openLeaderboardHistory(${i})" class="cursor-pointer group hover:bg-blue-50 transition-colors flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm"><div class="flex items-center gap-3"><div class="w-8 text-center text-lg font-bold text-slate-500">${med}</div><div class="flex flex-col"><span class="font-semibold text-slate-700 group-hover:text-blue-600">${e.name}</span><span class="text-[10px] text-slate-400">View History</span></div></div><span class="font-bold text-slate-800">${e.score.toFixed(2)}</span></div>`;
+                let modeIcon = e.mode === "rapid" ? "🔥" : "📚";
+                html += `<div onclick="openLeaderboardHistory(${i})" class="cursor-pointer group hover:bg-blue-50 transition-colors flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm"><div class="flex items-center gap-3"><div class="w-8 text-center text-lg font-bold text-slate-500">${med}</div><div class="flex flex-col"><span class="font-semibold text-slate-700 group-hover:text-blue-600">${e.name}</span><span class="text-[10px] text-slate-400">${modeIcon} ${e.mode} ${e.date ? '• ' + e.date : ''}</span></div></div><span class="font-bold text-slate-800">${e.score.toFixed(2)}</span></div>`;
             });
             startLeaderboardList.innerHTML = html || '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
         }
 
         function openLeaderboardHistory(idx) { 
-            previousView = views.start; views.start.classList.add('hidden'); 
-            // Need to pass the specific Question Set used for that user (since we randomize)
-            // But for simplicity in this version, we display the user's view of *their* attempt
-            // NOTE: In randomized mode, showing history for *other* users is tricky if q order changed.
-            // Current simplified fix: Show history based on stored qSet
+            previousView = views.start; 
+            views.start.classList.add('hidden'); 
             showReview(leaderboard[idx].history, leaderboard[idx].qSet); 
         }
         
         function showReviewFromResults() { 
-            previousView = views.result; views.result.classList.replace('flex', 'hidden'); 
+            previousView = views.result; 
+            views.result.classList.replace('flex', 'hidden'); 
             showReview(attemptHistory, activeQuestions); 
         }
 
         function showReview(hist, questionSet) {
-            views.review.classList.replace('hidden', 'flex');
-            const cont = document.getElementById('review-container'); cont.innerHTML = '';
+            views.review.classList.remove('hidden');
+            views.review.classList.add('flex');
+            const cont = document.getElementById('review-container'); 
+            cont.innerHTML = '';
             
             hist.forEach((h, i) => {
                 const q = questionSet[h.qIdx];
@@ -297,10 +484,21 @@
             });
         }
 
-        function closeReview() { views.review.classList.replace('flex', 'hidden'); previousView.classList.replace('hidden', 'flex'); }
-        function resetApp() { clearInterval(timerId); clearTimeout(nextQTimer); isAnswered = false; nameInput.value = ""; views.result.classList.replace('flex', 'hidden'); views.review.classList.replace('flex', 'hidden'); views.start.classList.remove('hidden'); }
+        function closeReview() { 
+            views.review.classList.replace('flex', 'hidden'); 
+            previousView.classList.remove('hidden'); 
+        }
+
+        function resetApp() { 
+            clearInterval(timerId); 
+            clearTimeout(nextQTimer); 
+            isAnswered = false; 
+            nameInput.value = ""; 
+            views.result.classList.replace('flex', 'hidden'); 
+            views.review.classList.replace('flex', 'hidden'); 
+            views.start.classList.remove('hidden');
+            header.classList.add('hidden');
+        }
     </script>
 </body>
 </html>
-```
-```
