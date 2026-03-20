@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maratha to Wardha Scheme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
+        .btn-option { transition: all 0.15s ease; border-width: 2px; }
+        .btn-option:active { transform: scale(0.99); }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 h-screen overflow-hidden">
+
+    <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-[90vh]">
+        
+        <!-- HEADER -->
+        <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
+            <div class="flex flex-col">
+                <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase" id="mode-display">RAPID FIRE</span>
+            </div>
+            <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
+                ⏱️ <span id="timer">20</span>s
+            </div>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white/80 z-50 hidden flex-col items-center justify-center backdrop-blur-sm">
+            <div class="spinner mb-2"></div>
+            <p class="text-sm font-bold text-slate-600">Loading History...</p>
+        </div>
+
+        <!-- VIEW 1: START SCREEN -->
+        <div id="start-view" class="h-full overflow-hidden flex flex-col">
+            <div class="p-8 flex flex-col items-center text-center shrink-0 overflow-y-auto">
+                <div class="text-5xl mb-4">⚔️</div>
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Maratha to Wardha Scheme</h1>
+                <p class="text-slate-500 mb-6 text-sm">
+                    160 Quality Qs<br>
+                    <span class="text-green-600 font-bold">+1.0</span> • <span class="text-red-500 font-bold">-0.25</span>
+                </p>
+                <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors">
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">Continue</button>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1 overflow-y-auto min-h-0">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leaderboard</h3>
+                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR HISTORY</button>
+                </div>
+                <div id="start-leaderboard-list" class="space-y-2 pb-4">
+                    <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: MODE SELECTION -->
+        <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
+            <div class="p-8 flex flex-col items-center text-center shrink-0">
+                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
+                <div class="flex flex-col gap-4 w-full">
+                    <div onclick="startRapidFire()" class="cursor-pointer group p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-orange-900 flex items-center gap-2">🔥 Rapid Fire</div>
+                        <p class="text-xs text-orange-700 mt-1 font-medium">20s Timer • No-Skip</p>
+                    </div>
+                    <div onclick="startPractice()" class="cursor-pointer group p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-green-900 flex items-center gap-2">📚 Practice Mode</div>
+                        <p class="text-xs text-green-700 mt-1 font-medium">No Timer • Review before submit</p>
+                    </div>
+                </div>
+                <button onclick="backToStart()" class="mt-8 text-slate-400 hover:text-slate-600 font-bold text-sm">← Back</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: QUIZ -->
+        <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
+            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-6 shrink-0 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="mb-6 shrink-0">
+                <h2 id="question-text" class="text-lg font-bold text-slate-800 leading-relaxed">Loading...</h2>
+                <div id="pyq-tag" class="inline-block mt-2 px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-mono text-slate-500 font-medium"></div>
+            </div>
+            <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-100 pt-4 mt-2 flex gap-3">
+                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50">← Prev</button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow-sm">Submit</button>
+                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50 shadow-sm">Next →</button>
+            </div>
+            <div id="question-indicator" class="hidden shrink-0 text-center text-[10px] text-slate-400 font-bold mt-3">
+                <span id="current-q-num">1</span> / <span id="total-q-num">100</span>
+            </div>
+        </div>
+
+        <!-- VIEW 4: RESULT -->
+        <div id="result-view" class="hidden flex-col h-full overflow-y-auto">
+            <div class="p-8 text-center shrink-0">
+                <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Completed</h2>
+                <p class="text-slate-500 text-sm mb-6 font-medium" id="result-name">Well done</p>
+                <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200">
+                    <div class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">FINAL SCORE</div>
+                    <div id="final-score" class="text-6xl font-black text-blue-600 leading-none mb-4 tracking-tight">0</div>
+                    <div class="flex justify-center gap-6 text-sm font-bold border-t border-slate-200 pt-4">
+                        <span class="text-green-600 flex items-center gap-1">✅ <span id="correct-count">0</span></span>
+                        <span class="text-red-500 flex items-center gap-1">❌ <span id="wrong-count">0</span></span>
+                        <span class="text-slate-400 flex items-center gap-1">⚪ <span id="skip-count">0</span></span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-xl transition-colors text-sm">📄 Review Solutions</button>
+                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-md shadow-blue-200">🔄 Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: REVIEW HISTORY -->
+        <div id="review-view" class="hidden flex-col h-full bg-slate-50">
+            <div class="p-4 bg-white border-b border-slate-200 flex flex-col gap-2 shrink-0 shadow-sm z-10">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 text-sm">History: <span id="review-player-name" class="text-blue-600"></span></h3>
+                    <button onclick="closeReview()" class="text-blue-600 font-bold text-xs hover:underline bg-blue-50 px-3 py-1 rounded-full">CLOSE</button>
+                </div>
+                <div id="review-stats" class="text-[10px] flex gap-3 font-bold text-slate-500">
+                    <!-- Stats injected here -->
+                </div>
+            </div>
+            <div id="review-container" class="flex-1 p-4 overflow-y-auto min-h-0 space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- MASTER DATA ---
+        // (Insert the full 100 questions here. I'm using the 5 you provided + will assume you paste the 95 batch)
+        const MASTER_DATA = [
+            //Marathas-anglo maratha
+            { q: "Who among the following was the founder of the Maratha Empire?", tag: "SSC CGL", opts: ["Shivaji", "Balaji Vishwanath", "Baji Rao I", "Shahji Bhonsle"], ansText: "Shivaji", why: "Shivaji Maharaj founded the Maratha Empire and formally assumed the title of Chhatrapati in 1674 at Raigad." },
+    { q: "The 'Ashtapradhan' was a council of eight ministers in the administration of:", tag: "SSC CPO", opts: ["Marathas", "Guptas", "Mughals", "Cholas"], ansText: "Marathas", why: "Shivaji established the Ashtapradhan system to assist him in state administration. The Peshwa was the Prime Minister." },
+    { q: "In the Maratha administration, 'Chauth' was a tax equivalent to what fraction of the revenue?", tag: "SSC CHSL", opts: ["One-fourth", "One-third", "One-tenth", "One-half"], ansText: "One-fourth", why: "Chauth was an annual tax nominally levied at 25% on revenue or produce, demanded from lands outside Maratha direct control to avoid Maratha raids." },
+    { q: "The 'Sardeshmukhi' tax was an additional levy of what percentage?", tag: "SSC MTS", opts: ["10%", "25%", "15%", "5%"], ansText: "10%", why: "It was an additional 10% tax levied by Shivaji on top of Chauth, claiming his position as the supreme head (Sardeshmukh) of the region." },
+    { q: "Which Peshwa is known as the 'Second Founder of the Maratha Empire'?", tag: "SSC CGL", opts: ["Balaji Vishwanath", "Baji Rao I", "Balaji Baji Rao", "Madhav Rao"], ansText: "Balaji Vishwanath", why: "He made the Peshwaship hereditary and secured significant rights (like collecting Chauth/Sardeshmukhi from Mughal Deccan) from the Syed Brothers." },
+    { q: "Who was the Maratha commander in the Third Battle of Panipat (1761)?", tag: "SSC CPO", opts: ["Sadashivrao Bhau", "Baji Rao I", "Mahadji Shinde", "Malhar Rao Holkar"], ansText: "Sadashivrao Bhau", why: "He led the Maratha forces against Ahmad Shah Abdali. The defeat severely checked Maratha expansion." },
+    { q: "The 'Treaty of Purandar' (1776) was signed between the Marathas and the:", tag: "SSC CHSL", opts: ["British East India Company", "Mughals", "Nizam of Hyderabad", "French"], ansText: "British East India Company", why: "Signed by Warren Hastings, it annulled the Treaty of Surat and temporarily recognized Sawai Madhavrao as the Peshwa." },
+    { q: "Which Anglo-Maratha war ended with the 'Treaty of Salbai' (1782)?", tag: "SSC MTS", opts: ["First", "Second", "Third", "Fourth"], ansText: "First", why: "The treaty guaranteed 20 years of peace between the British and the Marathas and recognized Madhavrao II as Peshwa." },
+    { q: "The 'Treaty of Bassein' (1802) was signed by which Peshwa with the British?", tag: "SSC CGL Tier-2", opts: ["Baji Rao II", "Narayan Rao", "Madhav Rao", "Raghunath Rao"], ansText: "Baji Rao II", why: "He accepted the Subsidiary Alliance after being defeated by the Holkars, essentially surrendering Maratha independence." },
+    { q: "Which Governor-General finally abolished the office of the Peshwa?", tag: "SSC Selection Post", opts: ["Lord Hastings", "Lord Wellesley", "Lord Dalhousie", "Lord Cornwallis"], ansText: "Lord Hastings", why: "After the Third Anglo-Maratha War (1817-1818), Lord Hastings abolished the Peshwaship and exiled Baji Rao II to Bithur." },
+    { q: "The Maratha confederacy consisted of several prominent families. Which pair is INCORRECT?", tag: "SSC Statement", opts: ["Bhonsle - Nagpur", "Holkar - Indore", "Scindia - Gwalior", "Gaikwad - Pune"], ansText: "Gaikwad - Pune", why: "Gaikwads ruled Baroda, while Pune was the seat of the Peshwas." },
+    { q: "Who established the Maratha naval force?", tag: "SSC CPO", opts: ["Kanhoji Angre", "Shivaji", "Balaji Baji Rao", "Baji Rao I"], ansText: "Shivaji", why: "Shivaji realized the importance of naval power for coastal defense against the Portuguese, Siddhis, and British, building a strong navy later led by Kanhoji Angre." },
+    { q: "The 'Treaty of Rajghat' (1805) was concluded between the British and:", tag: "SSC CHSL", opts: ["Holkars", "Scindias", "Bhonsles", "Gaikwads"], ansText: "Holkars", why: "It marked the end of the Second Anglo-Maratha War regarding Yashwantrao Holkar." },
+    { q: "Consider the statements: 1. Baji Rao I never lost a battle. 2. He captured Salsette and Bassein from the Portuguese. Which are true?", tag: "SSC Statement", opts: ["Both 1 and 2", "1 only", "2 only", "Neither"], ansText: "Both 1 and 2", why: "Baji Rao I is considered the greatest cavalry general of India. His brother Chimaji Appa defeated the Portuguese to capture Salsette and Bassein." },
+    { q: "Who was the Mughal Emperor when Shivaji died in 1680?", tag: "SSC MTS", opts: ["Aurangzeb", "Shah Jahan", "Bahadur Shah I", "Jahangir"], ansText: "Aurangzeb", why: "Aurangzeb spent his final 25 years in the Deccan trying to crush the Marathas after Shivaji's death." },
+    { q: "The system of 'Saranjam' in Maratha administration was related to:", tag: "SSC CGL", opts: ["Land grants for military service", "Tax collection", "Religious donations", "Naval commands"], ansText: "Land grants for military service", why: "Saranjami system was similar to the Jagir system, where land revenue was assigned for maintaining troops." },
+    { q: "Who was the chronicler of Shivaji's reign?", tag: "SSC History", opts: ["Krishnaji Anant Sabhasad", "Khafi Khan", "Badauni", "Abul Fazl"], ansText: "Krishnaji Anant Sabhasad", why: "He wrote the 'Sabhasad Bakhar', the most authentic biographical account of Shivaji." },
+    { q: "The guerrilla warfare tactics of the Marathas were known as:", tag: "SSC GD", opts: ["Bargiri", "Swarajya", "Chauth", "Pindari"], ansText: "Bargiri", why: "Bargiris were light cavalry who excelled in hit-and-run guerrilla tactics (Ganimi Kava) against heavily armored Mughal armies." },
+    { q: "Which Peshwa fought the 'Battle of Palkhed' (1728) against the Nizam of Hyderabad?", tag: "SSC CPO", opts: ["Baji Rao I", "Balaji Vishwanath", "Madhav Rao", "Narayan Rao"], ansText: "Baji Rao I", why: "Considered a masterpiece of strategic mobility, Baji Rao I outmaneuvered and defeated Nizam-ul-Mulk." },
+    { q: "The Third Anglo-Maratha War was triggered by the British campaign against:", tag: "SSC CGL", opts: ["Pindaris", "Mughals", "Sikhs", "Afghans"], ansText: "Pindaris", why: "Lord Hastings' campaign against the Pindaris (freebooters attached to Maratha armies) led to a direct conflict with the Maratha chiefs." },
+    { q: "Who was the female Maratha ruler who heroically fought against the Mughals after the death of Rajaram?", tag: "SSC CHSL", opts: ["Tarabai", "Jijabai", "Ahilyabai Holkar", "Rani Durgavati"], ansText: "Tarabai", why: "She was the widow of Rajaram and acted as regent for her son, keeping the Maratha resistance alive against Aurangzeb." },
+    { q: "Which Maratha chief supported the British during the Revolt of 1857?", tag: "SSC MTS", opts: ["Scindia of Gwalior", "Nana Sahib", "Tatya Tope", "Rani Lakshmibai"], ansText: "Scindia of Gwalior", why: "Jayajirao Scindia remained loyal to the British, famously prompting Lord Canning to say, 'If Scindia joins the rebels, I will pack off tomorrow'." },
+    { q: "The 'Treaty of Wadgaon' (1779) was a humiliating defeat for the British against which Maratha leader?", tag: "SSC CGL Tier-2", opts: ["Mahadji Shinde", "Malhar Rao Holkar", "Nana Phadnavis", "Baji Rao II"], ansText: "Mahadji Shinde", why: "The British forces surrendered to the Marathas under Mahadji Shinde during the First Anglo-Maratha War." },
+    { q: "What was the 'Mukasa' in Maratha revenue system?", tag: "SSC Deep History", opts: ["66% of the Chauth", "Religious tax", "Land tax", "Toll tax"], ansText: "66% of the Chauth", why: "Out of the collected Chauth, 25% went to the King, 6% to the Pant Sachiv, and 66% (Mukasa) was assigned to Maratha chiefs for troop maintenance." },
+    { q: "Who built the famous 'Shaniwar Wada' in Pune?", tag: "SSC CPO", opts: ["Baji Rao I", "Shivaji", "Balaji Baji Rao", "Madhav Rao"], ansText: "Baji Rao I", why: "It was built in 1732 as the fortified seat of the Peshwas of the Maratha Empire." },
+    { q: "Which British official called the Treaty of Bassein 'a treaty with a cipher'?", tag: "SSC Conceptual", opts: ["Lord Castlereagh", "Lord Wellesley", "Lord Hastings", "Arthur Wellesley"], ansText: "Lord Castlereagh", why: "He criticized Wellesley's policy, calling Baji Rao II a 'cipher' (zero) as he had no real power or support among Marathas." },
+    { q: "The 'Nana Phadnavis' was the influential minister during the minority of which Peshwa?", tag: "SSC CHSL", opts: ["Sawai Madhavrao", "Baji Rao II", "Narayan Rao", "Balaji Baji Rao"], ansText: "Sawai Madhavrao", why: "Often called the 'Maratha Machiavelli', he led the Barbhai Council to protect the infant Peshwa from Raghunath Rao." },
+    { q: "Which statements are correct? 1. Ahilyabai Holkar ruled from Maheshwar. 2. She rebuilt the Kashi Vishwanath temple. 3. She fought in the 3rd Battle of Panipat.", tag: "SSC Statement", opts: ["1 and 2 only", "1 and 3 only", "2 and 3 only", "All 1, 2, and 3"], ansText: "1 and 2 only", why: "Ahilyabai Holkar (Queen of Malwa) was an excellent administrator and builder, but she did not fight at Panipat." },
+    { q: "Who was the commander of the British forces at the Battle of Assaye (1803) against the Marathas?", tag: "SSC CGL", opts: ["Arthur Wellesley", "Robert Clive", "Hector Munro", "Eyre Coote"], ansText: "Arthur Wellesley", why: "Later the Duke of Wellington (who defeated Napoleon), he defeated the combined forces of Scindia and Bhonsle." },
+    { q: "The 'Peshwa' office became fully hereditary during the reign of:", tag: "SSC MTS", opts: ["Chhatrapati Shahu", "Shivaji", "Sambhaji", "Rajaram"], ansText: "Chhatrapati Shahu", why: "He appointed Balaji Vishwanath as Peshwa, and from then on, the power shifted from the Chhatrapati to the Peshwas." },
+    { q: "Which Maratha leader was nicknamed 'The Machiavelli of India'?", tag: "SSC GD", opts: ["Nana Phadnavis", "Balaji Vishwanath", "Mahadji Shinde", "Baji Rao I"], ansText: "Nana Phadnavis", why: "For his political acumen and ability to keep the Maratha Confederacy together against the British." },
+    { q: "The Battle of Kharda (1795) was a decisive victory of the Marathas over:", tag: "SSC History", opts: ["Nizam of Hyderabad", "British", "Tipu Sultan", "Mughals"], ansText: "Nizam of Hyderabad", why: "It was the last time all the major Maratha chiefs fought together under the Peshwa." },
+    { q: "Who assassinated Peshwa Narayan Rao?", tag: "SSC Trivia", opts: ["Raghunath Rao's guards", "British spies", "Nizam's assassins", "Hyder Ali"], ansText: "Raghunath Rao's guards", why: "His uncle Raghunath Rao (Raghoba) conspired to kill him to usurp the Peshwaship, leading to civil war." },
+    { q: "The 'Misl' system in Punjab was roughly equivalent to which Maratha concept?", tag: "SSC Conceptual", opts: ["Confederacy", "Chauth", "Sardeshmukhi", "Ashtapradhan"], ansText: "Confederacy", why: "Just like the Maratha Confederacy of different ruling families, the Sikhs were divided into 12 sovereign Misls." },
+    { q: "Which Maratha treaty ceded Cuttack (Odisha) to the British East India Company?", tag: "SSC CGL Tier-2", opts: ["Treaty of Deogaon", "Treaty of Surji-Anjangaon", "Treaty of Bassein", "Treaty of Salbai"], ansText: "Treaty of Deogaon", why: "Signed in 1803 by the Bhonsles of Nagpur after their defeat in the Second Anglo-Maratha War." },
+    { q: "Consider the statements about Baji Rao II: 1. He was the last Peshwa. 2. He signed the Treaty of Bassein. 3. He led the 1857 revolt.", tag: "SSC Statement", opts: ["1 and 2 only", "1 and 3 only", "2 and 3 only", "All are correct"], ansText: "1 and 2 only", why: "His adopted son, Nana Sahib, led the Kanpur uprising in 1857 because the British refused to continue Baji Rao II's pension." },
+    { q: "The capital of the Scindias was shifted from Ujjain to Gwalior by:", tag: "SSC CPO", opts: ["Daulat Rao Scindia", "Mahadji Scindia", "Ranoji Scindia", "Jankoji Scindia"], ansText: "Daulat Rao Scindia", why: "He shifted the capital in 1810 after the death of the great Mahadji Scindia." },
+    { q: "Which European power first trained the Maratha infantry and artillery?", tag: "SSC History", opts: ["French", "British", "Portuguese", "Dutch"], ansText: "French", why: "Leaders like Mahadji Shinde employed French officers (like Benoit de Boigne) to modernize their army." },
+    { q: "The 'Chhatrapati' title means:", tag: "SSC Basic", opts: ["Lord of the Umbrella", "Lord of the Earth", "King of Kings", "Protector of Cows"], ansText: "Lord of the Umbrella", why: "It signifies a sovereign ruler, symbolized by the royal umbrella (Chhatra)." },
+    { q: "Which war permanently ended the Maratha Empire as a political power?", tag: "SSC MTS", opts: ["Third Anglo-Maratha War", "Second Anglo-Maratha War", "First Anglo-Maratha War", "Anglo-Mysore War"], ansText: "Third Anglo-Maratha War", why: "Fought between 1817-1818, it resulted in the total dismantling of the Maratha Confederacy and British paramountcy in India." },
+
+    //punjab & anglo-punjab
+    { q: "Who was the founder of Sikhism and the first of the ten Sikh Gurus?", tag: "SSC MTS", opts: ["Guru Nanak Dev", "Guru Angad", "Guru Ram Das", "Guru Arjan Dev"], ansText: "Guru Nanak Dev", why: "Born in 1469 at Talwandi, he established the core tenets of Sikhism emphasizing equality and one God." },
+    { q: "Which Sikh Guru invented the 'Gurmukhi' script?", tag: "SSC CGL", opts: ["Guru Angad Dev", "Guru Nanak", "Guru Ram Das", "Guru Hargobind"], ansText: "Guru Angad Dev", why: "He formalized the Gurmukhi script, standardizing the writing of the Punjabi language and compiling Guru Nanak's hymns." },
+    { q: "The city of Amritsar (originally Ramdaspur) was founded by:", tag: "SSC CPO", opts: ["Guru Ram Das", "Guru Arjan Dev", "Guru Amar Das", "Guru Tegh Bahadur"], ansText: "Guru Ram Das", why: "The fourth Guru, Guru Ram Das, excavated the holy tank and founded the city on land granted by Mughal Emperor Akbar." },
+    { q: "Who compiled the 'Adi Granth', the holy scripture of Sikhism?", tag: "SSC CHSL", opts: ["Guru Arjan Dev", "Guru Gobind Singh", "Guru Nanak", "Guru Tegh Bahadur"], ansText: "Guru Arjan Dev", why: "The fifth Guru compiled the Adi Granth in 1604 and installed it in the Harmandir Sahib (Golden Temple)." },
+    { q: "Which Mughal Emperor ordered the execution of Guru Arjan Dev?", tag: "SSC CGL", opts: ["Jahangir", "Akbar", "Shah Jahan", "Aurangzeb"], ansText: "Jahangir", why: "Jahangir ordered his execution in 1606, marking a turning point that led to the militarization of the Sikh community." },
+    { q: "Which Guru introduced the concept of 'Miri and Piri' (temporal and spiritual authority)?", tag: "SSC History", opts: ["Guru Hargobind", "Guru Har Rai", "Guru Har Krishan", "Guru Gobind Singh"], ansText: "Guru Hargobind", why: "The sixth Guru built the Akal Takht and wore two swords representing spiritual (Piri) and temporal (Miri) power." },
+    { q: "Who was the youngest Sikh Guru, becoming Guru at the age of 5?", tag: "SSC GD", opts: ["Guru Har Krishan", "Guru Har Rai", "Guru Tegh Bahadur", "Guru Angad"], ansText: "Guru Har Krishan", why: "The eighth Guru, he died of smallpox at the age of 8 while treating patients in Delhi." },
+    { q: "Which Sikh Guru was executed by Aurangzeb at Chandni Chowk in Delhi?", tag: "SSC MTS", opts: ["Guru Tegh Bahadur", "Guru Arjan Dev", "Guru Gobind Singh", "Banda Singh Bahadur"], ansText: "Guru Tegh Bahadur", why: "The ninth Guru was executed in 1675 for refusing to convert to Islam and for protecting Kashmiri Pandits." },
+    { q: "The 'Khalsa Panth' was founded in 1699 by:", tag: "SSC CGL", opts: ["Guru Gobind Singh", "Guru Nanak", "Ranjit Singh", "Banda Bahadur"], ansText: "Guru Gobind Singh", why: "The tenth Guru formed the Khalsa, a community of initiated Sikhs (Saint-Soldiers), on Baisakhi day." },
+    { q: "Which of the following is NOT one of the 'Five Ks' of the Khalsa?", tag: "SSC CPO", opts: ["Khadi", "Kesh", "Kada", "Kirpan"], ansText: "Khadi", why: "The Five Ks are Kesh (uncut hair), Kangha (comb), Kada (steel bracelet), Kachhera (cotton undergarment), and Kirpan (sword)." },
+    { q: "Who led the Sikh rebellion against the Mughals after the death of Guru Gobind Singh?", tag: "SSC CHSL", opts: ["Banda Singh Bahadur", "Ranjit Singh", "Dalip Singh", "Kapur Singh"], ansText: "Banda Singh Bahadur", why: "He abolished the Zamindari system and established the first independent Sikh state before being captured and executed by Farrukhsiyar in 1716." },
+    { q: "Maharaja Ranjit Singh belonged to which Sikh Misl?", tag: "SSC CGL", opts: ["Sukerchakia Misl", "Ahluwalia Misl", "Bhangi Misl", "Ramgarhia Misl"], ansText: "Sukerchakia Misl", why: "He united the 12 warring Misls to forge a powerful Sikh Empire in the Punjab." },
+    { q: "The 'Treaty of Amritsar' (1809) fixed which river as the boundary between the British and Ranjit Singh's empire?", tag: "SSC MTS", opts: ["Sutlej", "Ravi", "Beas", "Indus"], ansText: "Sutlej", why: "Signed with Charles Metcalfe, it restricted Ranjit Singh's expansion south of the Sutlej but gave him a free hand in the north and west." },
+    { q: "Who obtained the famous 'Koh-i-Noor' diamond from the Afghan ruler Shah Shuja?", tag: "SSC GD", opts: ["Ranjit Singh", "Nadir Shah", "Ahmad Shah Abdali", "Dalip Singh"], ansText: "Ranjit Singh", why: "Ranjit Singh gave Shah Shuja refuge in Lahore and acquired the diamond in return for his help." },
+    { q: "The First Anglo-Sikh War (1845-46) ended with the signing of the:", tag: "SSC CGL", opts: ["Treaty of Lahore", "Treaty of Amritsar", "Treaty of Peshawar", "Treaty of Multan"], ansText: "Treaty of Lahore", why: "The British defeated the Sikh army, imposed a heavy war indemnity, and took the Jalandhar Doab." },
+    { q: "Consider the statements: 1. Gulab Singh bought Kashmir from the British after the 1st Anglo-Sikh War. 2. Ranjit Singh modernized his army with French commanders. Which are true?", tag: "SSC Statement", opts: ["Both 1 and 2", "1 only", "2 only", "Neither"], ansText: "Both 1 and 2", why: "Gulab Singh paid 75 lakh rupees for Kashmir (Treaty of Amritsar 1846). Ranjit Singh's 'Fauj-i-Khas' was trained by Allard and Ventura." },
+    { q: "Which Governor-General annexed Punjab into the British Empire in 1849?", tag: "SSC CPO", opts: ["Lord Dalhousie", "Lord Hardinge", "Lord Wellesley", "Lord Canning"], ansText: "Lord Dalhousie", why: "Following the decisive British victory in the Second Anglo-Sikh War at the Battle of Gujrat, Dalhousie annexed Punjab." },
+    { q: "The 'Battle of Gujrat' (1849) is famously known in history as the:", tag: "SSC CHSL", opts: ["Battle of Guns", "Battle of Swords", "Battle of Horses", "Battle of Blood"], ansText: "Battle of Guns", why: "It was an artillery duel where the British effectively utilized their heavy guns to crush the Sikh army." },
+    { q: "Who was the last Maharaja of the Sikh Empire?", tag: "SSC MTS", opts: ["Dalip Singh", "Kharak Singh", "Sher Singh", "Ranjit Singh"], ansText: "Dalip Singh", why: "The youngest son of Ranjit Singh, he was deposed by the British, exiled to England, and the Koh-i-Noor was taken from him." },
+    { q: "The 'Zafarnama' was a letter written to Aurangzeb by:", tag: "SSC History", opts: ["Guru Gobind Singh", "Guru Tegh Bahadur", "Banda Bahadur", "Shivaji"], ansText: "Guru Gobind Singh", why: "Written in Persian, it is the 'Epistle of Victory' detailing Aurangzeb's treacheries and the moral victory of the Khalsa." },
+    { q: "Who was the mother of Maharaja Dalip Singh, known for her strong resistance against the British?", tag: "SSC CGL", opts: ["Rani Jindan", "Rani Sada Kaur", "Rani Durgavati", "Rani Lakshmibai"], ansText: "Rani Jindan", why: "Jind Kaur (Rani Jindan) was the youngest wife of Ranjit Singh and acted as regent. The British exiled her due to her influence." },
+    { q: "Which Sikh Guru started the institution of 'Langar' (community kitchen)?", tag: "SSC GD", opts: ["Guru Nanak Dev", "Guru Amar Das", "Guru Ram Das", "Guru Arjan Dev"], ansText: "Guru Nanak Dev", why: "Guru Nanak initiated the practice to promote equality regardless of caste or religion. Guru Amar Das later institutionalized it." },
+    { q: "The 'Dasham Granth' is associated with which Sikh Guru?", tag: "SSC CPO", opts: ["Guru Gobind Singh", "Guru Nanak", "Guru Arjan Dev", "Guru Hargobind"], ansText: "Guru Gobind Singh", why: "It is a religious text compiled after his death, containing his compositions, separate from the Guru Granth Sahib." },
+    { q: "The Battle of Mudki, Ferozeshah, Aliwal, and Sobraon were fought during the:", tag: "SSC CGL Tier-2", opts: ["First Anglo-Sikh War", "Second Anglo-Sikh War", "Anglo-Afghan War", "Anglo-Maratha War"], ansText: "First Anglo-Sikh War", why: "The Sikh army fought bravely but was repeatedly betrayed by their own commanders, Lal Singh and Tej Singh." },
+    { q: "Who was famously called the 'Lion of Punjab' (Sher-e-Punjab)?", tag: "SSC Basic", opts: ["Ranjit Singh", "Lala Lajpat Rai", "Bhagat Singh", "Both A and B"], ansText: "Both A and B", why: "Maharaja Ranjit Singh was originally known as Sher-e-Punjab. Later, Lala Lajpat Rai was also given this title during the freedom struggle." },
+    { q: "Which Sikh Guru was a contemporary of Babur and mentioned his invasions in his writings?", tag: "SSC CHSL", opts: ["Guru Nanak Dev", "Guru Angad", "Guru Amar Das", "Guru Ram Das"], ansText: "Guru Nanak Dev", why: "His verses regarding Babur's invasion are known as 'Babarvani' in the Guru Granth Sahib." },
+    { q: "The capital of Maharaja Ranjit Singh's empire was:", tag: "SSC MTS", opts: ["Lahore", "Amritsar", "Peshawar", "Multan"], ansText: "Lahore", why: "He captured Lahore in 1799, making it his political capital, while Amritsar remained the religious capital." },
+    { q: "Which British official signed the Treaty of Lahore (1846)?", tag: "SSC History", opts: ["Lord Hardinge", "Lord Dalhousie", "Lord Gough", "Henry Lawrence"], ansText: "Lord Hardinge", why: "Governor-General Lord Hardinge dictated the punitive terms after the First Anglo-Sikh War." },
+    { q: "Consider the statements: 1. The Khalsa was purely a religious body with no military training. 2. Banda Bahadur issued coins in the name of Nanak and Gobind Singh. Which are true?", tag: "SSC Statement", opts: ["2 only", "1 only", "Both 1 and 2", "Neither"], ansText: "2 only", why: "Statement 1 is false. The Khalsa was specifically a militant brotherhood ('Saint-Soldiers') to defend the faith." },
+    { q: "Who led the Sikh forces at the Battle of Chillianwala (1849) which resulted in heavy British casualties?", tag: "SSC CGL", opts: ["Sher Singh Attariwalla", "Tej Singh", "Lal Singh", "Chattar Singh"], ansText: "Sher Singh Attariwalla", why: "It was one of the bloodiest battles of the Second Anglo-Sikh War, ending in a tactical draw but shocking the British public." },
+    { q: "What was 'Masand' system in Sikhism, which was abolished by Guru Gobind Singh?", tag: "SSC Deep History", opts: ["System of tithe collection by deputies", "System of military draft", "System of religious texts", "System of Langar"], ansText: "System of tithe collection by deputies", why: "Started by Guru Ram Das, the Masands (deputies) collected offerings. It became corrupt, so Guru Gobind Singh abolished it." },
+    { q: "The famous 'Akal Takht' in the Golden Temple complex was built by:", tag: "SSC CPO", opts: ["Guru Hargobind", "Guru Arjan Dev", "Guru Ram Das", "Guru Gobind Singh"], ansText: "Guru Hargobind", why: "It represents the highest seat of earthly authority of the Khalsa, establishing the 'Miri' concept." },
+    { q: "Which British general was known for his aggressive tactics against the Sikhs in the Second Anglo-Sikh War?", tag: "SSC Trivia", opts: ["Lord Gough", "Charles Napier", "Harry Smith", "Hugh Rose"], ansText: "Lord Gough", why: "His frontal assault tactics at Chillianwala caused high British casualties, leading to his imminent replacement before his victory at Gujrat." },
+    { q: "The Tripartite Treaty of 1838 was signed between the British, Shah Shuja, and:", tag: "SSC CGL", opts: ["Ranjit Singh", "Dost Mohammad", "Sindhia", "Nizam"], ansText: "Ranjit Singh", why: "It aimed to place Shah Shuja on the Afghan throne, leading to the disastrous First Anglo-Afghan War." },
+    { q: "Which of the following Sikh Misls was the most powerful before the rise of Ranjit Singh?", tag: "SSC History", opts: ["Bhangi Misl", "Sukerchakia Misl", "Nihang Misl", "Phulkian Misl"], ansText: "Bhangi Misl", why: "They controlled Lahore and Amritsar before Ranjit Singh defeated them." },
+    { q: "Who was the British Resident appointed in Lahore after the Treaty of Bhairoval (1846)?", tag: "SSC CGL Tier-2", opts: ["Henry Lawrence", "John Lawrence", "Charles Metcalfe", "Alexander Burnes"], ansText: "Henry Lawrence", why: "The treaty established a Council of Regency acting under the control of the British Resident." },
+    { q: "The Sikh empire was divided into provinces known as:", tag: "SSC Admin", opts: ["Subas", "Iqtas", "Sarkars", "Misls"], ansText: "Subas", why: "Modeled loosely on the Mughal system, the empire was divided into four Subas: Lahore, Multan, Kashmir, and Peshawar." },
+    { q: "Which Sikh Guru is associated with the 'Anand Karaj' marriage ceremony?", tag: "SSC CHSL", opts: ["Guru Amar Das", "Guru Nanak", "Guru Arjan Dev", "Guru Ram Das"], ansText: "Guru Amar Das", why: "He composed the 'Anand Sahib' and initiated the distinct Sikh marriage ceremony, moving away from Hindu rituals." },
+    { q: "What was the name of Maharaja Ranjit Singh's famous horse?", tag: "SSC Trivia", opts: ["Laili", "Chetak", "Bucephalus", "Gajraj"], ansText: "Laili", why: "He fought an entire war against the Afghan governor of Peshawar just to acquire this legendary Persian horse." },
+    { q: "After the annexation of Punjab, a Board of Administration was formed. Who was its President?", tag: "SSC CGL", opts: ["Henry Lawrence", "John Lawrence", "Lord Dalhousie", "Charles Napier"], ansText: "Henry Lawrence", why: "The Board included Henry Lawrence, John Lawrence, and Charles Mansel, tasked with governing the newly conquered province." },
+
+    //British Expansion & Economic Policies
+    { q: "The 'Subsidiary Alliance' system was introduced by which Governor-General?", tag: "SSC MTS", opts: ["Lord Wellesley", "Lord Dalhousie", "Lord Cornwallis", "Lord Hastings"], ansText: "Lord Wellesley", why: "Introduced in 1798, it forced Indian rulers to disband their armies, maintain British troops, and place a British Resident at their court." },
+    { q: "Which Indian state was the FIRST to accept the Subsidiary Alliance?", tag: "SSC CGL", opts: ["Hyderabad", "Awadh", "Mysore", "Maratha Peshwa"], ansText: "Hyderabad", why: "The Nizam of Hyderabad was the first to accept it in 1798 to secure British protection against the Marathas." },
+    { q: "The 'Doctrine of Lapse' is associated with:", tag: "SSC CPO", opts: ["Lord Dalhousie", "Lord Wellesley", "Lord William Bentinck", "Lord Canning"], ansText: "Lord Dalhousie", why: "If an Indian ruler died without a natural male heir, his state would 'lapse' (be annexed) to the British Company." },
+    { q: "Which state was the FIRST to be annexed under the Doctrine of Lapse in 1848?", tag: "SSC CHSL", opts: ["Satara", "Jhansi", "Nagpur", "Sambalpur"], ansText: "Satara", why: "Followed by Jaitpur and Sambalpur (1849), Baghat (1850), Udaipur (1852), Jhansi (1853), and Nagpur (1854)." },
+    { q: "Awadh was annexed in 1856 on the grounds of:", tag: "SSC CGL", opts: ["Misgovernance", "Doctrine of Lapse", "Subsidiary Alliance violation", "Military rebellion"], ansText: "Misgovernance", why: "Lord Dalhousie used the Outram report alleging maladministration by Nawab Wajid Ali Shah to justify the annexation." },
+    { q: "The 'Policy of Ring Fence' was primarily associated with:", tag: "SSC History", opts: ["Warren Hastings", "Lord Clive", "Lord Wellesley", "Lord Lytton"], ansText: "Warren Hastings", why: "It aimed at creating buffer zones (like defending Awadh) to protect the Company's frontiers (Bengal) from Maratha and Afghan invasions." },
+    { q: "The 'Permanent Settlement' (Zamindari System) of land revenue was introduced in 1793 by:", tag: "SSC MTS", opts: ["Lord Cornwallis", "Thomas Munro", "Holt Mackenzie", "Warren Hastings"], ansText: "Lord Cornwallis", why: "It fixed land revenue permanently. Zamindars were recognized as owners of the land as long as they paid 10/11th of the revenue to the British." },
+    { q: "In the Permanent Settlement, what was the 'Sunset Law'?", tag: "SSC Conceptual", opts: ["If revenue wasn't paid by sunset of a specified date, the Zamindari was auctioned.", "Peasants couldn't work after sunset.", "British troops withdrew at sunset.", "No taxation on solar eclipses."], ansText: "If revenue wasn't paid by sunset of a specified date, the Zamindari was auctioned.", why: "A strict rule that led to many traditional Zamindars losing their lands to new urban merchants." },
+    { q: "The 'Ryotwari System' was primarily implemented in which region?", tag: "SSC CPO", opts: ["Madras and Bombay", "Bengal and Bihar", "Punjab and North-West", "Awadh"], ansText: "Madras and Bombay", why: "Introduced by Thomas Munro and Captain Read, revenue was directly settled with the ryot (peasant) without middlemen." },
+    { q: "Who introduced the 'Mahalwari System' in 1822?", tag: "SSC CGL", opts: ["Holt Mackenzie", "Thomas Munro", "Lord Cornwallis", "Lord Dalhousie"], ansText: "Holt Mackenzie", why: "Implemented in the North-Western Provinces, parts of Central India, and Punjab. Revenue was settled with the village community (Mahal)." },
+    { q: "The theory of the 'Drain of Wealth' from India to Britain was first propounded by:", tag: "SSC GD", opts: ["Dadabhai Naoroji", "R.C. Dutt", "G.K. Gokhale", "B.G. Tilak"], ansText: "Dadabhai Naoroji", why: "He explained this in his book 'Poverty and Un-British Rule in India', exposing how Indian wealth financed British industrialization." },
+    { q: "Consider the statements: 1. In Ryotwari, the peasant was the owner of the land. 2. Mahalwari system relied on the village headman for collection. Which are true?", tag: "SSC Statement", opts: ["Both 1 and 2", "1 only", "2 only", "Neither"], ansText: "Both 1 and 2", why: "Ryotwari established direct farmer-state relations. Mahalwari used the 'Lambardar' (headman) to collect from the entire Mahal." },
+    { q: "The first passenger railway line in India (1853) ran between:", tag: "SSC Basic", opts: ["Bombay to Thane", "Howrah to Hooghly", "Madras to Arcot", "Delhi to Meerut"], ansText: "Bombay to Thane", why: "Introduced during the tenure of Lord Dalhousie, it covered a distance of 34 kilometers." },
+    { q: "What was the primary motive behind the British developing railways in India?", tag: "SSC Conceptual", opts: ["Commercial extraction and troop movement", "Promoting Indian tourism", "Philanthropy", "Industrializing India"], ansText: "Commercial extraction and troop movement", why: "Railways were built to transport raw materials from the hinterland to ports, and to quickly move troops to quell rebellions." },
+    { q: "The 'Economic History of India', a classic work on British economic exploitation, was written by:", tag: "SSC CGL", opts: ["R.C. Dutt", "Dadabhai Naoroji", "M.G. Ranade", "A.O. Hume"], ansText: "R.C. Dutt", why: "Romesh Chunder Dutt deeply analyzed agrarian policies and the destructive impact of British de-industrialization on Indian artisans." },
+    { q: "Which policy is known as 'Subordinate Isolation' (1813-1857)?", tag: "SSC Tier-2", opts: ["States surrendered external sovereignty but retained internal autonomy", "States became complete British districts", "States shared equal power with British", "Complete non-intervention"], ansText: "States surrendered external sovereignty but retained internal autonomy", why: "Indian states acted in subordinate cooperation; the British controlled their foreign affairs and defense." },
+    { q: "The 'Commercialization of Agriculture' during British rule led to:", tag: "SSC History", opts: ["Frequent famines and shift to cash crops", "Prosperity of peasants", "Decrease in land revenue", "Growth of modern industries"], ansText: "Frequent famines and shift to cash crops", why: "Peasants were forced to grow cash crops like indigo and cotton instead of food grains, increasing vulnerability to famines." },
+    { q: "Under the Permanent Settlement, what fraction of the collected revenue was kept by the Zamindar?", tag: "SSC CPO", opts: ["1/11th", "10/11th", "1/4th", "1/2"], ansText: "1/11th", why: "The Zamindar kept 1/11th for his services, and 10/11th went to the British Company." },
+    { q: "The first telegraph line in India (1851) connected:", tag: "SSC CHSL", opts: ["Calcutta and Diamond Harbour", "Bombay and Thane", "Delhi and Meerut", "Madras and Bangalore"], ansText: "Calcutta and Diamond Harbour", why: "Introduced by Lord Dalhousie, the telegraph played a crucial role in saving the British Empire during the 1857 revolt." },
+    { q: "Who were the 'Gomasthas' during the British era?", tag: "SSC CGL", opts: ["Paid agents of the EIC to supervise weavers", "Village headmen", "Money lenders", "Rebel leaders"], ansText: "Paid agents of the EIC to supervise weavers", why: "They collected supplies, fixed prices, and prevented weavers from dealing with other European buyers, often using coercive methods." },
+    { q: "The British monopoly over Indian trade was completely abolished by the:", tag: "SSC MTS", opts: ["Charter Act of 1833", "Charter Act of 1813", "Regulating Act of 1773", "Pitt's India Act of 1784"], ansText: "Charter Act of 1833", why: "The 1813 Act ended the monopoly except for tea and trade with China. The 1833 Act ended ALL commercial activities of the Company." },
+    { q: "The ruin of traditional Indian handicraft industries is known as:", tag: "SSC Conceptual", opts: ["De-industrialization", "Industrial Revolution", "Mercantilism", "Laissez-faire"], ansText: "De-industrialization", why: "Cheap, machine-made British goods flooded the Indian market, destroying native weavers and artisans without replacing them with modern industries." },
+    { q: "Which Governor-General introduced the 'Postal Act' of 1854?", tag: "SSC GD", opts: ["Lord Dalhousie", "Lord Canning", "Lord Wellesley", "Lord Bentinck"], ansText: "Lord Dalhousie", why: "It introduced uniform postage rates across India and the first postage stamps." },
+    { q: "Consider the statements: 1. Wellesley resigned due to the costly wars of Subsidiary Alliance. 2. The Doctrine of Lapse was completely abolished after 1857. Which are true?", tag: "SSC Statement", opts: ["Both 1 and 2", "1 only", "2 only", "Neither"], ansText: "Both 1 and 2", why: "Wellesley's expansion was too expensive for the EIC Directors. The Queen's Proclamation of 1858 promised no further territorial expansion (ending Lapse)." },
+    { q: "The Tinkathia system in Champaran forced peasants to grow:", tag: "SSC CHSL", opts: ["Indigo on 3/20th of their land", "Opium on half their land", "Cotton on 1/3rd of their land", "Tea on all barren land"], ansText: "Indigo on 3/20th of their land", why: "This exploitative system led to the Champaran Satyagraha by Mahatma Gandhi in 1917." },
+    { q: "Who established the Public Works Department (PWD) in India?", tag: "SSC CGL", opts: ["Lord Dalhousie", "Lord Cornwallis", "Lord Curzon", "Lord Ripon"], ansText: "Lord Dalhousie", why: "He separated PWD from the Military Board and began constructing the Ganges Canal and roads." },
+    { q: "Which Indian state was the only one annexed by Dalhousie on grounds of 'misgovernment' rather than the Doctrine of Lapse?", tag: "SSC CPO", opts: ["Awadh", "Satara", "Jhansi", "Nagpur"], ansText: "Awadh", why: "Awadh had many legal heirs, so Dalhousie used the Outram report of maladministration to justify annexation in 1856." },
+    { q: "The system of 'Home Charges' significantly contributed to the Drain of Wealth. It included:", tag: "SSC Tier-2", opts: ["All of the above", "Pensions of British officials", "Interest on public debt", "Dividends to EIC shareholders"], ansText: "All of the above", why: "Home charges were payments made by the Indian government in Britain from Indian revenues, offering no return to the Indian economy." },
+    { q: "Under the Ryotwari system, the revenue was usually revised after a period of:", tag: "SSC History", opts: ["20-30 years", "Every year", "Never (Permanent)", "10 years"], ansText: "20-30 years", why: "Unlike the Permanent Settlement, the Ryotwari assessment was temporary and subject to reassessment." },
+    { q: "The 'Taluqdars' of Awadh were most severely affected by:", tag: "SSC Conceptual", opts: ["Summary Settlement of 1856", "Permanent Settlement", "Ryotwari System", "Ilbert Bill"], ansText: "Summary Settlement of 1856", why: "After annexing Awadh, the British stripped the traditional Taluqdars of their land and forts, leading them to join the 1857 revolt." },
+    { q: "Which British policy is associated with 'Paramountcy' where the Company claimed its authority was supreme?", tag: "SSC MTS", opts: ["Lord Hastings", "Lord Cornwallis", "Robert Clive", "Lord Wellesley"], ansText: "Lord Hastings", why: "Under Lord Hastings (1813-1823), the Company initiated the policy of 'paramountcy' to justify annexing or threatening Indian states." },
+    { q: "The 'Grand Trunk Road' was rebuilt and modernized during the tenure of:", tag: "SSC CHSL", opts: ["Lord Dalhousie", "Lord Bentinck", "Sher Shah Suri", "Warren Hastings"], ansText: "Lord Dalhousie", why: "While originally Sher Shah's Sadak-e-Azam, Dalhousie's newly formed PWD initiated massive reconstruction of the road." },
+    { q: "Which one of the following was NOT a feature of the Subsidiary Alliance?", tag: "SSC CGL", opts: ["The Indian ruler could freely negotiate with other European powers", "Maintenance of a British contingent", "A British Resident at the court", "Expulsion of other Europeans"], ansText: "The Indian ruler could freely negotiate with other European powers", why: "The ruler was strictly forbidden from negotiating with any other Indian or European power without British consent." },
+    { q: "Dadabhai Naoroji calculated the per capita income of India in 1867-68 to be:", tag: "SSC Trivia", opts: ["Rs. 20", "Rs. 100", "Rs. 5", "Rs. 50"], ansText: "Rs. 20", why: "In his book, he highlighted the extreme poverty of the Indian masses due to British extraction." },
+    { q: "The policy of 'Masterly Inactivity' (relating to Afghanistan) was followed by:", tag: "SSC CPO", opts: ["John Lawrence", "Lord Lytton", "Lord Auckland", "Lord Dalhousie"], ansText: "John Lawrence", why: "After the disastrous First Afghan War, Lawrence adopted a policy of non-interference in Afghan civil wars." },
+    { q: "The term 'Bania' in the context of British economic history refers to:", tag: "SSC History", opts: ["Indian merchants/moneylenders who collaborated with the British", "British revenue officers", "Rebel peasants", "Traditional weavers"], ansText: "Indian merchants/moneylenders who collaborated with the British", why: "They often acted as middlemen for the British and became wealthy by exploiting the peasantry." },
+    { q: "Consider the statements about Dalhousie: 1. He introduced the Widow Remarriage Act. 2. He annexed Jhansi. 3. He started the first railway. Which are true?", tag: "SSC Statement", opts: ["All 1, 2, and 3", "2 and 3 only", "1 and 2 only", "1 and 3 only"], ansText: "All 1, 2, and 3", why: "Dalhousie drafted the Hindu Widow Remarriage Act (passed by Canning in 1856), annexed Jhansi under Lapse, and built the railways." },
+    { q: "What was the 'Guarantee System' in the construction of Indian Railways?", tag: "SSC Tier-2", opts: ["British companies were guaranteed a 5% return on investment by the Indian Govt", "Indian passengers were guaranteed safety", "The speed of trains was guaranteed", "Land was guaranteed to farmers"], ansText: "British companies were guaranteed a 5% return on investment by the Indian Govt", why: "This led to massive private British investment in Indian railways, with the financial risk borne entirely by the Indian taxpayer." },
+    { q: "The transition from mercantilism to free trade in India benefited:", tag: "SSC Conceptual", opts: ["British industrial capitalists", "Indian artisans", "East India Company monopoly", "Indian peasants"], ansText: "British industrial capitalists", why: "Free trade (post-1813) allowed cheap machine-made British textiles to flood India, destroying the native artisan economy." },
+    { q: "Who famously stated, 'The bones of the cotton weavers are bleaching the plains of India'?", tag: "SSC CGL", opts: ["William Bentinck", "Karl Marx", "Dadabhai Naoroji", "Lord Dalhousie"], ansText: "William Bentinck", why: "Governor-General Bentinck wrote this in 1834 describing the devastating impact of cheap British imports on Indian weavers." },
+
+    //Administration & Education Policies
+    { q: "Who is known as the 'Father of Civil Services in India'?", tag: "SSC CGL", opts: ["Lord Cornwallis", "Warren Hastings", "Lord Dalhousie", "Lord Wellesley"], ansText: "Lord Cornwallis", why: "He reorganized, purified, and Europeanized the administration, creating a professional 'Covenanted Civil Service'." },
+    { q: "Who was the first Indian to pass the Indian Civil Service (ICS) examination in 1863?", tag: "SSC MTS", opts: ["Satyendranath Tagore", "Surendranath Banerjee", "Subhas Chandra Bose", "Dadabhai Naoroji"], ansText: "Satyendranath Tagore", why: "The elder brother of Rabindranath Tagore, he broke the glass ceiling for Indians in the elite administrative service." },
+    { q: "Which Governor-General created the regular police force and the 'Daroga' system?", tag: "SSC CPO", opts: ["Lord Cornwallis", "Lord Bentinck", "Lord Hastings", "Lord Ripon"], ansText: "Lord Cornwallis", why: "He relieved the Zamindars of their police duties and established circles (Thanas) headed by a Daroga." },
+    { q: "The 'Ilbert Bill Controversy' (1883) occurred during the tenure of:", tag: "SSC CHSL", opts: ["Lord Ripon", "Lord Lytton", "Lord Curzon", "Lord Dufferin"], ansText: "Lord Ripon", why: "The bill proposed allowing Indian judges to try European offenders. Violent protests by Europeans forced Ripon to amend it." },
+    { q: "Who is known as the 'Father of Local Self Government' in India?", tag: "SSC CGL", opts: ["Lord Ripon", "Lord Mayo", "Lord Curzon", "Lord Dalhousie"], ansText: "Lord Ripon", why: "His 1882 Resolution is hailed as the Magna Carta of local self-government, establishing municipal boards with non-official majorities." },
+    { q: "The first step towards financial decentralization and local self-government was taken in 1870 by:", tag: "SSC MTS", opts: ["Lord Mayo", "Lord Ripon", "Lord Lytton", "Lord Elgin"], ansText: "Lord Mayo", why: "Mayo's Resolution of 1870 initiated financial decentralization, laying the groundwork for Ripon's later reforms." },
+    { q: "The 'Statutory Civil Service' (appointing Indians of aristocratic families without exam) was introduced by:", tag: "SSC CPO", opts: ["Lord Lytton", "Lord Ripon", "Lord Cornwallis", "Lord Dufferin"], ansText: "Lord Lytton", why: "Introduced in 1878-79, it was a failure and was later abolished." },
+    { q: "The minimum age for the ICS exam was reduced from 21 to 19 by:", tag: "SSC History", opts: ["Lord Lytton", "Lord Ripon", "Lord Curzon", "Lord Canning"], ansText: "Lord Lytton", why: "This was a deliberate attempt to make it nearly impossible for Indians to clear the exam in London." },
+    { q: "Which committee recommended the three-tier system of Civil Services (Imperial, Provincial, Subordinate)?", tag: "SSC Tier-2", opts: ["Aitchison Commission", "Lee Commission", "Macaulay Committee", "Hunter Commission"], ansText: "Aitchison Commission", why: "Appointed in 1886 under Lord Dufferin, it recommended abolishing the Statutory Civil Service." },
+    { q: "The 'Charter Act of 1833' made which crucial provision regarding administration?", tag: "SSC Conceptual", opts: ["No Indian should be debarred from employment based on religion, place of birth, or color", "Introduced open competition for ICS", "Created the police department", "Separated executive from judiciary"], ansText: "No Indian should be debarred from employment based on religion, place of birth, or color", why: "Section 87 of the Act theoretically opened administration to Indians, though practically it was ignored for decades." },
+    { q: "Open competition for the Civil Services was finally introduced by which Act?", tag: "SSC CGL", opts: ["Charter Act of 1853", "Charter Act of 1833", "Government of India Act 1858", "Indian Councils Act 1861"], ansText: "Charter Act of 1853", why: "It ended the patronage system of the Court of Directors, opening the ICS to competitive examination (Macaulay Committee)." },
+    { q: "The 'Calcutta Madrasa' was established in 1781 by:", tag: "SSC GD", opts: ["Warren Hastings", "Jonathan Duncan", "Lord Wellesley", "William Jones"], ansText: "Warren Hastings", why: "It was established for the study of Islamic law and related subjects, showing the early Orientalist approach." },
+    { q: "The 'Sanskrit College' at Benaras was established in 1791 by:", tag: "SSC CHSL", opts: ["Jonathan Duncan", "Warren Hastings", "William Jones", "Lord Macaulay"], ansText: "Jonathan Duncan", why: "Established for the study of Hindu law and philosophy." },
+    { q: "Who established the 'Asiatic Society of Bengal' in 1784?", tag: "SSC MTS", opts: ["William Jones", "Warren Hastings", "Charles Grant", "James Mill"], ansText: "William Jones", why: "It was founded to understand and translate ancient Indian texts, promoting Orientalist learning." },
+    { q: "The 'Macaulay's Minute' of 1835 favored:", tag: "SSC CGL", opts: ["English education focusing on Western sciences", "Vernacular education", "Oriental learning (Sanskrit/Arabic)", "Mass primary education"], ansText: "English education focusing on Western sciences", why: "Macaulay famously mocked Oriental learning and pushed the Anglicist agenda to create a class of 'Indians in blood and color, but English in taste'." },
+    { q: "What was the 'Downward Filtration Theory' in British education policy?", tag: "SSC Conceptual", opts: ["Educating a few upper-class Indians who would pass knowledge down to the masses", "Filtering out revolutionary books", "Providing only basic literacy to the poor", "Teaching only practical skills"], ansText: "Educating a few upper-class Indians who would pass knowledge down to the masses", why: "The British claimed they didn't have the funds to educate everyone, so they focused on the elite." },
+    { q: "Which document is called the 'Magna Carta of English Education in India'?", tag: "SSC CPO", opts: ["Wood's Dispatch (1854)", "Macaulay's Minute (1835)", "Hunter Commission (1882)", "Sadler Commission (1917)"], ansText: "Wood's Dispatch (1854)", why: "Drafted by Charles Wood, it created a comprehensive system from primary vernacular schools to English universities, repudiating the Downward Filtration Theory." },
+    { q: "Based on Wood's Dispatch, the first three Universities in India (1857) were established at:", tag: "SSC CGL", opts: ["Calcutta, Bombay, Madras", "Delhi, Bombay, Madras", "Calcutta, Lahore, Allahabad", "Benaras, Aligarh, Calcutta"], ansText: "Calcutta, Bombay, Madras", why: "They were modeled on the University of London." },
+    { q: "The 'Hunter Education Commission' (1882) primarily focused on improving:", tag: "SSC CHSL", opts: ["Primary and Secondary Education", "University Education", "Women's Education", "Technical Education"], ansText: "Primary and Secondary Education", why: "Appointed by Lord Ripon, it recommended that the state should take special care of primary education and transfer it to local boards." },
+    { q: "The 'Raleigh Commission' (1902) was appointed by Lord Curzon to look into:", tag: "SSC MTS", opts: ["University Education", "Primary Education", "Famine Relief", "Police Reforms"], ansText: "University Education", why: "This led to the controversial Indian Universities Act of 1904, which brought universities under strict government control." },
+    { q: "Consider the statements about the Wardha Scheme of Basic Education (1937): 1. It was inspired by Mahatma Gandhi. 2. It emphasized learning through manual productive work. Which are true?", tag: "SSC Statement", opts: ["Both 1 and 2", "1 only", "2 only", "Neither"], ansText: "Both 1 and 2", why: "The Zakir Husain Committee formulated this scheme based on Gandhi's ideas in 'Harijan' (Nai Talim)." },
+    { q: "The 'Sadler University Commission' (1917) is also known as the:", tag: "SSC History", opts: ["Calcutta University Commission", "Madras Education Board", "Delhi University Act", "Bombay Commission"], ansText: "Calcutta University Commission", why: "Though formed for Calcutta University, its recommendations (like a 12-year school course) were applied to other universities." },
+    { q: "Who founded the 'Fort William College' in Calcutta (1800) to train British civil servants?", tag: "SSC CGL", opts: ["Lord Wellesley", "Lord Cornwallis", "Lord Hastings", "Lord Dalhousie"], ansText: "Lord Wellesley", why: "It was created to teach Indian languages and customs to young British officials, though the Directors in London later closed it and opened Haileybury College." },
+    { q: "The 'Hartog Committee' (1929) is associated with which sector?", tag: "SSC CPO", opts: ["Education", "Famine", "Currency", "Police"], ansText: "Education", why: "It highlighted the problem of 'stagnation and wastage' in primary education." },
+    { q: "Which Commission recommended the establishment of a Public Service Commission in India?", tag: "SSC Tier-2", opts: ["Lee Commission (1924)", "Aitchison Commission (1886)", "Hunter Commission", "Simon Commission"], ansText: "Lee Commission (1924)", why: "It led to the establishment of the Federal Public Service Commission in 1926." },
+    { q: "The 'Sargent Plan of Education' (1944) aimed to achieve universal literacy in India within how many years?", tag: "SSC Deep Trivia", opts: ["40 years", "10 years", "20 years", "50 years"], ansText: "40 years", why: "It was a comprehensive plan by the British to reconstruct education post-WWII, but was considered too slow by Indian nationalists." },
+    { q: "The 'District Magistrate' post was created by:", tag: "SSC History", opts: ["Warren Hastings", "Lord Cornwallis", "Lord Bentinck", "Robert Clive"], ansText: "Warren Hastings", why: "Created in 1772, the 'Collector' or DM became the linchpin of the British revenue and administrative system at the district level." },
+    { q: "The separation of the Judiciary from the Executive at the district level was first initiated by:", tag: "SSC Conceptual", opts: ["Lord Cornwallis", "Lord Ripon", "Lord Curzon", "Warren Hastings"], ansText: "Lord Cornwallis", why: "Under the Cornwallis Code (1793), the Collector was stripped of judicial powers, which were given to District Judges." },
+    { q: "Which British Governor-General is famously associated with the suppression of 'Thuggee'?", tag: "SSC CHSL", opts: ["William Bentinck", "Lord Dalhousie", "Lord Hastings", "Lord Wellesley"], ansText: "William Bentinck", why: "Bentinck, with the help of Captain William Sleeman, successfully eradicated the bands of robbers known as Thugs." },
+    { q: "The 'C.V.D. (Criminal Investigation Department)' was created during the tenure of:", tag: "SSC MTS", opts: ["Lord Curzon", "Lord Dufferin", "Lord Lytton", "Lord Minto"], ansText: "Lord Curzon", why: "Curzon established the CID based on the recommendations of the Frazer Police Commission (1902)." },
+    { q: "Who established the 'Sadar Diwani Adalat' and 'Sadar Nizamat Adalat'?", tag: "SSC CGL", opts: ["Warren Hastings", "Lord Cornwallis", "William Bentinck", "Lord Macaulay"], ansText: "Warren Hastings", why: "Hastings set up these highest courts of appeal for civil and criminal cases respectively in Calcutta." },
+    { q: "Consider the statements about the Ilbert Bill: 1. It was introduced by Lord Ripon. 2. It was strongly supported by the European community in India. Which are true?", tag: "SSC Statement", opts: ["1 only", "2 only", "Both 1 and 2", "Neither"], ansText: "1 only", why: "The European community fiercely opposed it (the 'White Mutiny') because they didn't want to be judged by Indians." },
+    { q: "Which Act first sanctioned Rs. 1 Lakh for the promotion of education and literature in India?", tag: "SSC CPO", opts: ["Charter Act of 1813", "Charter Act of 1833", "Regulating Act 1773", "Wood's Dispatch 1854"], ansText: "Charter Act of 1813", why: "This was the first time the British state acknowledged responsibility for the education of Indians." },
+    { q: "Who was the first Indian to become a member of the Viceroy's Executive Council (as Law Member)?", tag: "SSC CGL", opts: ["Satyendra Prasad Sinha", "Dadabhai Naoroji", "B.R. Ambedkar", "W.C. Bonnerjee"], ansText: "Satyendra Prasad Sinha", why: "Appointed following the Morley-Minto Reforms of 1909." },
+    { q: "The English language was made the official language of instruction in India in which year?", tag: "SSC GD", opts: ["1835", "1854", "1813", "1882"], ansText: "1835", why: "Following Macaulay's Minute, Lord William Bentinck officially adopted English as the medium of higher education." },
+    { q: "Which Education Commission was headed by W.W. Hunter?", tag: "SSC Basic", opts: ["Indian Education Commission of 1882", "University Commission of 1902", "Calcutta University Commission 1917", "Basic Education Committee 1937"], ansText: "Indian Education Commission of 1882", why: "It focused primarily on reviewing the progress of education since Wood's Dispatch, especially primary and secondary sectors." },
+    { q: "The 'Vernacular Press Act' (1878), aimed at gagging Indian language newspapers, was enacted by:", tag: "SSC MTS", opts: ["Lord Lytton", "Lord Ripon", "Lord Curzon", "Lord Dufferin"], ansText: "Lord Lytton", why: "It was repealed four years later by the liberal Governor-General Lord Ripon." },
+    { q: "Which Viceroy passed the 'Ancient Monuments Preservation Act' in 1904?", tag: "SSC CHSL", opts: ["Lord Curzon", "Lord Dalhousie", "Lord Ripon", "Lord Minto"], ansText: "Lord Curzon", why: "Curzon took a deep interest in Indian archaeology and appointed John Marshall as the Director-General of the ASI." },
+    { q: "Under the Wardha Scheme, the medium of instruction was proposed to be:", tag: "SSC CGL", opts: ["Mother tongue", "English", "Sanskrit", "Hindi exclusively"], ansText: "Mother tongue", why: "Gandhi firmly believed that basic education for seven years must be imparted in the mother tongue." },
+    { q: "Who described the Indian Civil Service as the 'Steel Frame' of British administration?", tag: "SSC Trivia", opts: ["David Lloyd George", "Winston Churchill", "Lord Curzon", "Lord Mountbatten"], ansText: "David Lloyd George", why: "The British Prime Minister used this term in 1922 to emphasize the critical role of British ICS officers in holding the empire together." }
+        ];
+
+        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid", userName = "";
+        let previousView = null;
+
+        const views = { start: document.getElementById('start-view'), mode: document.getElementById('mode-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
+
+        // --- LOCAL STORAGE LOGIC ---
+        // CHANGED KEY TO START FRESH FOR NEW TOPIC
+        const LB_KEY = 'ssc_medieval_marathon_lb'; 
+
+        function loadLeaderboard() {
+            const data = localStorage.getItem(LB_KEY);
+            if (data) leaderboard = JSON.parse(data);
+            updateLeaderboardUI();
+        }
+        function saveLeaderboard() {
+            localStorage.setItem(LB_KEY, JSON.stringify(leaderboard));
+        }
+        function clearLeaderboard() {
+            if(confirm("Clear history?")) {
+                leaderboard = [];
+                saveLeaderboard();
+                updateLeaderboardUI();
+            }
+        }
+        window.onload = loadLeaderboard;
+
+        // --- NAVIGATION ---
+        function goToModeSelection() {
+            userName = document.getElementById('username').value.trim();
+            if (!userName) return alert("Please enter your name");
+            views.start.classList.add('hidden');
+            views.mode.classList.remove('hidden');
+        }
+        function backToStart() { views.mode.classList.add('hidden'); views.start.classList.remove('hidden'); }
+        
+        function startRapidFire() { mode = "rapid"; initQuiz(); }
+        function startPractice() { mode = "practice"; initQuiz(); }
+
+        // --- QUIZ LOGIC ---
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+        function initQuiz() {
+            activeQ = shuffle(JSON.parse(JSON.stringify(MASTER_DATA))).map(q => {
+                let s = shuffle([...q.opts]);
+                return { ...q, opts: s, ans: s.indexOf(q.ansText) };
+            });
+            
+            currentIdx = 0; 
+            userAnswers = Array(activeQ.length).fill(-1);
+            
+            views.mode.classList.add('hidden'); 
+            views.quiz.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.remove('hidden');
+            
+            document.getElementById('user-display').innerText = userName;
+            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'RAPID FIRE' : 'PRACTICE';
+            
+            if(mode === 'rapid') {
+                document.getElementById('nav-buttons').classList.add('hidden');
+                document.getElementById('question-indicator').classList.add('hidden');
+                document.getElementById('timer-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-buttons').classList.remove('hidden');
+                document.getElementById('question-indicator').classList.remove('hidden');
+                document.getElementById('timer-badge').classList.add('hidden');
+                document.getElementById('current-q-num').innerText = 1;
+                document.getElementById('total-q-num').innerText = activeQ.length;
+            }
+            
+            renderQ();
+        }
+
+        function renderQ() {
+            const q = activeQ[currentIdx];
+            document.getElementById('question-text').innerText = `Q${currentIdx+1}. ${q.q}`;
+            document.getElementById('pyq-tag').innerText = q.tag;
+            document.getElementById('progress-bar').style.width = `${((currentIdx+1)/activeQ.length)*100}%`;
+            
+            if(mode === 'practice') document.getElementById('current-q-num').innerText = currentIdx + 1;
+
+            const cont = document.getElementById('options-container');
+            cont.innerHTML = '';
+            
+            q.opts.forEach((o, i) => {
+                const btn = document.createElement('button');
+                let sel = userAnswers[currentIdx] === i;
+                btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-medium border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50`;
+                
+                if (sel) {
+                    btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-bold border-blue-500 bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-500`;
+                }
+
+                btn.innerText = o;
+                btn.onclick = () => handleSelect(i);
+                cont.appendChild(btn);
+            });
+
+            if(mode === 'practice') {
+                document.getElementById('prev-btn').disabled = currentIdx === 0;
+                document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
+            } else {
+                startTimer();
+            }
+        }
+
+        function handleSelect(i) {
+            userAnswers[currentIdx] = i;
+            renderQ();
+
+            if (mode === 'rapid') {
+                clearInterval(timerId);
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } 
+                    else finish();
+                }, 400);
+            } else {
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
+                }, 400);
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerId); 
+            let t = 20;
+            const el = document.getElementById('timer'); 
+            el.innerText = t;
+            
+            timerId = setInterval(() => {
+                t--; 
+                el.innerText = t;
+                if(t <= 0) { 
+                    clearInterval(timerId); 
+                    if(userAnswers[currentIdx] === -1) handleSelect(-1); 
+                }
+            }, 1000);
+        }
+
+        function prevQ() { if(currentIdx > 0) { currentIdx--; renderQ(); } }
+        function nextQ() { if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } }
+        function submitQuiz() { if(confirm("Submit Test?")) finish(); }
+
+        function finish() {
+            clearInterval(timerId);
+            views.quiz.classList.replace('flex', 'hidden'); 
+            views.result.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.add('hidden');
+
+            let m = 0, c = 0, w = 0, s = 0;
+            userAnswers.forEach((a, i) => {
+                if (a === activeQ[i].ans) { m += 1; c++; }
+                else if (a === -1) { s++; }
+                else { m -= 0.25; w++; }
+            });
+
+            document.getElementById('result-name').innerText = userName;
+            document.getElementById('final-score').innerText = m.toFixed(2);
+            document.getElementById('correct-count').innerText = c;
+            document.getElementById('wrong-count').innerText = w;
+            document.getElementById('skip-count').innerText = s;
+
+            leaderboard.push({
+                name: userName,
+                score: m,
+                date: new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
+                mode: mode,
+                qSet: activeQ, 
+                history: userAnswers
+            });
+            saveLeaderboard();
+            updateLeaderboardUI();
+        }
+
+        function updateLeaderboardUI() {
+            leaderboard.sort((a,b) => b.score - a.score);
+            const list = document.getElementById('start-leaderboard-list');
+            
+            if (leaderboard.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
+                return;
+            }
+
+            let currentRank = 1;
+            
+            list.innerHTML = leaderboard.map((e, i) => {
+                if (i > 0 && e.score < leaderboard[i-1].score) currentRank = currentRank + 1;
+                
+                let icon = e.mode === 'rapid' ? '🔥' : '📚';
+                let medal = currentRank === 1 ? '🥇' : currentRank === 2 ? '🥈' : currentRank === 3 ? '🥉' : `<span class="text-slate-400 font-bold text-sm">#${currentRank}</span>`;
+
+                return `
+                <div onclick="viewHistory(${i})" class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition-colors group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 flex justify-center text-xl">${medal}</div>
+                        <div>
+                            <div class="font-bold text-slate-700 text-sm group-hover:text-blue-700">${e.name}</div>
+                            <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                <span>${icon}</span> ${e.date}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-slate-800 text-sm">${e.score.toFixed(2)}</div>
+                        <div class="text-[9px] text-blue-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">VIEW</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // --- NEW LOADING & STATS LOGIC ---
+        function viewHistory(idx) {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex'); // Show Spinner
+            
+            // Artificial delay to let UI breathe and show spinner
+            setTimeout(() => {
+                previousView = views.start;
+                views.start.classList.add('hidden');
+                renderReview(leaderboard[idx].history, leaderboard[idx].qSet, leaderboard[idx].name);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden'); // Hide Spinner
+            }, 500); 
+        }
+
+        function showReviewFromResults() {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex');
+            setTimeout(() => {
+                previousView = views.result;
+                views.result.classList.replace('flex', 'hidden');
+                renderReview(userAnswers, activeQ, userName);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden');
+            }, 500);
+        }
+
+        function renderReview(answers, qData, pName) {
+            views.review.classList.replace('hidden', 'flex');
+            document.getElementById('review-player-name').innerText = pName;
+            
+            // Calculate Stats for Header
+            let c=0, w=0, s=0;
+            answers.forEach((a, i) => { if(a === qData[i].ans) c++; else if(a === -1) s++; else w++; });
+            
+            document.getElementById('review-stats').innerHTML = `
+                <span class="text-green-600">Correct: ${c}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-red-500">Wrong: ${w}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-500">Skipped: ${s}</span>
+            `;
+
+            const cont = document.getElementById('review-container');
+            cont.innerHTML = ''; // Clear previous content
+
+            // Use DocumentFragment for performance with large lists
+            const fragment = document.createDocumentFragment();
+
+            answers.forEach((ansIdx, i) => {
+                const q = qData[i];
+                let statusClass = ansIdx === q.ans ? 'text-green-600 bg-green-50 border-green-100' : ansIdx === -1 ? 'text-slate-500 bg-slate-50 border-slate-100' : 'text-red-500 bg-red-50 border-red-100';
+                let statusText = ansIdx === q.ans ? 'CORRECT (+1)' : ansIdx === -1 ? 'SKIPPED' : 'WRONG (-0.25)';
+
+                let optsHtml = q.opts.map((o, idx) => {
+                    let style = "border-slate-100 text-slate-500";
+                    let icon = "";
+                    if (idx === q.ans) { style = "bg-green-50 border-green-200 text-green-800 font-bold"; icon = "✅"; }
+                    else if (idx === ansIdx) { style = "bg-red-50 border-red-200 text-red-800 line-through"; icon = "❌"; }
+                    return `<div class="p-2.5 rounded-lg border text-xs flex justify-between items-center ${style}">${o} <span>${icon}</span></div>`;
+                }).join('');
+
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm shrink-0";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-slate-400 text-xs">Q${i+1}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-1 leading-relaxed">${q.q}</p>
+                    <p class="text-[10px] text-slate-400 font-mono mb-3">${q.tag}</p>
+                    <div class="space-y-1.5 mb-3">${optsHtml}</div>
+                    <div class="mt-2 text-xs text-yellow-800 bg-yellow-50 border border-yellow-200 p-2.5 rounded-lg leading-relaxed flex gap-2">
+                        <span>💡</span>
+                        <span>${q.why}</span>
+                    </div>`;
+                fragment.appendChild(div);
+            });
+            
+            cont.appendChild(fragment);
+        }
+
+        function closeReview() {
+            views.review.classList.replace('flex', 'hidden');
+            previousView.classList.remove('hidden');
+            if(previousView === views.result) previousView.classList.add('flex');
+        }
+
+        function resetApp() {
+            clearInterval(timerId);
+            document.getElementById('username').value = "";
+            views.result.classList.replace('flex', 'hidden');
+            views.start.classList.remove('hidden');
+            document.getElementById('header').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+```
