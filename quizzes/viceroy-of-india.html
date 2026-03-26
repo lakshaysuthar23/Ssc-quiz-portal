@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viceroy of India</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
+        .btn-option { transition: all 0.15s ease; border-width: 2px; }
+        .btn-option:active { transform: scale(0.99); }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 h-screen overflow-hidden">
+
+    <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-[90vh]">
+        
+        <!-- HEADER -->
+        <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
+            <div class="flex flex-col">
+                <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase" id="mode-display">RAPID FIRE</span>
+            </div>
+            <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
+                ⏱️ <span id="timer">20</span>s
+            </div>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white/80 z-50 hidden flex-col items-center justify-center backdrop-blur-sm">
+            <div class="spinner mb-2"></div>
+            <p class="text-sm font-bold text-slate-600">Loading History...</p>
+        </div>
+
+        <!-- VIEW 1: START SCREEN -->
+        <div id="start-view" class="h-full overflow-hidden flex flex-col">
+            <div class="p-8 flex flex-col items-center text-center shrink-0 overflow-y-auto">
+                <div class="text-5xl mb-4">⚔🏛️</div>
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Viceroy of India</h1>
+                <p class="text-slate-500 mb-6 text-sm">
+                    100 Quality Qs<br>
+                    <span class="text-green-600 font-bold">+1.0</span> • <span class="text-red-500 font-bold">-0.25</span>
+                </p>
+                <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors">
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">Continue</button>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1 overflow-y-auto min-h-0">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leaderboard</h3>
+                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR HISTORY</button>
+                </div>
+                <div id="start-leaderboard-list" class="space-y-2 pb-4">
+                    <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: MODE SELECTION -->
+        <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
+            <div class="p-8 flex flex-col items-center text-center shrink-0">
+                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
+                <div class="flex flex-col gap-4 w-full">
+                    <div onclick="startRapidFire()" class="cursor-pointer group p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-orange-900 flex items-center gap-2">🔥 Rapid Fire</div>
+                        <p class="text-xs text-orange-700 mt-1 font-medium">20s Timer • No-Skip</p>
+                    </div>
+                    <div onclick="startPractice()" class="cursor-pointer group p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-green-900 flex items-center gap-2">📚 Practice Mode</div>
+                        <p class="text-xs text-green-700 mt-1 font-medium">No Timer • Review before submit</p>
+                    </div>
+                </div>
+                <button onclick="backToStart()" class="mt-8 text-slate-400 hover:text-slate-600 font-bold text-sm">← Back</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: QUIZ -->
+        <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
+            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-6 shrink-0 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="mb-6 shrink-0">
+                <h2 id="question-text" class="text-lg font-bold text-slate-800 leading-relaxed">Loading...</h2>
+                <div id="pyq-tag" class="inline-block mt-2 px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-mono text-slate-500 font-medium"></div>
+            </div>
+            <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-100 pt-4 mt-2 flex gap-3">
+                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50">← Prev</button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow-sm">Submit</button>
+                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50 shadow-sm">Next →</button>
+            </div>
+            <div id="question-indicator" class="hidden shrink-0 text-center text-[10px] text-slate-400 font-bold mt-3">
+                <span id="current-q-num">1</span> / <span id="total-q-num">100</span>
+            </div>
+        </div>
+
+        <!-- VIEW 4: RESULT -->
+        <div id="result-view" class="hidden flex-col h-full overflow-y-auto">
+            <div class="p-8 text-center shrink-0">
+                <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Completed</h2>
+                <p class="text-slate-500 text-sm mb-6 font-medium" id="result-name">Well done</p>
+                <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200">
+                    <div class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">FINAL SCORE</div>
+                    <div id="final-score" class="text-6xl font-black text-blue-600 leading-none mb-4 tracking-tight">0</div>
+                    <div class="flex justify-center gap-6 text-sm font-bold border-t border-slate-200 pt-4">
+                        <span class="text-green-600 flex items-center gap-1">✅ <span id="correct-count">0</span></span>
+                        <span class="text-red-500 flex items-center gap-1">❌ <span id="wrong-count">0</span></span>
+                        <span class="text-slate-400 flex items-center gap-1">⚪ <span id="skip-count">0</span></span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-xl transition-colors text-sm">📄 Review Solutions</button>
+                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-md shadow-blue-200">🔄 Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: REVIEW HISTORY -->
+        <div id="review-view" class="hidden flex-col h-full bg-slate-50">
+            <div class="p-4 bg-white border-b border-slate-200 flex flex-col gap-2 shrink-0 shadow-sm z-10">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 text-sm">History: <span id="review-player-name" class="text-blue-600"></span></h3>
+                    <button onclick="closeReview()" class="text-blue-600 font-bold text-xs hover:underline bg-blue-50 px-3 py-1 rounded-full">CLOSE</button>
+                </div>
+                <div id="review-stats" class="text-[10px] flex gap-3 font-bold text-slate-500">
+                    <!-- Stats injected here -->
+                </div>
+            </div>
+            <div id="review-container" class="flex-1 p-4 overflow-y-auto min-h-0 space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- MASTER DATA ---
+        // (Insert the full 100 questions here. I'm using the 5 you provided + will assume you paste the 95 batch)
+        const MASTER_DATA = [
+    { q: "Who was the first Viceroy of India under the Government of India Act 1858?", tag: "SSC CGL PYQ", opts: ["Lord Dalhousie", "Lord Canning", "Lord Ripon", "Lord Lytton"], ansText: "Lord Canning", why: "After the 1857 revolt, the East India Company's rule ended and Lord Canning became the first Viceroy." },
+    { q: "The portfolio system in the Indian executive council was introduced by which Viceroy?", tag: "SSC CPO", opts: ["Lord Canning", "Lord Curzon", "Lord Minto", "Lord Mayo"], ansText: "Lord Canning", why: "Introduced via the Indian Councils Act of 1861, allocating specific departments to executive members." },
+    { q: "Which Viceroy was assassinated in the Andaman Islands by a convict in 1872?", tag: "SSC CHSL", opts: ["Lord Lytton", "Lord Mayo", "Lord Ripon", "Lord Dufferin"], ansText: "Lord Mayo", why: "Sher Ali Afridi assassinated Lord Mayo during his visit to the convict settlement in Port Blair." },
+    { q: "The first synchronised census in India took place in 1881 during the tenure of:", tag: "SSC MTS", opts: ["Lord Mayo", "Lord Ripon", "Lord Lytton", "Lord Curzon"], ansText: "Lord Ripon", why: "While the first experimental census was under Mayo (1872), the first complete census was under Ripon." },
+    { q: "Who passed the controversial Vernacular Press Act of 1878 to gag the Indian press?", tag: "SSC CGL", opts: ["Lord Lytton", "Lord Ripon", "Lord Curzon", "Lord Dalhousie"], ansText: "Lord Lytton", why: "It was aimed at restricting vernacular newspapers criticizing British policies, later repealed by Ripon." },
+    { q: "Which Viceroy repealed the Vernacular Press Act in 1882?", tag: "SSC CPO", opts: ["Lord Lytton", "Lord Ripon", "Lord Dufferin", "Lord Lansdowne"], ansText: "Lord Ripon", why: "Ripon, known for his liberal policies, restored freedom to the native press." },
+    { q: "The Indian National Congress was founded in 1885 during the viceroyalty of:", tag: "SSC GD", opts: ["Lord Ripon", "Lord Dufferin", "Lord Curzon", "Lord Lansdowne"], ansText: "Lord Dufferin", why: "A.O. Hume founded the INC while Dufferin was Viceroy. Dufferin initially supported it but later mocked it." },
+    { q: "The First Factory Act (1881), aimed at improving child labor conditions, was passed by:", tag: "SSC CHSL", opts: ["Lord Mayo", "Lord Lytton", "Lord Ripon", "Lord Curzon"], ansText: "Lord Ripon", why: "It restricted working hours for children under 12 and made fencing of dangerous machinery mandatory." },
+    { q: "Which Viceroy is credited with the introduction of financial decentralization in India?", tag: "SSC MTS", opts: ["Lord Mayo", "Lord Ripon", "Lord Lytton", "Lord Dalhousie"], ansText: "Lord Mayo", why: "His 1870 resolution gave provincial governments fixed sums to manage local services." },
+    { q: "The Ilbert Bill controversy, involving the trial of Europeans by Indian judges, occurred under:", tag: "SSC CGL", opts: ["Lord Lytton", "Lord Ripon", "Lord Dufferin", "Lord Curzon"], ansText: "Lord Ripon", why: "The European community violently protested against this racial equality measure, forcing Ripon to resign." },
+    { q: "Who appointed the Hunter Commission in 1882 to review educational progress?", tag: "SSC CPO", opts: ["Lord Lytton", "Lord Ripon", "Lord Dufferin", "Lord Lansdowne"], ansText: "Lord Ripon", why: "The commission focused on primary and secondary education reforms." },
+    { q: "The Third Anglo-Burmese War (1885), leading to the annexation of Burma, occurred under:", tag: "SSC History", opts: ["Lord Ripon", "Lord Dufferin", "Lord Lansdowne", "Lord Curzon"], ansText: "Lord Dufferin", why: "Upper Burma was annexed and made a province of British India during his tenure." },
+    { q: "The Durand Line, separating British India and Afghanistan, was demarcated during the time of:", tag: "SSC CHSL", opts: ["Lord Dufferin", "Lord Lansdowne", "Lord Curzon", "Lord Minto"], ansText: "Lord Lansdowne", why: "The Durand Commission was set up in 1893 under Viceroy Lansdowne to secure the northwestern frontier." },
+    { q: "The Partition of Bengal (1905) was executed by which Viceroy?", tag: "SSC CGL", opts: ["Lord Lansdowne", "Lord Curzon", "Lord Minto", "Lord Hardinge"], ansText: "Lord Curzon", why: "Curzon divided Bengal citing administrative convenience, but the real motive was to break nationalist unity." },
+    { q: "Who passed the Ancient Monuments Preservation Act in 1904?", tag: "SSC MTS", opts: ["Lord Ripon", "Lord Curzon", "Lord Minto", "Lord Chelmsford"], ansText: "Lord Curzon", why: "Curzon took great interest in restoring India's architectural heritage and established the ASI directorate." },
+    { q: "The Swadeshi Movement was formally launched in 1905 in response to the policies of:", tag: "SSC CPO", opts: ["Lord Lytton", "Lord Curzon", "Lord Minto", "Lord Hardinge"], ansText: "Lord Curzon", why: "The movement was a direct reaction to Curzon's partition of Bengal." },
+    { q: "Which Viceroy appointed the Frazer Commission to recommend police reforms?", tag: "SSC GD", opts: ["Lord Lansdowne", "Lord Curzon", "Lord Minto", "Lord Hardinge"], ansText: "Lord Curzon", why: "Appointed in 1902, it led to the creation of the Criminal Investigation Department (CID)." },
+    { q: "The All India Muslim League was formed in 1906 during the viceroyalty of:", tag: "SSC CHSL", opts: ["Lord Curzon", "Lord Minto II", "Lord Hardinge", "Lord Chelmsford"], ansText: "Lord Minto II", why: "Formed in Dhaka, it was encouraged by the British to counter the growing influence of the Congress." },
+    { q: "The Surat Split of the Indian National Congress (1907) happened during the tenure of:", tag: "SSC CGL", opts: ["Lord Curzon", "Lord Minto II", "Lord Hardinge", "Lord Chelmsford"], ansText: "Lord Minto II", why: "The Congress split into Moderates and Extremists over the methods of the Swadeshi movement." },
+    { q: "Which Act introduced the system of separate electorates for Muslims in India?", tag: "SSC CPO", opts: ["Indian Councils Act 1892", "Morley-Minto Reforms 1909", "Mont-Ford Reforms 1919", "Govt of India Act 1935"], ansText: "Morley-Minto Reforms 1909", why: "Lord Minto is known as the 'Father of Communal Electorate' for introducing this divisive policy." },
+    { q: "The capital of British India was shifted from Calcutta to Delhi in 1911 during the tenure of:", tag: "SSC MTS", opts: ["Lord Minto II", "Lord Hardinge II", "Lord Chelmsford", "Lord Reading"], ansText: "Lord Hardinge II", why: "The announcement was made during the Delhi Durbar of 1911 by King George V." },
+    { q: "Who was the Viceroy when Mahatma Gandhi returned to India from South Africa in 1915?", tag: "SSC CGL", opts: ["Lord Minto II", "Lord Hardinge II", "Lord Chelmsford", "Lord Reading"], ansText: "Lord Hardinge II", why: "Gandhi arrived in January 1915 while Hardinge was still the Viceroy." },
+    { q: "A bomb was thrown at which Viceroy during his state entry into the new capital of Delhi in 1912?", tag: "SSC CHSL", opts: ["Lord Curzon", "Lord Minto", "Lord Hardinge II", "Lord Chelmsford"], ansText: "Lord Hardinge II", why: "Rash Behari Bose masterminded the Delhi Conspiracy Case, injuring the Viceroy." },
+    { q: "The Lucknow Pact (1916) between Congress and the Muslim League was signed during the time of:", tag: "SSC CPO", opts: ["Lord Hardinge II", "Lord Chelmsford", "Lord Reading", "Lord Irwin"], ansText: "Lord Chelmsford", why: "Chelmsford became Viceroy in 1916, overseeing this historic unity agreement." },
+    { q: "Which Viceroy passed the infamous Rowlatt Act in 1919?", tag: "SSC GD", opts: ["Lord Hardinge", "Lord Chelmsford", "Lord Reading", "Lord Irwin"], ansText: "Lord Chelmsford", why: "The Act allowed imprisonment without trial, leading to nationwide protests and the Jallianwala Bagh massacre." },
+    { q: "The Jallianwala Bagh Massacre (1919) occurred during the viceroyalty of:", tag: "SSC MTS", opts: ["Lord Hardinge", "Lord Chelmsford", "Lord Reading", "Lord Irwin"], ansText: "Lord Chelmsford", why: "General Dyer ordered the firing on the Baisakhi gathering during Chelmsford's rule." },
+    { q: "The Non-Cooperation Movement was launched by Gandhi during the tenure of:", tag: "SSC CGL", opts: ["Lord Chelmsford", "Lord Reading", "Lord Irwin", "Lord Willingdon"], ansText: "Lord Chelmsford", why: "Launched in 1920 to protest against the Rowlatt Act, Jallianwala Bagh, and the Khilafat wrong." },
+    { q: "Which British act introduced 'Dyarchy' at the provincial level?", tag: "SSC CPO", opts: ["Indian Councils Act 1909", "Montagu-Chelmsford Reforms 1919", "Govt of India Act 1935", "Indian Independence Act"], ansText: "Montagu-Chelmsford Reforms 1919", why: "It divided provincial subjects into 'Reserved' and 'Transferred' categories." },
+    { q: "Who was the only Jewish Viceroy of India?", tag: "SSC Trivia", opts: ["Lord Curzon", "Lord Reading", "Lord Irwin", "Lord Wavell"], ansText: "Lord Reading", why: "Rufus Isaacs, 1st Marquess of Reading, served from 1921 to 1926." },
+    { q: "The Chauri Chaura incident (1922) which halted the Non-Cooperation Movement happened under:", tag: "SSC CHSL", opts: ["Lord Chelmsford", "Lord Reading", "Lord Irwin", "Lord Willingdon"], ansText: "Lord Reading", why: "Following the violence, Gandhi called off the movement during Reading's viceroyalty." },
+    { q: "The Swaraj Party was founded by C.R. Das and Motilal Nehru during the tenure of:", tag: "SSC CGL", opts: ["Lord Chelmsford", "Lord Reading", "Lord Irwin", "Lord Linlithgow"], ansText: "Lord Reading", why: "Formed in 1923 after the failure of the Non-Cooperation movement to contest council elections." },
+    { q: "The Kakori Train Robbery (1925) was executed by HRA revolutionaries during the time of:", tag: "SSC MTS", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Linlithgow"], ansText: "Lord Reading", why: "Ram Prasad Bismil and Ashfaqulla Khan led the train heist during Reading's tenure." },
+    { q: "Which Viceroy appointed the Simon Commission in 1927?", tag: "SSC CPO", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Linlithgow"], ansText: "Lord Irwin", why: "The all-white statutory commission was appointed to review constitutional reforms." },
+    { q: "The famous 'Purna Swaraj' (Complete Independence) resolution was passed in 1929 under:", tag: "SSC GD", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Wavell"], ansText: "Lord Irwin", why: "Passed at the Lahore session of INC, protesting against the lack of dominion status." },
+    { q: "The Dandi March and the Civil Disobedience Movement were launched during the viceroyalty of:", tag: "SSC CGL", opts: ["Lord Irwin", "Lord Willingdon", "Lord Linlithgow", "Lord Wavell"], ansText: "Lord Irwin", why: "Gandhi started the salt satyagraha in 1930 during Irwin's tenure." },
+    { q: "The Gandhi-Irwin Pact was signed in which year to suspend the Civil Disobedience Movement?", tag: "SSC CHSL", opts: ["1929", "1930", "1931", "1932"], ansText: "1931", why: "Signed on March 5, 1931, it allowed the Congress to participate in the Second Round Table Conference." },
+    { q: "Who was the Viceroy when Bhagat Singh, Sukhdev, and Rajguru were executed?", tag: "SSC MTS", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Linlithgow"], ansText: "Lord Irwin", why: "They were hanged on March 23, 1931, shortly after the Gandhi-Irwin pact." },
+    { q: "The Second and Third Round Table Conferences were held during the tenure of:", tag: "SSC CPO", opts: ["Lord Irwin", "Lord Willingdon", "Lord Linlithgow", "Lord Wavell"], ansText: "Lord Willingdon", why: "Willingdon replaced Irwin in 1931 and adopted strict measures against the renewed Civil Disobedience." },
+    { q: "Who announced the 'Communal Award' in 1932, creating separate electorates for depressed classes?", tag: "SSC History", opts: ["Ramsay MacDonald", "Winston Churchill", "Clement Attlee", "Lord Willingdon"], ansText: "Ramsay MacDonald", why: "The British PM announced it, leading to Gandhi's fast unto death and the subsequent Poona Pact." },
+    { q: "The Poona Pact (1932) was signed between B.R. Ambedkar and Mahatma Gandhi during the time of:", tag: "SSC CGL", opts: ["Lord Irwin", "Lord Willingdon", "Lord Linlithgow", "Lord Wavell"], ansText: "Lord Willingdon", why: "It replaced separate electorates for Dalits with reserved seats in joint electorates." },
+    { q: "The Government of India Act 1935, which proposed an All India Federation, was passed under:", tag: "SSC CHSL", opts: ["Lord Irwin", "Lord Willingdon", "Lord Linlithgow", "Lord Mountbatten"], ansText: "Lord Willingdon", why: "The act granted provincial autonomy and was the last major constitution passed by the British." },
+    { q: "Provincial elections under the 1935 Act were held in 1937 during the viceroyalty of:", tag: "SSC MTS", opts: ["Lord Willingdon", "Lord Linlithgow", "Lord Wavell", "Lord Mountbatten"], ansText: "Lord Linlithgow", why: "Congress formed ministries in a majority of provinces but resigned in 1939 over WWII." },
+    { q: "Which Viceroy unilaterally declared India a belligerent in World War II in 1939?", tag: "SSC CPO", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Willingdon", "Lord Irwin"], ansText: "Lord Linlithgow", why: "This action without consulting Indian leaders led to the mass resignation of Congress ministries." },
+    { q: "The 'August Offer' (1940) proposing dominion status was made by:", tag: "SSC CGL", opts: ["Lord Wavell", "Lord Linlithgow", "Stafford Cripps", "Lord Mountbatten"], ansText: "Lord Linlithgow", why: "He offered it to secure Indian cooperation in WWII, but both Congress and Muslim League rejected it." },
+    { q: "The Quit India Movement was launched in 1942 during the tenure of:", tag: "SSC GD", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Lord Willingdon"], ansText: "Lord Linlithgow", why: "Following the failure of the Cripps Mission, Gandhi gave the 'Do or Die' call." },
+    { q: "The disastrous Bengal Famine of 1943 occurred predominantly during the time of:", tag: "SSC CHSL", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Willingdon", "Lord Mountbatten"], ansText: "Lord Linlithgow", why: "Millions died due to wartime policies and neglect before Wavell took over and improved relief efforts." },
+    { q: "Who convened the Simla Conference in 1945 to discuss the reconstruction of the Executive Council?", tag: "SSC CPO", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Clement Attlee"], ansText: "Lord Wavell", why: "The 'Wavell Plan' failed because Jinnah insisted that only the Muslim League could nominate Muslim members." },
+    { q: "The INA (Indian National Army) Trials at the Red Fort were held during the viceroyalty of:", tag: "SSC MTS", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Lord Irwin"], ansText: "Lord Wavell", why: "The 1945-46 trials sparked massive nationalist upsurges across the country." },
+    { q: "The Cabinet Mission (1946) arrived in India during the tenure of:", tag: "SSC CGL", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Lord Chelmsford"], ansText: "Lord Wavell", why: "It proposed a weak center and grouping of provinces, which was ultimately unworkable." },
+    { q: "Direct Action Day (August 16, 1946), leading to massive communal riots, occurred under:", tag: "SSC History", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Lord Willingdon"], ansText: "Lord Wavell", why: "Called by the Muslim League, it resulted in the Great Calcutta Killings." },
+    { q: "Who was the last British Viceroy of India?", tag: "SSC CGL", opts: ["Lord Wavell", "Lord Mountbatten", "C. Rajagopalachari", "Clement Attlee"], ansText: "Lord Mountbatten", why: "He was sent in 1947 to oversee the rapid transfer of power and partition of the subcontinent." },
+    { q: "The 'June 3 Plan', which laid down the framework for India's partition, is also known as the:", tag: "SSC CHSL", opts: ["Wavell Plan", "Mountbatten Plan", "Cabinet Mission Plan", "Cripps Plan"], ansText: "Mountbatten Plan", why: "It officially declared that India would be partitioned into two independent dominions." },
+    { q: "Who was the first Governor-General of independent India?", tag: "SSC MTS", opts: ["C. Rajagopalachari", "Lord Mountbatten", "Jawaharlal Nehru", "Rajendra Prasad"], ansText: "Lord Mountbatten", why: "India requested him to stay on as Governor-General immediately after independence in 1947." },
+    { q: "Who was the first and only Indian to become the Governor-General of free India?", tag: "SSC CPO", opts: ["Jawaharlal Nehru", "Dr. B.R. Ambedkar", "C. Rajagopalachari", "Sardar Patel"], ansText: "C. Rajagopalachari", why: "He succeeded Mountbatten in 1948 and served until the Republic was formed in 1950." },
+    { q: "Which Viceroy is associated with the doctrine of 'Masterly Inactivity' towards Afghanistan?", tag: "SSC Deep Trivia", opts: ["Lord Lytton", "John Lawrence", "Lord Elgin", "Lord Mayo"], ansText: "John Lawrence", why: "He strictly avoided interfering in Afghan succession disputes to prevent another costly war." },
+    { q: "The Royal Titles Act of 1876, conferring the title of 'Empress of India' on Queen Victoria, was passed by:", tag: "SSC CGL", opts: ["Lord Lytton", "Lord Ripon", "Lord Dufferin", "Lord Curzon"], ansText: "Lord Lytton", why: "Lytton held a lavish Delhi Durbar in 1877 during a severe famine to announce this." },
+    { q: "Which Viceroy lowered the maximum age for appearing in the Civil Services Examination from 21 to 19?", tag: "SSC CHSL", opts: ["Lord Lytton", "Lord Ripon", "Lord Curzon", "Lord Lansdowne"], ansText: "Lord Lytton", why: "This deliberately racist move was designed to prevent Indians from entering the elite services." },
+    { q: "The Statutory Civil Service, nominating Indians of aristocratic families, was created by:", tag: "SSC MTS", opts: ["Lord Lytton", "Lord Ripon", "Lord Dufferin", "Lord Lansdowne"], ansText: "Lord Lytton", why: "Created in 1878, it bypassed the competitive exam but proved highly unsuccessful." },
+    { q: "Which Viceroy restored the maximum age limit for the Civil Services back to 21 years?", tag: "SSC CPO", opts: ["Lord Lytton", "Lord Ripon", "Lord Dufferin", "Lord Curzon"], ansText: "Lord Ripon", why: "Ripon reversed Lytton's oppressive policy to give educated Indians a fair chance." },
+    { q: "The Kuka Movement in Punjab was suppressed during the viceroyalty of:", tag: "SSC History", opts: ["Lord Mayo", "Lord Northbrook", "Lord Lytton", "Lord Ripon"], ansText: "Lord Northbrook", why: "Baba Ram Singh's movement was crushed in 1872 during Northbrook's tenure." },
+    { q: "Who appointed the Strachey Commission to formulate a comprehensive famine policy?", tag: "SSC CGL", opts: ["Lord Lytton", "Lord Ripon", "Lord Curzon", "Lord Lansdowne"], ansText: "Lord Lytton", why: "Appointed after the devastating famine of 1876-78, it laid the foundation of the Famine Code." },
+    { q: "The Indian Councils Act of 1892, introducing the principle of indirect elections, was passed under:", tag: "SSC CHSL", opts: ["Lord Dufferin", "Lord Lansdowne", "Lord Elgin II", "Lord Curzon"], ansText: "Lord Lansdowne", why: "It increased the number of non-official members in the legislative councils." },
+    { q: "Who famously said, 'India is the pivot of our Empire... If the Empire loses any other part of its Dominion we can survive, but if we lose India the sun of our Empire will have set'?", tag: "SSC Trivia", opts: ["Lord Curzon", "Winston Churchill", "Lord Dalhousie", "Lord Lytton"], ansText: "Lord Curzon", why: "Curzon believed deeply in the absolute necessity of India to British imperial power." },
+    { q: "The setting up of the Department of Agriculture and Commerce was initiated by:", tag: "SSC CPO", opts: ["Lord Mayo", "Lord Ripon", "Lord Curzon", "Lord Lytton"], ansText: "Lord Mayo", why: "Mayo took steps to organize agricultural data and improve farming techniques." },
+    { q: "Which Viceroy established the Imperial Cadet Corps to provide military training to Indian princes?", tag: "SSC GD", opts: ["Lord Dufferin", "Lord Lansdowne", "Lord Curzon", "Lord Minto"], ansText: "Lord Curzon", why: "Curzon created it to satisfy the military ambitions of aristocratic Indian youth." },
+    { q: "The Munda Uprising led by Birsa Munda (1899-1900) occurred during the tenure of:", tag: "SSC MTS", opts: ["Lord Lansdowne", "Lord Elgin II", "Lord Curzon", "Lord Minto II"], ansText: "Lord Curzon", why: "The Ulgulan (Great Tumult) peaked just as Curzon assumed the viceroyalty." },
+    { q: "The Indian Universities Act of 1904, increasing government control over colleges, was passed by:", tag: "SSC CGL", opts: ["Lord Ripon", "Lord Curzon", "Lord Minto", "Lord Chelmsford"], ansText: "Lord Curzon", why: "Based on the Raleigh Commission, nationalists criticized it as an attempt to crush political dissent in varsities." },
+    { q: "Which Viceroy survived a bomb attack in Chandni Chowk, Delhi, orchestrated by Rash Behari Bose?", tag: "SSC CHSL", opts: ["Lord Curzon", "Lord Minto II", "Lord Hardinge II", "Lord Chelmsford"], ansText: "Lord Hardinge II", why: "He was severely injured but survived the 1912 attack during the capital shift parade." },
+    { q: "The MacDonnell Commission on famine (1900) was appointed by:", tag: "SSC History", opts: ["Lord Lytton", "Lord Lansdowne", "Lord Curzon", "Lord Minto"], ansText: "Lord Curzon", why: "It recommended setting up a Famine Commissioner and improving irrigation." },
+    { q: "The Ghadar Party was formed in San Francisco in 1913 during the viceroyalty of:", tag: "SSC MTS", opts: ["Lord Minto II", "Lord Hardinge II", "Lord Chelmsford", "Lord Reading"], ansText: "Lord Hardinge II", why: "Indian expatriates formed it to trigger a revolution during Hardinge's rule." },
+    { q: "Who was the Viceroy when the tragic Komagata Maru incident occurred in 1914?", tag: "SSC CPO", opts: ["Lord Minto", "Lord Hardinge II", "Lord Chelmsford", "Lord Reading"], ansText: "Lord Hardinge II", why: "The Japanese ship carrying Indian immigrants was turned back from Canada, leading to a riot upon return." },
+    { q: "The establishment of the Banaras Hindu University (BHU) in 1916 happened during the tenure of:", tag: "SSC CGL", opts: ["Lord Hardinge II", "Lord Chelmsford", "Lord Reading", "Lord Irwin"], ansText: "Lord Hardinge II", why: "Madan Mohan Malaviya founded it with the active support of Annie Besant and the GG." },
+    { q: "The Home Rule League movement by Tilak and Annie Besant started during the viceroyalty of:", tag: "SSC CHSL", opts: ["Lord Hardinge II", "Lord Chelmsford", "Lord Reading", "Lord Irwin"], ansText: "Lord Chelmsford", why: "The movement peaked between 1916-1918 demanding self-government within the empire." },
+    { q: "Which Viceroy appointed the Hunter Committee (Disorders Inquiry Committee) to investigate the Jallianwala Bagh tragedy?", tag: "SSC GD", opts: ["Lord Hardinge", "Lord Chelmsford", "Lord Reading", "Lord Irwin"], ansText: "Lord Chelmsford", why: "The committee was a whitewash, leading to widespread anger against Chelmsford." },
+    { q: "The repeal of the draconian Rowlatt Act was carried out by which Viceroy?", tag: "SSC CPO", opts: ["Lord Chelmsford", "Lord Reading", "Lord Irwin", "Lord Willingdon"], ansText: "Lord Reading", why: "Attempting to pacify the masses post-Non-Cooperation, Reading repealed several repressive laws." },
+    { q: "The Moplah Rebellion (1921) in Kerala broke out during the tenure of:", tag: "SSC MTS", opts: ["Lord Chelmsford", "Lord Reading", "Lord Irwin", "Lord Willingdon"], ansText: "Lord Reading", why: "The agrarian revolt took a communal turn and was brutally suppressed by the British." },
+    { q: "The establishment of the Rashtriya Swayamsevak Sangh (RSS) in 1925 happened under:", tag: "SSC History", opts: ["Lord Chelmsford", "Lord Reading", "Lord Irwin", "Lord Linlithgow"], ansText: "Lord Reading", why: "K.B. Hedgewar founded the organization in Nagpur during Reading's viceroyalty." },
+    { q: "The Indian Sandhurst Committee (Skeen Committee) regarding the Indianization of the army was appointed by:", tag: "SSC CGL", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Wavell"], ansText: "Lord Reading", why: "Appointed in 1925 to investigate the establishment of an Indian military college." },
+    { q: "The historic bomb explosion in the Central Legislative Assembly by Bhagat Singh (1929) occurred under:", tag: "SSC CHSL", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Linlithgow"], ansText: "Lord Irwin", why: "They threw the bomb 'to make the deaf hear' protesting against the Public Safety Bill." },
+    { q: "The martyrdom of Jatin Das after a 63-day hunger strike in Lahore jail happened during the viceroyalty of:", tag: "SSC MTS", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Linlithgow"], ansText: "Lord Irwin", why: "He fasted demanding political prisoner status in 1929." },
+    { q: "The Deepavali Declaration of 1929 offering a vague promise of Dominion Status was made by:", tag: "SSC CPO", opts: ["Lord Reading", "Lord Irwin", "Lord Willingdon", "Lord Linlithgow"], ansText: "Lord Irwin", why: "Irwin made it to placate leaders before the Lahore session, but it lacked a specific timeline." },
+    { q: "Who was the British Prime Minister during the First Round Table Conference (1930)?", tag: "SSC Trivia", opts: ["Winston Churchill", "Ramsay MacDonald", "Clement Attlee", "Neville Chamberlain"], ansText: "Ramsay MacDonald", why: "He chaired the conferences in London attempting to frame a new constitution." },
+    { q: "The resumption of the Civil Disobedience Movement in 1932 was met with severe repression by:", tag: "SSC CGL", opts: ["Lord Irwin", "Lord Willingdon", "Lord Linlithgow", "Lord Wavell"], ansText: "Lord Willingdon", why: "Unlike Irwin, Willingdon ruthlessly jailed over 80,000 Indians to crush the movement." },
+    { q: "The foundation of the Congress Socialist Party (1934) occurred during the tenure of:", tag: "SSC CHSL", opts: ["Lord Irwin", "Lord Willingdon", "Lord Linlithgow", "Lord Wavell"], ansText: "Lord Willingdon", why: "JP Narayan, Acharya Narendra Dev, and Minoo Masani formed it within the INC." },
+    { q: "The Government of India Act 1935 separated which territory from British India?", tag: "SSC CPO", opts: ["Ceylon", "Burma", "Nepal", "Bhutan"], ansText: "Burma", why: "Burma (Myanmar) was administratively separated from India effective 1937." },
+    { q: "Subhas Chandra Bose formed the Forward Bloc in 1939 during the viceroyalty of:", tag: "SSC MTS", opts: ["Lord Willingdon", "Lord Linlithgow", "Lord Wavell", "Lord Mountbatten"], ansText: "Lord Linlithgow", why: "Bose resigned as Congress President due to differences with Gandhi and formed his own faction." },
+    { q: "The Muslim League's Lahore Resolution (1940) demanding a separate state for Muslims happened under:", tag: "SSC CGL", opts: ["Lord Willingdon", "Lord Linlithgow", "Lord Wavell", "Lord Mountbatten"], ansText: "Lord Linlithgow", why: "Drafted by Sikandar Hayat Khan and presented by Fazlul Huq, it formalized the Pakistan demand." },
+    { q: "Who was the Viceroy during the mutiny of the Royal Indian Navy (RIN) in 1946?", tag: "SSC CHSL", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Lord Irwin"], ansText: "Lord Wavell", why: "The naval strike in Bombay severely shook British military confidence in holding India." },
+    { q: "The Interim Government headed by Jawaharlal Nehru was sworn in during the time of:", tag: "SSC CPO", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Clement Attlee"], ansText: "Lord Wavell", why: "Sworn in on September 2, 1946, it functioned as a transitional cabinet." },
+    { q: "Clement Attlee’s declaration setting a deadline of June 1948 for British withdrawal was made while the Viceroy was:", tag: "SSC History", opts: ["Lord Wavell", "Lord Mountbatten", "Lord Linlithgow", "Lord Willingdon"], ansText: "Lord Wavell", why: "Attlee announced it in February 1947, simultaneously replacing Wavell with Mountbatten." },
+    { q: "The Radcliffe Line demarcating the boundaries of India and Pakistan was finalized under the supervision of:", tag: "SSC GD", opts: ["Lord Wavell", "Lord Mountbatten", "Clement Attlee", "Lord Ismay"], ansText: "Lord Mountbatten", why: "Sir Cyril Radcliffe arrived in July 1947 and finished drawing the borders just days before independence." },
+    { q: "Who famously declared that the British goal in India was the 'progressive realization of responsible government' in 1917?", tag: "SSC Trivia", opts: ["Edwin Montagu", "Lord Chelmsford", "Lord Hardinge", "Lord Reading"], ansText: "Edwin Montagu", why: "The August Declaration by the Secretary of State formed the basis for the 1919 reforms." },
+    { q: "Which Viceroy described the Congress as representing only a 'microscopic minority'?", tag: "SSC CGL", opts: ["Lord Lytton", "Lord Dufferin", "Lord Curzon", "Lord Lansdowne"], ansText: "Lord Dufferin", why: "After initially hosting them, Dufferin turned hostile and used this phrase to dismiss the Congress." },
+    { q: "The White Mutiny by European soldiers protesting the transfer of EIC troops to the Crown occurred under:", tag: "SSC CHSL", opts: ["Lord Canning", "Lord Elgin", "Lord Lawrence", "Lord Mayo"], ansText: "Lord Canning", why: "British soldiers demanded a bounty for the transfer, leading to minor rebellions in 1859." },
+    { q: "The first High Courts in Calcutta, Madras, and Bombay were established in 1865 during the tenure of:", tag: "SSC MTS", opts: ["Lord Canning", "John Lawrence", "Lord Mayo", "Lord Northbrook"], ansText: "John Lawrence", why: "Replacing the old Supreme Courts and Sadar Adalats under the Indian High Courts Act 1861." },
+    { q: "Who created the Indian Forest Department and appointed Dietrich Brandis as its first Inspector General?", tag: "SSC CPO", opts: ["Lord Canning", "John Lawrence", "Lord Lytton", "Lord Ripon"], ansText: "John Lawrence", why: "Lawrence initiated systematic forest conservation in 1864." },
+    { q: "The famine of Odisha (1866) occurred under the administration of:", tag: "SSC History", opts: ["Lord Canning", "John Lawrence", "Lord Lytton", "Lord Dufferin"], ansText: "John Lawrence", why: "Over a million died due to strict laissez-faire policies, leading to the Campbell Commission." },
+    { q: "Which Viceroy organized a grand Durbar in Delhi in 1903 to celebrate the coronation of King Edward VII?", tag: "SSC GD", opts: ["Lord Lansdowne", "Lord Curzon", "Lord Minto", "Lord Hardinge"], ansText: "Lord Curzon", why: "Curzon staged the most spectacular and expensive of all Delhi Durbars." },
+    { q: "The formal integration of princely states post-independence was managed while the Governor-General was:", tag: "SSC CGL", opts: ["Lord Wavell", "Lord Mountbatten", "Clement Attlee", "Winston Churchill"], ansText: "Lord Mountbatten", why: "Mountbatten assisted Sardar Patel and V.P. Menon in convincing princes to sign the Instrument of Accession." },
+    { q: "The Boundary Commission for the partition of Bengal and Punjab was appointed by:", tag: "SSC CHSL", opts: ["Lord Wavell", "Lord Mountbatten", "Clement Attlee", "Stafford Cripps"], ansText: "Lord Mountbatten", why: "He appointed Sir Cyril Radcliffe to head both commissions in June 1947." },
+    { q: "Which Viceroy is associated with the 'Dickie Bird Plan' which proposed Balkanization of India?", tag: "SSC Trivia", opts: ["Lord Linlithgow", "Lord Wavell", "Lord Mountbatten", "Lord Ismay"], ansText: "Lord Mountbatten", why: "His initial 'Plan Balkan' proposed transferring power directly to provinces, which Nehru vehemently rejected." }
+          ]
+
+        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid", userName = "";
+        let previousView = null;
+
+        const views = { start: document.getElementById('start-view'), mode: document.getElementById('mode-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
+
+        // --- LOCAL STORAGE LOGIC ---
+        // CHANGED KEY TO START FRESH FOR NEW TOPIC
+        const LB_KEY = 'ssc_modern_mega_160_lb'; 
+
+        function loadLeaderboard() {
+            const data = localStorage.getItem(LB_KEY);
+            if (data) leaderboard = JSON.parse(data);
+            updateLeaderboardUI();
+        }
+        function saveLeaderboard() {
+            localStorage.setItem(LB_KEY, JSON.stringify(leaderboard));
+        }
+        function clearLeaderboard() {
+            if(confirm("Clear history?")) {
+                leaderboard = [];
+                saveLeaderboard();
+                updateLeaderboardUI();
+            }
+        }
+        window.onload = loadLeaderboard;
+
+        // --- NAVIGATION ---
+        function goToModeSelection() {
+            userName = document.getElementById('username').value.trim();
+            if (!userName) return alert("Please enter your name");
+            views.start.classList.add('hidden');
+            views.mode.classList.remove('hidden');
+        }
+        function backToStart() { views.mode.classList.add('hidden'); views.start.classList.remove('hidden'); }
+        
+        function startRapidFire() { mode = "rapid"; initQuiz(); }
+        function startPractice() { mode = "practice"; initQuiz(); }
+
+        // --- QUIZ LOGIC ---
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+        function initQuiz() {
+            activeQ = shuffle(JSON.parse(JSON.stringify(MASTER_DATA))).map(q => {
+                let s = shuffle([...q.opts]);
+                return { ...q, opts: s, ans: s.indexOf(q.ansText) };
+            });
+            
+            currentIdx = 0; 
+            userAnswers = Array(activeQ.length).fill(-1);
+            
+            views.mode.classList.add('hidden'); 
+            views.quiz.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.remove('hidden');
+            
+            document.getElementById('user-display').innerText = userName;
+            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'RAPID FIRE' : 'PRACTICE';
+            
+            if(mode === 'rapid') {
+                document.getElementById('nav-buttons').classList.add('hidden');
+                document.getElementById('question-indicator').classList.add('hidden');
+                document.getElementById('timer-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-buttons').classList.remove('hidden');
+                document.getElementById('question-indicator').classList.remove('hidden');
+                document.getElementById('timer-badge').classList.add('hidden');
+                document.getElementById('current-q-num').innerText = 1;
+                document.getElementById('total-q-num').innerText = activeQ.length;
+            }
+            
+            renderQ();
+        }
+
+        function renderQ() {
+            const q = activeQ[currentIdx];
+            document.getElementById('question-text').innerText = `Q${currentIdx+1}. ${q.q}`;
+            document.getElementById('pyq-tag').innerText = q.tag;
+            document.getElementById('progress-bar').style.width = `${((currentIdx+1)/activeQ.length)*100}%`;
+            
+            if(mode === 'practice') document.getElementById('current-q-num').innerText = currentIdx + 1;
+
+            const cont = document.getElementById('options-container');
+            cont.innerHTML = '';
+            
+            q.opts.forEach((o, i) => {
+                const btn = document.createElement('button');
+                let sel = userAnswers[currentIdx] === i;
+                btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-medium border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50`;
+                
+                if (sel) {
+                    btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-bold border-blue-500 bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-500`;
+                }
+
+                btn.innerText = o;
+                btn.onclick = () => handleSelect(i);
+                cont.appendChild(btn);
+            });
+
+            if(mode === 'practice') {
+                document.getElementById('prev-btn').disabled = currentIdx === 0;
+                document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
+            } else {
+                startTimer();
+            }
+        }
+
+        function handleSelect(i) {
+            userAnswers[currentIdx] = i;
+            renderQ();
+
+            if (mode === 'rapid') {
+                clearInterval(timerId);
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } 
+                    else finish();
+                }, 400);
+            } else {
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
+                }, 400);
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerId); 
+            let t = 20;
+            const el = document.getElementById('timer'); 
+            el.innerText = t;
+            
+            timerId = setInterval(() => {
+                t--; 
+                el.innerText = t;
+                if(t <= 0) { 
+                    clearInterval(timerId); 
+                    if(userAnswers[currentIdx] === -1) handleSelect(-1); 
+                }
+            }, 1000);
+        }
+
+        function prevQ() { if(currentIdx > 0) { currentIdx--; renderQ(); } }
+        function nextQ() { if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } }
+        function submitQuiz() { if(confirm("Submit Test?")) finish(); }
+
+        function finish() {
+            clearInterval(timerId);
+            views.quiz.classList.replace('flex', 'hidden'); 
+            views.result.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.add('hidden');
+
+            let m = 0, c = 0, w = 0, s = 0;
+            userAnswers.forEach((a, i) => {
+                if (a === activeQ[i].ans) { m += 1; c++; }
+                else if (a === -1) { s++; }
+                else { m -= 0.25; w++; }
+            });
+
+            document.getElementById('result-name').innerText = userName;
+            document.getElementById('final-score').innerText = m.toFixed(2);
+            document.getElementById('correct-count').innerText = c;
+            document.getElementById('wrong-count').innerText = w;
+            document.getElementById('skip-count').innerText = s;
+
+            leaderboard.push({
+                name: userName,
+                score: m,
+                date: new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
+                mode: mode,
+                qSet: activeQ, 
+                history: userAnswers
+            });
+            saveLeaderboard();
+            updateLeaderboardUI();
+        }
+
+        function updateLeaderboardUI() {
+            leaderboard.sort((a,b) => b.score - a.score);
+            const list = document.getElementById('start-leaderboard-list');
+            
+            if (leaderboard.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
+                return;
+            }
+
+            let currentRank = 1;
+            
+            list.innerHTML = leaderboard.map((e, i) => {
+                if (i > 0 && e.score < leaderboard[i-1].score) currentRank = currentRank + 1;
+                
+                let icon = e.mode === 'rapid' ? '🔥' : '📚';
+                let medal = currentRank === 1 ? '🥇' : currentRank === 2 ? '🥈' : currentRank === 3 ? '🥉' : `<span class="text-slate-400 font-bold text-sm">#${currentRank}</span>`;
+
+                return `
+                <div onclick="viewHistory(${i})" class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition-colors group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 flex justify-center text-xl">${medal}</div>
+                        <div>
+                            <div class="font-bold text-slate-700 text-sm group-hover:text-blue-700">${e.name}</div>
+                            <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                <span>${icon}</span> ${e.date}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-slate-800 text-sm">${e.score.toFixed(2)}</div>
+                        <div class="text-[9px] text-blue-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">VIEW</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // --- NEW LOADING & STATS LOGIC ---
+        function viewHistory(idx) {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex'); // Show Spinner
+            
+            // Artificial delay to let UI breathe and show spinner
+            setTimeout(() => {
+                previousView = views.start;
+                views.start.classList.add('hidden');
+                renderReview(leaderboard[idx].history, leaderboard[idx].qSet, leaderboard[idx].name);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden'); // Hide Spinner
+            }, 500); 
+        }
+
+        function showReviewFromResults() {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex');
+            setTimeout(() => {
+                previousView = views.result;
+                views.result.classList.replace('flex', 'hidden');
+                renderReview(userAnswers, activeQ, userName);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden');
+            }, 500);
+        }
+
+        function renderReview(answers, qData, pName) {
+            views.review.classList.replace('hidden', 'flex');
+            document.getElementById('review-player-name').innerText = pName;
+            
+            // Calculate Stats for Header
+            let c=0, w=0, s=0;
+            answers.forEach((a, i) => { if(a === qData[i].ans) c++; else if(a === -1) s++; else w++; });
+            
+            document.getElementById('review-stats').innerHTML = `
+                <span class="text-green-600">Correct: ${c}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-red-500">Wrong: ${w}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-500">Skipped: ${s}</span>
+            `;
+
+            const cont = document.getElementById('review-container');
+            cont.innerHTML = ''; // Clear previous content
+
+            // Use DocumentFragment for performance with large lists
+            const fragment = document.createDocumentFragment();
+
+            answers.forEach((ansIdx, i) => {
+                const q = qData[i];
+                let statusClass = ansIdx === q.ans ? 'text-green-600 bg-green-50 border-green-100' : ansIdx === -1 ? 'text-slate-500 bg-slate-50 border-slate-100' : 'text-red-500 bg-red-50 border-red-100';
+                let statusText = ansIdx === q.ans ? 'CORRECT (+1)' : ansIdx === -1 ? 'SKIPPED' : 'WRONG (-0.25)';
+
+                let optsHtml = q.opts.map((o, idx) => {
+                    let style = "border-slate-100 text-slate-500";
+                    let icon = "";
+                    if (idx === q.ans) { style = "bg-green-50 border-green-200 text-green-800 font-bold"; icon = "✅"; }
+                    else if (idx === ansIdx) { style = "bg-red-50 border-red-200 text-red-800 line-through"; icon = "❌"; }
+                    return `<div class="p-2.5 rounded-lg border text-xs flex justify-between items-center ${style}">${o} <span>${icon}</span></div>`;
+                }).join('');
+
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm shrink-0";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-slate-400 text-xs">Q${i+1}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-1 leading-relaxed">${q.q}</p>
+                    <p class="text-[10px] text-slate-400 font-mono mb-3">${q.tag}</p>
+                    <div class="space-y-1.5 mb-3">${optsHtml}</div>
+                    <div class="mt-2 text-xs text-yellow-800 bg-yellow-50 border border-yellow-200 p-2.5 rounded-lg leading-relaxed flex gap-2">
+                        <span>💡</span>
+                        <span>${q.why}</span>
+                    </div>`;
+                fragment.appendChild(div);
+            });
+            
+            cont.appendChild(fragment);
+        }
+
+        function closeReview() {
+            views.review.classList.replace('flex', 'hidden');
+            previousView.classList.remove('hidden');
+            if(previousView === views.result) previousView.classList.add('flex');
+        }
+
+        function resetApp() {
+            clearInterval(timerId);
+            document.getElementById('username').value = "";
+            views.result.classList.replace('flex', 'hidden');
+            views.start.classList.remove('hidden');
+            document.getElementById('header').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+```
