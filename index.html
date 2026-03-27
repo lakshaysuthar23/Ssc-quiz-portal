@@ -20,14 +20,18 @@
       --muted: rgba(255,255,255,0.45);
     }
 
-    html, body {
-  height: 100%;
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  overflow: hidden; /* Keeps the main window still */
-}
+    html {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
 
+    /* Full-screen fixed background effects */
+    body {
+      min-height: 100%;
+      position: relative;
+    }
 
     body::before {
       content: '';
@@ -51,23 +55,38 @@
       opacity: 0.35;
     }
 
+    /* ── STICKY HEADER ZONE ── */
+    .sticky-top {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      /* subtle bottom fade to blend with cards below */
+      padding-bottom: 12px;
+    }
+
+    .sticky-top::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -18px;
+      height: 18px;
+      background: linear-gradient(to bottom, var(--bg), transparent);
+      pointer-events: none;
+    }
+
+    /* ── PAGE SHELL ── */
     .page {
-  position: relative;
-  z-index: 1;
-  height: 100dvh; /* Use dvh for better mobile support */
-  display: flex;
-  flex-direction: column;
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 10px 20px 0; /* Put that 10px margin here instead */
-}
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
 
-
-    /* HEADER */
+    /* ── HEADER ── */
     header {
-      padding: 20px 0 14px;
+      padding: 24px 0 16px;
       text-align: center;
-      flex-shrink: 0;
     }
 
     .header-badge {
@@ -140,7 +159,7 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
-    /* STATS BAR */
+    /* ── STATS BAR ── */
     .stats-bar {
       display: flex;
       gap: 1px;
@@ -148,20 +167,19 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
-      flex-shrink: 0;
       animation: fadeUp 0.55s 0.25s ease both;
     }
 
     .stat {
       flex: 1;
-      padding: 8px 6px;
+      padding: 10px 6px;
       background: var(--surface);
       text-align: center;
     }
 
     .stat-num {
       font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: #fff;
     }
@@ -172,15 +190,15 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--muted);
-      margin-top: 1px;
+      margin-top: 2px;
     }
 
-    /* SECTION HEADER */
+    /* ── SECTION HEADER ── */
     .section-header {
       display: flex;
       align-items: center;
       gap: 12px;
-      flex-shrink: 0;
+      margin-top: 20px;
       animation: fadeUp 0.55s 0.32s ease both;
     }
 
@@ -204,30 +222,22 @@
       white-space: nowrap;
     }
 
-    /* QUIZ CARDS */
+    /* ── QUIZ GRID (scrolls freely) ── */
     .quiz-grid {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-y: auto; /* This enables the scroll */
-  min-height: 0; /* CRITICAL: Allows flex child to shrink and scroll */
-  padding-bottom: 20px;
-  -webkit-overflow-scrolling: touch; /* Smooth scroll for iPhones */
-}
-    .quiz-grid::-webkit-scrollbar { width: 3px; }
-    .quiz-grid::-webkit-scrollbar-track { background: transparent; }
-    .quiz-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 99px; }
-
-    .quiz-card {
-      position: relative;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    /* ── QUIZ CARD ── */
+    .quiz-card {
+      position: relative;
+      display: block;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 11px 16px;
+      border-radius: 18px;
+      padding: 20px 20px 20px 22px;
       text-decoration: none;
       color: inherit;
       overflow: hidden;
@@ -236,7 +246,11 @@
     }
 
     .quiz-card:nth-child(1) { animation-delay: 0.38s; }
-    .quiz-card:nth-child(2) { animation-delay: 0.48s; }
+    .quiz-card:nth-child(2) { animation-delay: 0.46s; }
+    .quiz-card:nth-child(3) { animation-delay: 0.54s; }
+    .quiz-card:nth-child(4) { animation-delay: 0.62s; }
+    .quiz-card:nth-child(5) { animation-delay: 0.70s; }
+    .quiz-card:nth-child(6) { animation-delay: 0.78s; }
 
     .quiz-card::before {
       content: '';
@@ -247,10 +261,11 @@
       transition: opacity 0.3s;
     }
 
+    /* left accent bar */
     .quiz-card::after {
       content: '';
       position: absolute;
-      left: 0; top: 25%; bottom: 25%;
+      left: 0; top: 20%; bottom: 20%;
       width: 3px;
       border-radius: 0 3px 3px 0;
       background: var(--card-accent, var(--gold));
@@ -259,19 +274,19 @@
     }
 
     .quiz-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
       border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+      box-shadow: 0 20px 52px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
     }
 
     .quiz-card:hover::before { opacity: 1; }
-    .quiz-card:hover::after  { opacity: 1; top: 15%; bottom: 15%; }
+    .quiz-card:hover::after  { opacity: 1; top: 12%; bottom: 12%; }
 
     .card-glow {
       position: absolute;
       right: -30px; top: 50%;
       transform: translateY(-50%);
-      width: 120px; height: 120px;
+      width: 140px; height: 140px;
       border-radius: 50%;
       background: radial-gradient(circle, var(--card-accent, var(--gold)) 0%, transparent 70%);
       opacity: 0.07;
@@ -282,19 +297,18 @@
       position: relative;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
     }
 
     .card-emoji {
-      font-size: 1.6rem;
+      font-size: 2rem;
       line-height: 1;
       flex-shrink: 0;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
       transition: transform 0.3s ease;
     }
 
-    .quiz-card:hover .card-emoji { transform: scale(1.1) rotate(-5deg); }
+    .quiz-card:hover .card-emoji { transform: scale(1.12) rotate(-6deg); }
 
     .card-body { flex: 1; min-width: 0; }
 
@@ -304,10 +318,10 @@
       gap: 5px;
       font-size: 9px;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.13em;
       text-transform: uppercase;
       color: var(--card-accent, var(--gold));
-      margin-bottom: 3px;
+      margin-bottom: 5px;
     }
 
     .card-subject::before {
@@ -319,34 +333,34 @@
 
     .card-title {
       font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: #fff;
-      line-height: 1.2;
-      margin-bottom: 6px;
+      line-height: 1.25;
+      margin-bottom: 10px;
     }
 
     .card-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 6px;
     }
 
     .meta-pill {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.09);
       border-radius: 999px;
-      padding: 2px 8px;
-      font-size: 10px;
+      padding: 3px 10px;
+      font-size: 10.5px;
       color: var(--muted);
       font-weight: 500;
     }
 
     .card-arrow {
-      width: 26px; height: 26px;
+      width: 30px; height: 30px;
       border-radius: 50%;
       border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
@@ -359,83 +373,74 @@
       background: var(--card-accent, var(--gold));
       border-color: var(--card-accent, var(--gold));
       color: #03122e;
-      transform: translateX(3px);
+      transform: translateX(4px);
     }
 
-    /* FOOTER */
+    /* ── FOOTER ── */
     footer {
       text-align: center;
-      padding: 12px 0 16px;
+      padding: 28px 0 8px;
       font-size: 11px;
       color: var(--muted);
-      opacity: 0.55;
-      flex-shrink: 0;
-      animation: fadeUp 0.55s 0.55s ease both;
+      opacity: 0.5;
+      animation: fadeUp 0.55s 0.85s ease both;
     }
 
-    .gap-sm { height: 10px; flex-shrink: 0; }
-
-    /* Allow scroll only on very short screens */
-    @media (max-height: 680px) {
-      html, body { overflow: auto; }
-      header { padding: 12px 0 10px; }
-      .gap-sm { height: 6px; }
-      .card-emoji { font-size: 1.4rem; }
-    }
-
-    @media (max-width: 360px) {
-      .card-title { font-size: 0.88rem; }
-      .stat-num { font-size: 0.95rem; }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 400px) {
+      .card-title { font-size: 0.95rem; }
+      .card-emoji { font-size: 1.7rem; }
+      .quiz-card { padding: 16px 16px 16px 18px; }
     }
   </style>
 </head>
 <body>
   <div class="page">
 
-    <header>
-      <div class="header-badge">SSC Mock Portal</div>
-      <h1>Quizzes by <span>Lakshay Suthar</span></h1>
-      <p>Sharpen your knowledge. Ace the exam.</p>
-      <div class="header-line"></div>
-    </header>
+    <div class="sticky-top">
+      <header>
+        <div class="header-badge">SSC Mock Portal</div>
+        <h1>Quizzes by <span>Lakshay Suthar</span></h1>
+        <p>Sharpen your knowledge. Ace the exam.</p>
+        <div class="header-line"></div>
+      </header>
 
-    <div class="stats-bar">
-      <div class="stat">
-        <div class="stat-num">6</div>
-        <div class="stat-label">Quizzes</div>
+      <div class="stats-bar">
+        <div class="stat">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Quizzes</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">680</div>
+          <div class="stat-label">Questions</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Subjects</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">Free</div>
+          <div class="stat-label">Access</div>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-num">680</div>
-        <div class="stat-label">Questions</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">2</div>
-        <div class="stat-label">Subject</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">Free</div>
-        <div class="stat-label">Access</div>
+
+      <div class="section-header">
+        <h2>Available Quizzes</h2>
+        <div class="section-line"></div>
+        <div class="section-count">6 quizzes</div>
       </div>
     </div>
 
-    <div class="gap-sm"></div>
-
-    <div class="section-header">
-      <h2>Available Quizzes</h2>
-      <div class="section-line"></div>
-      <div class="section-count">6 quizzes</div>
-    </div>
-
-    <div class="gap-sm"></div>
-
+    <!-- CARDS — scroll freely below sticky header -->
     <div class="quiz-grid">
+
       <a href="quizzes/metal-non-metal.html" class="quiz-card" style="--card-accent: #4CC99B;">
         <div class="card-glow"></div>
         <div class="card-inner">
           <div class="card-emoji">🔬</div>
           <div class="card-body">
             <div class="card-subject">Chemistry</div>
-            <div class="card-title">Metal & Non Metal</div>
+            <div class="card-title">Metal &amp; Non Metal</div>
             <div class="card-meta">
               <span class="meta-pill">
                 <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -453,7 +458,6 @@
         </div>
       </a>
 
-      
       <a href="quizzes/viceroy-of-india.html" class="quiz-card" style="--card-accent: #c9a84c;">
         <div class="card-glow"></div>
         <div class="card-inner">
@@ -478,7 +482,6 @@
         </div>
       </a>
 
-      
       <a href="quizzes/maratha to wardha scheme.html" class="quiz-card" style="--card-accent: #c9a84c;">
         <div class="card-glow"></div>
         <div class="card-inner">
@@ -502,14 +505,14 @@
           </div>
         </div>
       </a>
-      
+
       <a href="quizzes/Vijayanagaram-Bahmani-Malwa-Mewar-Sufi-Bhakti movement.html" class="quiz-card" style="--card-accent: #c9a84c;">
         <div class="card-glow"></div>
         <div class="card-inner">
           <div class="card-emoji">🏯</div>
           <div class="card-body">
             <div class="card-subject">History</div>
-            <div class="card-title">Vijayanagara, Bahmani, Malwa, Mewar, Sufi & Bhakti movement Quiz</div>
+            <div class="card-title">Vijayanagara, Bahmani, Malwa, Mewar, Sufi &amp; Bhakti Movement</div>
             <div class="card-meta">
               <span class="meta-pill">
                 <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -577,7 +580,7 @@
 
     </div>
 
-    <footer style="margin-bottom: 11px;">Made with ♥ by Lakshay Suthar</footer>
+    <footer>Made with ♥ by Lakshay Suthar</footer>
 
   </div>
 </body>
