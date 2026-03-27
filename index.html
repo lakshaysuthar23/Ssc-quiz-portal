@@ -11,7 +11,6 @@
     :root {
       --bg: #03122e;
       --surface: rgba(255,255,255,0.05);
-      --surface2: rgba(255,255,255,0.09);
       --border: rgba(255,255,255,0.10);
       --gold: #c9a84c;
       --gold-light: #e8c96b;
@@ -20,19 +19,16 @@
       --muted: rgba(255,255,255,0.45);
     }
 
-    html {
+    /* ── BASE ── */
+    html, body {
       height: 100%;
+      overflow: hidden; /* page itself never scrolls */
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
     }
 
-    /* Full-screen fixed background effects */
-    body {
-      min-height: 100%;
-      position: relative;
-    }
-
+    /* fixed radial gradient background */
     body::before {
       content: '';
       position: fixed;
@@ -45,6 +41,7 @@
       z-index: 0;
     }
 
+    /* noise texture */
     body::after {
       content: '';
       position: fixed;
@@ -55,37 +52,27 @@
       opacity: 0.35;
     }
 
-    /* ── STICKY HEADER ZONE ── */
-    .sticky-top {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--bg);
-      /* subtle bottom fade to blend with cards below */
-      padding-bottom: 12px;
-    }
-
-    .sticky-top::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0; bottom: -18px;
-      height: 18px;
-      background: linear-gradient(to bottom, var(--bg), transparent);
-      pointer-events: none;
-    }
-
-    /* ── PAGE SHELL ── */
+    /* ── PAGE: full-height flex column ── */
     .page {
       position: relative;
       z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
       max-width: 680px;
       margin: 0 auto;
-      padding: 0 20px 40px;
+      padding: 0 20px;
+    }
+
+    /* ── TOP SECTION: static, never scrolls ── */
+    .top-section {
+      flex-shrink: 0;
+      padding-bottom: 14px;
     }
 
     /* ── HEADER ── */
     header {
-      padding: 24px 0 16px;
+      padding: 22px 0 16px;
       text-align: center;
     }
 
@@ -198,7 +185,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-top: 20px;
+      margin-top: 18px;
       animation: fadeUp 0.55s 0.32s ease both;
     }
 
@@ -222,13 +209,23 @@
       white-space: nowrap;
     }
 
-    /* ── QUIZ GRID (scrolls freely) ── */
+    /* ── QUIZ GRID: the ONLY scrollable element ── */
     .quiz-grid {
+      flex: 1;       /* fills all remaining vertical space */
+      min-height: 0; /* critical: lets flex child shrink so overflow kicks in */
+      overflow-y: auto;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin-top: 16px;
+      gap: 12px;
+      padding-top: 14px;
+      padding-bottom: 20px;
+      -webkit-overflow-scrolling: touch;
     }
+
+    .quiz-grid::-webkit-scrollbar { width: 3px; }
+    .quiz-grid::-webkit-scrollbar-track { background: transparent; }
+    .quiz-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 99px; }
 
     /* ── QUIZ CARD ── */
     .quiz-card {
@@ -236,11 +233,12 @@
       display: block;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px 20px 20px 22px;
+      border-radius: 16px;
+      padding: 14px 16px 14px 18px;
       text-decoration: none;
       color: inherit;
       overflow: hidden;
+      flex-shrink: 0; /* cards never compress vertically */
       transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
       animation: fadeUp 0.6s ease both;
     }
@@ -261,7 +259,6 @@
       transition: opacity 0.3s;
     }
 
-    /* left accent bar */
     .quiz-card::after {
       content: '';
       position: absolute;
@@ -274,9 +271,9 @@
     }
 
     .quiz-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 20px 52px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
     }
 
     .quiz-card:hover::before { opacity: 1; }
@@ -286,7 +283,7 @@
       position: absolute;
       right: -30px; top: 50%;
       transform: translateY(-50%);
-      width: 140px; height: 140px;
+      width: 130px; height: 130px;
       border-radius: 50%;
       background: radial-gradient(circle, var(--card-accent, var(--gold)) 0%, transparent 70%);
       opacity: 0.07;
@@ -297,18 +294,18 @@
       position: relative;
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 14px;
     }
 
     .card-emoji {
-      font-size: 2rem;
+      font-size: 1.8rem;
       line-height: 1;
       flex-shrink: 0;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
       transition: transform 0.3s ease;
     }
 
-    .quiz-card:hover .card-emoji { transform: scale(1.12) rotate(-6deg); }
+    .quiz-card:hover .card-emoji { transform: scale(1.1) rotate(-5deg); }
 
     .card-body { flex: 1; min-width: 0; }
 
@@ -321,7 +318,7 @@
       letter-spacing: 0.13em;
       text-transform: uppercase;
       color: var(--card-accent, var(--gold));
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .card-subject::before {
@@ -333,34 +330,34 @@
 
     .card-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
+      font-size: 0.97rem;
       font-weight: 700;
       color: #fff;
       line-height: 1.25;
-      margin-bottom: 10px;
+      margin-bottom: 7px;
     }
 
     .card-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 5px;
     }
 
     .meta-pill {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.09);
       border-radius: 999px;
-      padding: 3px 10px;
-      font-size: 10.5px;
+      padding: 3px 9px;
+      font-size: 10px;
       color: var(--muted);
       font-weight: 500;
     }
 
     .card-arrow {
-      width: 30px; height: 30px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
@@ -373,31 +370,31 @@
       background: var(--card-accent, var(--gold));
       border-color: var(--card-accent, var(--gold));
       color: #03122e;
-      transform: translateX(4px);
+      transform: translateX(3px);
     }
 
     /* ── FOOTER ── */
     footer {
+      flex-shrink: 0;
       text-align: center;
-      padding: 28px 0 8px;
+      padding: 10px 0 14px;
       font-size: 11px;
       color: var(--muted);
       opacity: 0.5;
-      animation: fadeUp 0.55s 0.85s ease both;
     }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 400px) {
-      .card-title { font-size: 0.95rem; }
-      .card-emoji { font-size: 1.7rem; }
-      .quiz-card { padding: 16px 16px 16px 18px; }
+      .card-title { font-size: 0.9rem; }
+      .card-emoji { font-size: 1.55rem; }
+      .quiz-card { padding: 12px 12px 12px 15px; }
     }
   </style>
 </head>
 <body>
   <div class="page">
 
-    <div class="sticky-top">
+    <!-- TOP: static, cards physically cannot scroll into this area -->
+    <div class="top-section">
       <header>
         <div class="header-badge">SSC Mock Portal</div>
         <h1>Quizzes by <span>Lakshay Suthar</span></h1>
@@ -431,7 +428,7 @@
       </div>
     </div>
 
-    <!-- CARDS — scroll freely below sticky header -->
+    <!-- QUIZ GRID: only this scrolls, inside its own box -->
     <div class="quiz-grid">
 
       <a href="quizzes/metal-non-metal.html" class="quiz-card" style="--card-accent: #4CC99B;">
