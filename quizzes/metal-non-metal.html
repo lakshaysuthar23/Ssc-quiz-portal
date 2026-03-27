@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metal & Non-Metal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
+        .btn-option { transition: all 0.15s ease; border-width: 2px; }
+        .btn-option:active { transform: scale(0.99); }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 h-screen overflow-hidden">
+
+    <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-[90vh]">
+        
+        <!-- HEADER -->
+        <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
+            <div class="flex flex-col">
+                <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase" id="mode-display">RAPID FIRE</span>
+            </div>
+            <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
+                ⏱️ <span id="timer">20</span>s
+            </div>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white/80 z-50 hidden flex-col items-center justify-center backdrop-blur-sm">
+            <div class="spinner mb-2"></div>
+            <p class="text-sm font-bold text-slate-600">Loading Chemistry...</p>
+        </div>
+
+        <!-- VIEW 1: START SCREEN -->
+        <div id="start-view" class="h-full overflow-hidden flex flex-col">
+            <div class="p-8 flex flex-col items-center text-center shrink-0 overflow-y-auto">
+                <div class="text-5xl mb-4">🔬️</div>
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Metal & Non-Metal</h1>
+                <p class="text-slate-500 mb-6 text-sm">
+                    100 Quality Qs<br>
+                    <span class="text-green-600 font-bold">+1.0</span> • <span class="text-red-500 font-bold">-0.25</span>
+                </p>
+                <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors">
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">Continue</button>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1 overflow-y-auto min-h-0">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leaderboard</h3>
+                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR HISTORY</button>
+                </div>
+                <div id="start-leaderboard-list" class="space-y-2 pb-4">
+                    <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: MODE SELECTION -->
+        <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
+            <div class="p-8 flex flex-col items-center text-center shrink-0">
+                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
+                <div class="flex flex-col gap-4 w-full">
+                    <div onclick="startRapidFire()" class="cursor-pointer group p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-orange-900 flex items-center gap-2">🔥 Rapid Fire</div>
+                        <p class="text-xs text-orange-700 mt-1 font-medium">20s Timer • No-Skip</p>
+                    </div>
+                    <div onclick="startPractice()" class="cursor-pointer group p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-green-900 flex items-center gap-2">📚 Practice Mode</div>
+                        <p class="text-xs text-green-700 mt-1 font-medium">No Timer • Review before submit</p>
+                    </div>
+                </div>
+                <button onclick="backToStart()" class="mt-8 text-slate-400 hover:text-slate-600 font-bold text-sm">← Back</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: QUIZ -->
+        <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
+            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-6 shrink-0 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="mb-6 shrink-0">
+                <h2 id="question-text" class="text-lg font-bold text-slate-800 leading-relaxed">Loading...</h2>
+                <div id="pyq-tag" class="inline-block mt-2 px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-mono text-slate-500 font-medium"></div>
+            </div>
+            <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-100 pt-4 mt-2 flex gap-3">
+                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50">← Prev</button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow-sm">Submit</button>
+                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50 shadow-sm">Next →</button>
+            </div>
+            <div id="question-indicator" class="hidden shrink-0 text-center text-[10px] text-slate-400 font-bold mt-3">
+                <span id="current-q-num">1</span> / <span id="total-q-num">100</span>
+            </div>
+        </div>
+
+        <!-- VIEW 4: RESULT -->
+        <div id="result-view" class="hidden flex-col h-full overflow-y-auto">
+            <div class="p-8 text-center shrink-0">
+                <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Completed</h2>
+                <p class="text-slate-500 text-sm mb-6 font-medium" id="result-name">Well done</p>
+                <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200">
+                    <div class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">FINAL SCORE</div>
+                    <div id="final-score" class="text-6xl font-black text-blue-600 leading-none mb-4 tracking-tight">0</div>
+                    <div class="flex justify-center gap-6 text-sm font-bold border-t border-slate-200 pt-4">
+                        <span class="text-green-600 flex items-center gap-1">✅ <span id="correct-count">0</span></span>
+                        <span class="text-red-500 flex items-center gap-1">❌ <span id="wrong-count">0</span></span>
+                        <span class="text-slate-400 flex items-center gap-1">⚪ <span id="skip-count">0</span></span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-xl transition-colors text-sm">📄 Review Solutions</button>
+                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-md shadow-blue-200">🔄 Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: REVIEW HISTORY -->
+        <div id="review-view" class="hidden flex-col h-full bg-slate-50">
+            <div class="p-4 bg-white border-b border-slate-200 flex flex-col gap-2 shrink-0 shadow-sm z-10">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 text-sm">Chemistry: <span id="review-player-name" class="text-blue-600"></span></h3>
+                    <button onclick="closeReview()" class="text-blue-600 font-bold text-xs hover:underline bg-blue-50 px-3 py-1 rounded-full">CLOSE</button>
+                </div>
+                <div id="review-stats" class="text-[10px] flex gap-3 font-bold text-slate-500">
+                    <!-- Stats injected here -->
+                </div>
+            </div>
+            <div id="review-container" class="flex-1 p-4 overflow-y-auto min-h-0 space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- MASTER DATA ---
+        // (Insert the full 100 questions here. I'm using the 5 you provided + will assume you paste the 95 batch)
+        const MASTER_DATA = [
+    { q: "Which of the following is the only metal that remains liquid at room temperature?", tag: "SSC CGL PYQ", opts: ["Mercury", "Bromine", "Gallium", "Francium"], ansText: "Mercury", why: "Important PYQ Fact." },
+    { q: "Which of the following is the only non-metal that remains liquid at room temperature?", tag: "SSC CHSL", opts: ["Mercury", "Bromine", "Chlorine", "Fluorine"], ansText: "Bromine", why: "Important PYQ Fact." },
+    { q: "Which metal is considered the most malleable among the following?", tag: "RRB NTPC", opts: ["Aluminium", "Platinum", "Silver", "Gold"], ansText: "Gold", why: "Important PYQ Fact." },
+    { q: "Which of the following metals is the best conductor of heat and electricity?", tag: "SSC MTS", opts: ["Copper", "Silver", "Gold", "Aluminium"], ansText: "Silver", why: "Important PYQ Fact." },
+    { q: "Among the following metals, which one is the poorest conductor of heat?", tag: "SSC CPO", opts: ["Lead", "Iron", "Zinc", "Copper"], ansText: "Lead", why: "Important PYQ Fact." },
+    { q: "Which non-metal is a good conductor of electricity?", tag: "RRB Group D", opts: ["Diamond", "Graphite", "Sulphur", "Phosphorus"], ansText: "Graphite", why: "Important PYQ Fact." },
+    { q: "Which of the following is a non-metal but possesses a metallic luster?", tag: "SSC CHSL", opts: ["Iodine", "Carbon", "Sulphur", "Oxygen"], ansText: "Iodine", why: "Important PYQ Fact." },
+    { q: "What is the hardest naturally occurring substance on Earth?", tag: "SSC CGL", opts: ["Platinum", "Titanium", "Diamond", "Graphene"], ansText: "Diamond", why: "Important PYQ Fact." },
+    { q: "Which of the following is the lightest metal in the periodic table?", tag: "RRB NTPC", opts: ["Lithium", "Sodium", "Helium", "Calcium"], ansText: "Lithium", why: "Important PYQ Fact." },
+    { q: "Which metal has the highest density (heaviest metal)?", tag: "SSC CPO", opts: ["Uranium", "Osmium", "Mercury", "Platinum"], ansText: "Osmium", why: "Important PYQ Fact." },
+    { q: "What is the most abundant element found in the Earth's crust?", tag: "SSC MTS", opts: ["Oxygen", "Silicon", "Iron", "Aluminium"], ansText: "Oxygen", why: "Important PYQ Fact." },
+    { q: "What is the most abundant metal found in the Earth's crust?", tag: "SSC CGL", opts: ["Iron", "Aluminium", "Calcium", "Sodium"], ansText: "Aluminium", why: "Important PYQ Fact." },
+    { q: "Which highly reactive metal is strictly stored under kerosene?", tag: "RRB Group D", opts: ["Magnesium", "Potassium", "Sodium", "Both B & C"], ansText: "Both B & C", why: "Important PYQ Fact." },
+    { q: "Which reactive non-metal is preserved by keeping it underwater?", tag: "SSC CHSL", opts: ["Red Phosphorus", "White Phosphorus", "Yellow Sulphur", "Liquid Bromine"], ansText: "White Phosphorus", why: "Important PYQ Fact." },
+    { q: "Which metal has such a low melting point that it melts in your hand?", tag: "SSC MTS", opts: ["Gallium", "Calcium", "Lithium", "Bismuth"], ansText: "Gallium", why: "Important PYQ Fact." },
+    { q: "Which metal is used to make the filament of an electric bulb?", tag: "RRB NTPC", opts: ["Nichrome", "Tungsten", "Titanium", "Platinum"], ansText: "Tungsten", why: "Important PYQ Fact." },
+    { q: "Which of the following noble gases is primarily used in electric bulbs?", tag: "SSC CGL", opts: ["Argon", "Helium", "Radon", "Xenon"], ansText: "Argon", why: "Important PYQ Fact." },
+    { q: "Which of the following is the most reactive metal in the reactivity series?", tag: "SSC CPO", opts: ["Potassium", "Sodium", "Calcium", "Magnesium"], ansText: "Potassium", why: "Important PYQ Fact." },
+    { q: "Which of the following is considered a 'Noble Metal' due to low reactivity?", tag: "SSC GD", opts: ["Platinum", "Titanium", "Uranium", "Tungsten"], ansText: "Platinum", why: "Important PYQ Fact." },
+    { q: "Which soft metals can be easily cut with a standard kitchen knife?", tag: "RRB Group D", opts: ["Sodium and Potassium", "Zinc and Magnesium", "Iron and Aluminium", "Copper and Silver"], ansText: "Sodium and Potassium", why: "Important PYQ Fact." },
+    { q: "Bauxite is the principal commercial ore of which metal?", tag: "SSC CGL", opts: ["Iron", "Aluminium", "Copper", "Zinc"], ansText: "Aluminium", why: "Important PYQ Fact." },
+    { q: "Cinnabar is the primary ore used for the extraction of which metal?", tag: "SSC CHSL", opts: ["Mercury", "Silver", "Lead", "Zinc"], ansText: "Mercury", why: "Important PYQ Fact." },
+    { q: "Galena is the most important naturally occurring ore of which metal?", tag: "RRB NTPC", opts: ["Lead", "Iron", "Gold", "Uranium"], ansText: "Lead", why: "Important PYQ Fact." },
+    { q: "Which of the following is the magnetic ore of Iron?", tag: "SSC MTS", opts: ["Haematite", "Magnetite", "Siderite", "Limonite"], ansText: "Magnetite", why: "Important PYQ Fact." },
+    { q: "Which of the following iron ores has a prominent reddish-brown color?", tag: "SSC CPO", opts: ["Magnetite", "Haematite", "Iron Pyrite", "Siderite"], ansText: "Haematite", why: "Important PYQ Fact." },
+    { q: "Pitchblende is a highly radioactive ore primarily consisting of:", tag: "SSC CGL", opts: ["Thorium", "Uranium", "Radium", "Plutonium"], ansText: "Uranium", why: "Important PYQ Fact." },
+    { q: "Monazite sand, found in Kerala, is a major source of which element?", tag: "RRB Group D", opts: ["Uranium", "Thorium", "Titanium", "Zirconium"], ansText: "Thorium", why: "Important PYQ Fact." },
+    { q: "Calamine is a well-known carbonate ore of which of the following metals?", tag: "SSC GD", opts: ["Calcium", "Copper", "Zinc", "Iron"], ansText: "Zinc", why: "Important PYQ Fact." },
+    { q: "Argentite is an important sulfide ore used to commercially extract:", tag: "SSC CHSL", opts: ["Gold", "Silver", "Platinum", "Mercury"], ansText: "Silver", why: "Important PYQ Fact." },
+    { q: "Cuprite and Malachite are the prominent naturally occurring ores of:", tag: "RRB NTPC", opts: ["Cobalt", "Copper", "Carbon", "Calcium"], ansText: "Copper", why: "Important PYQ Fact." },
+    { q: "Heating a sulphide ore strongly in the presence of excess air is called:", tag: "SSC CGL", opts: ["Calcination", "Smelting", "Roasting", "Refining"], ansText: "Roasting", why: "Important PYQ Fact." },
+    { q: "Heating a carbonate ore strongly in the absence of limited air is called:", tag: "SSC MTS", opts: ["Calcination", "Roasting", "Smelting", "Reduction"], ansText: "Calcination", why: "Important PYQ Fact." },
+    { q: "Galvanization is the process of applying a protective coating of:", tag: "RRB Group D", opts: ["Zinc on Iron", "Tin on Iron", "Copper on Iron", "Silver on Iron"], ansText: "Zinc on Iron", why: "Important PYQ Fact." },
+    { q: "Which two components are absolutely essential for the rusting of iron?", tag: "SSC CPO", opts: ["Oxygen and Moisture", "Nitrogen and Heat", "Carbon and Moisture", "Hydrogen and Heat"], ansText: "Oxygen and Moisture", why: "Important PYQ Fact." },
+    { q: "What is the accurate chemical formula for the rust formed on iron?", tag: "SSC CHSL", opts: ["Fe3O4", "Fe2O3.xH2O", "FeSO4.7H2O", "FeO"], ansText: "Fe2O3.xH2O", why: "Important PYQ Fact." },
+    { q: "What happens to the overall weight of iron when it undergoes rusting?", tag: "SSC CGL", opts: ["It decreases", "It increases", "Remains same", "Becomes zero"], ansText: "It increases", why: "Important PYQ Fact." },
+    { q: "The earthy or rocky impurities associated with mined metallic ores are called:", tag: "RRB NTPC", opts: ["Flux", "Slag", "Gangue", "Alloy"], ansText: "Gangue", why: "Important PYQ Fact." },
+    { q: "A substance added to the ore to remove infusible impurities is called:", tag: "SSC GD", opts: ["Gangue", "Slag", "Flux", "Matrix"], ansText: "Flux", why: "Important PYQ Fact." },
+    { q: "The fusible product formed when flux reacts with gangue is known as:", tag: "SSC MTS", opts: ["Slag", "Matte", "Amalgam", "Anode mud"], ansText: "Slag", why: "Important PYQ Fact." },
+    { q: "In the thermite process used for welding railway tracks, the reducing agent is:", tag: "SSC CPO", opts: ["Carbon", "Aluminium", "Sodium", "Magnesium"], ansText: "Aluminium", why: "Important PYQ Fact." },
+    { q: "The alloy Brass is a homogeneous mixture of which two specific metals?", tag: "SSC CGL", opts: ["Copper and Tin", "Copper and Zinc", "Lead and Tin", "Copper and Iron"], ansText: "Copper and Zinc", why: "Important PYQ Fact." },
+    { q: "The alloy Bronze is a homogeneous mixture of which two specific metals?", tag: "RRB Group D", opts: ["Copper and Tin", "Copper and Zinc", "Lead and Zinc", "Iron and Carbon"], ansText: "Copper and Tin", why: "Important PYQ Fact." },
+    { q: "Solder, an alloy used for welding electrical wires, is a mixture of:", tag: "SSC CHSL", opts: ["Copper and Zinc", "Lead and Tin", "Lead and Zinc", "Copper and Tin"], ansText: "Lead and Tin", why: "Important PYQ Fact." },
+    { q: "German Silver is a widely used alloy consisting of Copper, Zinc, and:", tag: "SSC MTS", opts: ["Silver", "Nickel", "Tin", "Lead"], ansText: "Nickel", why: "Important PYQ Fact." },
+    { q: "What is the exact percentage of actual silver present in German Silver?", tag: "RRB NTPC", opts: ["Ten Percent", "Five Percent", "Zero Percent", "Fifty Percent"], ansText: "Zero Percent", why: "Important PYQ Fact." },
+    { q: "Stainless steel primarily contains Iron, Carbon, Nickel, and:", tag: "SSC CGL", opts: ["Chromium", "Titanium", "Manganese", "Aluminium"], ansText: "Chromium", why: "Important PYQ Fact." },
+    { q: "Gun metal is a robust alloy containing Copper, Tin, Zinc, and:", tag: "SSC CPO", opts: ["Iron", "Lead", "Silver", "Nickel"], ansText: "Lead", why: "Important PYQ Fact." },
+    { q: "Bell metal, used for making temple bells, is an alloy consisting of:", tag: "SSC GD", opts: ["Copper and Tin", "Copper and Zinc", "Iron and Nickel", "Lead and Tin"], ansText: "Copper and Tin", why: "Important PYQ Fact." },
+    { q: "Duralumin, used extensively in aircraft bodies, mainly consists of:", tag: "SSC CHSL", opts: ["Iron", "Aluminium", "Copper", "Titanium"], ansText: "Aluminium", why: "Important PYQ Fact." },
+    { q: "For any alloy to be classified as an 'Amalgam', it must contain:", tag: "RRB Group D", opts: ["Silver", "Mercury", "Copper", "Gold"], ansText: "Mercury", why: "Important PYQ Fact." },
+    { q: "Magnalium is a light, tough alloy composed of Aluminium and:", tag: "SSC MTS", opts: ["Manganese", "Magnesium", "Molybdenum", "Mercury"], ansText: "Magnesium", why: "Important PYQ Fact." },
+    { q: "Invar, known for its extremely low coefficient of thermal expansion, contains:", tag: "SSC CGL", opts: ["Iron and Nickel", "Iron and Carbon", "Copper and Zinc", "Lead and Tin"], ansText: "Iron and Nickel", why: "Important PYQ Fact." },
+    { q: "Nichrome, used for heating coils in appliances, is an alloy of Nickel, Iron, and:", tag: "RRB NTPC", opts: ["Chromium", "Cobalt", "Carbon", "Copper"], ansText: "Chromium", why: "Important PYQ Fact." },
+    { q: "The primary difference between standard Steel and Cast Iron is the percentage of:", tag: "SSC CPO", opts: ["Nickel", "Carbon", "Chromium", "Sulphur"], ansText: "Carbon", why: "Important PYQ Fact." },
+    { q: "Which element is added to steel to make it resistant to rusting (stainless)?", tag: "SSC CHSL", opts: ["Chromium", "Carbon", "Copper", "Calcium"], ansText: "Chromium", why: "Important PYQ Fact." },
+    { q: "Type metal, used historically in printing presses, is an alloy containing:", tag: "SSC GD", opts: ["Lead, Antimony, Tin", "Copper, Zinc, Tin", "Iron, Carbon, Nickel", "Silver, Gold, Copper"], ansText: "Lead, Antimony, Tin", why: "Important PYQ Fact." },
+    { q: "Which alloy is preferred for aircraft construction due to its light weight and strength?", tag: "SSC CGL", opts: ["Solder", "Duralumin", "Brass", "Gun Metal"], ansText: "Duralumin", why: "Important PYQ Fact." },
+    { q: "Which of the following groups of metals are historically known as 'Coinage Metals'?", tag: "RRB Group D", opts: ["Cu, Ag, Au", "Fe, Co, Ni", "Li, Na, K", "Zn, Cd, Hg"], ansText: "Cu, Ag, Au", why: "Important PYQ Fact." },
+    { q: "Which metal is often referred to as a 'Strategic Metal' due to its defense uses?", tag: "SSC MTS", opts: ["Titanium", "Uranium", "Platinum", "Plutonium"], ansText: "Titanium", why: "Important PYQ Fact." },
+    { q: "The famous rust-resistant iron pillar at Mehrauli is primarily made of:", tag: "SSC CPO", opts: ["Pig Iron", "Cast Iron", "Wrought Iron", "Stainless Steel"], ansText: "Wrought Iron", why: "Important PYQ Fact." },
+    { q: "Which chemical compound is widely used as the indelible ink for voters?", tag: "SSC CGL", opts: ["Silver Bromide", "Silver Nitrate", "Silver Iodide", "Silver Chloride"], ansText: "Silver Nitrate", why: "Important PYQ Fact." },
+    { q: "Which chemical compound is sprayed on clouds to induce artificial rain?", tag: "RRB NTPC", opts: ["Silver Nitrate", "Silver Bromide", "Silver Iodide", "Silver Sulfate"], ansText: "Silver Iodide", why: "Important PYQ Fact." },
+    { q: "Which chemical compound was heavily used in traditional black-and-white photography?", tag: "SSC CHSL", opts: ["Silver Nitrate", "Silver Bromide", "Silver Iodide", "Silver Sulfate"], ansText: "Silver Bromide", why: "Important PYQ Fact." },
+    { q: "Calcium carbide reacts with water to produce which gas used in fruit ripening?", tag: "SSC MTS", opts: ["Ethylene", "Acetylene", "Methane", "Propane"], ansText: "Acetylene", why: "Important PYQ Fact." },
+    { q: "What is the common chemical name for the substance known as 'Blue Vitriol'?", tag: "SSC CGL", opts: ["Copper Sulphate", "Ferrous Sulphate", "Zinc Sulphate", "Sodium Sulphate"], ansText: "Copper Sulphate", why: "Important PYQ Fact." },
+    { q: "What is the common chemical name for the substance known as 'White Vitriol'?", tag: "RRB Group D", opts: ["Zinc Sulphate", "Copper Sulphate", "Ferrous Sulphate", "Calcium Sulphate"], ansText: "Zinc Sulphate", why: "Important PYQ Fact." },
+    { q: "What is the common chemical name for the substance known as 'Green Vitriol'?", tag: "SSC CPO", opts: ["Ferrous Sulphate", "Copper Sulphate", "Zinc Sulphate", "Sodium Sulphate"], ansText: "Ferrous Sulphate", why: "Important PYQ Fact." },
+    { q: "Which of the following chemical compounds is popularly known as 'Laughing Gas'?", tag: "SSC GD", opts: ["Nitrogen Dioxide", "Nitrous Oxide", "Nitric Oxide", "Nitrogen Pentoxide"], ansText: "Nitrous Oxide", why: "Important PYQ Fact." },
+    { q: "Which of the following chemicals is the primary component of 'Tear Gas'?", tag: "SSC CHSL", opts: ["Chloropicrin", "Chloroform", "Chlorine Gas", "Carbonyl Chloride"], ansText: "Chloropicrin", why: "Important PYQ Fact." },
+    { q: "What is the accurate chemical name for the compound known as 'Washing Soda'?", tag: "SSC CGL", opts: ["Sodium Bicarbonate", "Sodium Carbonate", "Sodium Hydroxide", "Sodium Chloride"], ansText: "Sodium Carbonate", why: "Important PYQ Fact." },
+    { q: "What is the accurate chemical name for the compound known as 'Baking Soda'?", tag: "RRB NTPC", opts: ["Sodium Bicarbonate", "Sodium Carbonate", "Sodium Hydroxide", "Sodium Chloride"], ansText: "Sodium Bicarbonate", why: "Important PYQ Fact." },
+    { q: "What is the accurate chemical name for the compound known as 'Caustic Soda'?", tag: "SSC MTS", opts: ["Sodium Hydroxide", "Sodium Carbonate", "Sodium Bicarbonate", "Sodium Chloride"], ansText: "Sodium Hydroxide", why: "Important PYQ Fact." },
+    { q: "What is the precise chemical name for the substance commonly called 'Quick Lime'?", tag: "SSC CPO", opts: ["Calcium Hydroxide", "Calcium Oxide", "Calcium Carbonate", "Calcium Sulphate"], ansText: "Calcium Oxide", why: "Important PYQ Fact." },
+    { q: "What is the precise chemical name for the substance commonly called 'Slaked Lime'?", tag: "SSC CHSL", opts: ["Calcium Hydroxide", "Calcium Oxide", "Calcium Carbonate", "Calcium Sulphate"], ansText: "Calcium Hydroxide", why: "Important PYQ Fact." },
+    { q: "What is the chemical formula for Plaster of Paris (used in bone fractures)?", tag: "SSC CGL", opts: ["CaSO4.2H2O", "CaSO4.1/2H2O", "CaSO4.10H2O", "CaSO4.5H2O"], ansText: "CaSO4.1/2H2O", why: "Important PYQ Fact." },
+    { q: "What is the chemical formula for Gypsum (used in cement manufacturing)?", tag: "RRB Group D", opts: ["CaSO4.1/2H2O", "CaSO4.2H2O", "CaSO4.5H2O", "CaSO4.10H2O"], ansText: "CaSO4.2H2O", why: "Important PYQ Fact." },
+    { q: "Which chemical compound is commonly known as Bleaching Powder?", tag: "SSC MTS", opts: ["CaOCl2", "CaCO3", "Ca(OH)2", "CaCl2"], ansText: "CaOCl2", why: "Important PYQ Fact." },
+    { q: "Which of the following chemical compounds is commercially known as 'Epsom Salt'?", tag: "SSC GD", opts: ["Magnesium Sulphate", "Calcium Sulphate", "Sodium Sulphate", "Potassium Sulphate"], ansText: "Magnesium Sulphate", why: "Important PYQ Fact." },
+    { q: "Which of the following compounds is traditionally known as 'Philosopher's Wool'?", tag: "SSC CGL", opts: ["Zinc Oxide", "Zinc Sulphide", "Zinc Carbonate", "Zinc Chloride"], ansText: "Zinc Oxide", why: "Important PYQ Fact." },
+    { q: "Aqua Regia, which can dissolve gold, is a mixture of HCl and HNO3 in the ratio:", tag: "RRB NTPC", opts: ["3:1", "1:3", "2:1", "1:2"], ansText: "3:1", why: "Important PYQ Fact." },
+    { q: "Which important metal naturally occurs as the central atom in Chlorophyll?", tag: "SSC CHSL", opts: ["Magnesium", "Iron", "Cobalt", "Zinc"], ansText: "Magnesium", why: "Important PYQ Fact." },
+    { q: "Which important metal naturally occurs as the central atom in Hemoglobin?", tag: "SSC CPO", opts: ["Iron", "Magnesium", "Cobalt", "Zinc"], ansText: "Iron", why: "Important PYQ Fact." },
+    { q: "Which important metal naturally occurs in the structure of Vitamin B12?", tag: "SSC CGL", opts: ["Cobalt", "Iron", "Magnesium", "Zinc"], ansText: "Cobalt", why: "Important PYQ Fact." },
+    { q: "Which important metal is intrinsically linked to the function of Insulin?", tag: "SSC MTS", opts: ["Zinc", "Cobalt", "Iron", "Magnesium"], ansText: "Zinc", why: "Important PYQ Fact." },
+    { q: "The notorious Minamata disease was caused by severe poisoning of which metal?", tag: "RRB Group D", opts: ["Mercury", "Cadmium", "Lead", "Arsenic"], ansText: "Mercury", why: "Important PYQ Fact." },
+    { q: "The painful Itai-Itai disease was caused by severe poisoning of which metal?", tag: "SSC CHSL", opts: ["Cadmium", "Mercury", "Lead", "Arsenic"], ansText: "Cadmium", why: "Important PYQ Fact." },
+    { q: "The condition known as Plumbism is directly caused by the toxicity of:", tag: "SSC CGL", opts: ["Lead", "Mercury", "Cadmium", "Arsenic"], ansText: "Lead", why: "Important PYQ Fact." },
+    { q: "Wilson's disease is a genetic disorder resulting in the toxic accumulation of:", tag: "SSC CPO", opts: ["Copper", "Iron", "Zinc", "Manganese"], ansText: "Copper", why: "Important PYQ Fact." },
+    { q: "Which gas is responsible for the discoloration of brass in open air over time?", tag: "SSC GD", opts: ["Hydrogen Sulphide", "Carbon Dioxide", "Nitrogen Dioxide", "Sulphur Dioxide"], ansText: "Hydrogen Sulphide", why: "Important PYQ Fact." },
+    { q: "Which non-metal gas is extensively used for the large-scale purification of water?", tag: "RRB NTPC", opts: ["Chlorine", "Fluorine", "Nitrogen", "Hydrogen"], ansText: "Chlorine", why: "Important PYQ Fact." },
+    { q: "Which non-metal element is essential for the process of vulcanization of rubber?", tag: "SSC CHSL", opts: ["Sulphur", "Phosphorus", "Carbon", "Silicon"], ansText: "Sulphur", why: "Important PYQ Fact." },
+    { q: "Which non-metal is historically used on the striking surface of safety matchboxes?", tag: "SSC MTS", opts: ["Red Phosphorus", "White Phosphorus", "Yellow Sulphur", "Black Carbon"], ansText: "Red Phosphorus", why: "Important PYQ Fact." },
+    { q: "Which acid is so corrosive that it dissolves glass and cannot be kept in glass bottles?", tag: "SSC CGL", opts: ["Hydrofluoric Acid", "Hydrochloric Acid", "Sulphuric Acid", "Nitric Acid"], ansText: "Hydrofluoric Acid", why: "Important PYQ Fact." },
+    { q: "Which of the following is the most electronegative element in the periodic table?", tag: "RRB Group D", opts: ["Fluorine", "Chlorine", "Oxygen", "Nitrogen"], ansText: "Fluorine", why: "Important PYQ Fact." },
+    { q: "Which of the following is the most electropositive element in the periodic table?", tag: "SSC CPO", opts: ["Francium", "Sodium", "Potassium", "Lithium"], ansText: "Francium", why: "Important PYQ Fact." },
+    { q: "Which element in the periodic table possesses the highest electron affinity?", tag: "SSC CHSL", opts: ["Chlorine", "Fluorine", "Oxygen", "Sulphur"], ansText: "Chlorine", why: "Important PYQ Fact." },
+    { q: "Which of the following is an example of a completely monoatomic gas?", tag: "SSC CGL", opts: ["Helium", "Oxygen", "Nitrogen", "Chlorine"], ansText: "Helium", why: "Important PYQ Fact." },
+    { q: "Which common gas turns clear lime water milky due to carbonate formation?", tag: "RRB NTPC", opts: ["Carbon Dioxide", "Carbon Monoxide", "Nitrogen Dioxide", "Hydrogen Sulphide"], ansText: "Carbon Dioxide", why: "Important PYQ Fact." },
+    { q: "The brilliant crimson red color in fireworks is caused by the presence of:", tag: "SSC MTS", opts: ["Strontium", "Barium", "Sodium", "Copper"], ansText: "Strontium", why: "Important PYQ Fact." },
+    { q: "The brilliant apple green color in fireworks is caused by the presence of:", tag: "SSC CPO", opts: ["Barium", "Strontium", "Sodium", "Copper"], ansText: "Barium", why: "Important PYQ Fact." }
+          ]
+
+        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid", userName = "";
+        let previousView = null;
+
+        const views = { start: document.getElementById('start-view'), mode: document.getElementById('mode-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
+
+        // --- LOCAL STORAGE LOGIC ---
+        // CHANGED KEY TO START FRESH FOR NEW TOPIC
+        const LB_KEY = 'metal_nonmetal'; 
+
+        function loadLeaderboard() {
+            const data = localStorage.getItem(LB_KEY);
+            if (data) leaderboard = JSON.parse(data);
+            updateLeaderboardUI();
+        }
+        function saveLeaderboard() {
+            localStorage.setItem(LB_KEY, JSON.stringify(leaderboard));
+        }
+        function clearLeaderboard() {
+            if(confirm("Clear history?")) {
+                leaderboard = [];
+                saveLeaderboard();
+                updateLeaderboardUI();
+            }
+        }
+        window.onload = loadLeaderboard;
+
+        // --- NAVIGATION ---
+        function goToModeSelection() {
+            userName = document.getElementById('username').value.trim();
+            if (!userName) return alert("Please enter your name");
+            views.start.classList.add('hidden');
+            views.mode.classList.remove('hidden');
+        }
+        function backToStart() { views.mode.classList.add('hidden'); views.start.classList.remove('hidden'); }
+        
+        function startRapidFire() { mode = "rapid"; initQuiz(); }
+        function startPractice() { mode = "practice"; initQuiz(); }
+
+        // --- QUIZ LOGIC ---
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+        function initQuiz() {
+            activeQ = shuffle(JSON.parse(JSON.stringify(MASTER_DATA))).map(q => {
+                let s = shuffle([...q.opts]);
+                return { ...q, opts: s, ans: s.indexOf(q.ansText) };
+            });
+            
+            currentIdx = 0; 
+            userAnswers = Array(activeQ.length).fill(-1);
+            
+            views.mode.classList.add('hidden'); 
+            views.quiz.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.remove('hidden');
+            
+            document.getElementById('user-display').innerText = userName;
+            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'RAPID FIRE' : 'PRACTICE';
+            
+            if(mode === 'rapid') {
+                document.getElementById('nav-buttons').classList.add('hidden');
+                document.getElementById('question-indicator').classList.add('hidden');
+                document.getElementById('timer-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-buttons').classList.remove('hidden');
+                document.getElementById('question-indicator').classList.remove('hidden');
+                document.getElementById('timer-badge').classList.add('hidden');
+                document.getElementById('current-q-num').innerText = 1;
+                document.getElementById('total-q-num').innerText = activeQ.length;
+            }
+            
+            renderQ();
+        }
+
+        function renderQ() {
+            const q = activeQ[currentIdx];
+            document.getElementById('question-text').innerText = `Q${currentIdx+1}. ${q.q}`;
+            document.getElementById('pyq-tag').innerText = q.tag;
+            document.getElementById('progress-bar').style.width = `${((currentIdx+1)/activeQ.length)*100}%`;
+            
+            if(mode === 'practice') document.getElementById('current-q-num').innerText = currentIdx + 1;
+
+            const cont = document.getElementById('options-container');
+            cont.innerHTML = '';
+            
+            q.opts.forEach((o, i) => {
+                const btn = document.createElement('button');
+                let sel = userAnswers[currentIdx] === i;
+                btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-medium border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50`;
+                
+                if (sel) {
+                    btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-bold border-blue-500 bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-500`;
+                }
+
+                btn.innerText = o;
+                btn.onclick = () => handleSelect(i);
+                cont.appendChild(btn);
+            });
+
+            if(mode === 'practice') {
+                document.getElementById('prev-btn').disabled = currentIdx === 0;
+                document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
+            } else {
+                startTimer();
+            }
+        }
+
+        function handleSelect(i) {
+            userAnswers[currentIdx] = i;
+            renderQ();
+
+            if (mode === 'rapid') {
+                clearInterval(timerId);
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } 
+                    else finish();
+                }, 400);
+            } else {
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
+                }, 400);
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerId); 
+            let t = 20;
+            const el = document.getElementById('timer'); 
+            el.innerText = t;
+            
+            timerId = setInterval(() => {
+                t--; 
+                el.innerText = t;
+                if(t <= 0) { 
+                    clearInterval(timerId); 
+                    if(userAnswers[currentIdx] === -1) handleSelect(-1); 
+                }
+            }, 1000);
+        }
+
+        function prevQ() { if(currentIdx > 0) { currentIdx--; renderQ(); } }
+        function nextQ() { if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } }
+        function submitQuiz() { if(confirm("Submit Test?")) finish(); }
+
+        function finish() {
+            clearInterval(timerId);
+            views.quiz.classList.replace('flex', 'hidden'); 
+            views.result.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.add('hidden');
+
+            let m = 0, c = 0, w = 0, s = 0;
+            userAnswers.forEach((a, i) => {
+                if (a === activeQ[i].ans) { m += 1; c++; }
+                else if (a === -1) { s++; }
+                else { m -= 0.25; w++; }
+            });
+
+            document.getElementById('result-name').innerText = userName;
+            document.getElementById('final-score').innerText = m.toFixed(2);
+            document.getElementById('correct-count').innerText = c;
+            document.getElementById('wrong-count').innerText = w;
+            document.getElementById('skip-count').innerText = s;
+
+            leaderboard.push({
+                name: userName,
+                score: m,
+                date: new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
+                mode: mode,
+                qSet: activeQ, 
+                history: userAnswers
+            });
+            saveLeaderboard();
+            updateLeaderboardUI();
+        }
+
+        function updateLeaderboardUI() {
+            leaderboard.sort((a,b) => b.score - a.score);
+            const list = document.getElementById('start-leaderboard-list');
+            
+            if (leaderboard.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
+                return;
+            }
+
+            let currentRank = 1;
+            
+            list.innerHTML = leaderboard.map((e, i) => {
+                if (i > 0 && e.score < leaderboard[i-1].score) currentRank = currentRank + 1;
+                
+                let icon = e.mode === 'rapid' ? '🔥' : '📚';
+                let medal = currentRank === 1 ? '🥇' : currentRank === 2 ? '🥈' : currentRank === 3 ? '🥉' : `<span class="text-slate-400 font-bold text-sm">#${currentRank}</span>`;
+
+                return `
+                <div onclick="viewHistory(${i})" class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition-colors group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 flex justify-center text-xl">${medal}</div>
+                        <div>
+                            <div class="font-bold text-slate-700 text-sm group-hover:text-blue-700">${e.name}</div>
+                            <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                <span>${icon}</span> ${e.date}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-slate-800 text-sm">${e.score.toFixed(2)}</div>
+                        <div class="text-[9px] text-blue-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">VIEW</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // --- NEW LOADING & STATS LOGIC ---
+        function viewHistory(idx) {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex'); // Show Spinner
+            
+            // Artificial delay to let UI breathe and show spinner
+            setTimeout(() => {
+                previousView = views.start;
+                views.start.classList.add('hidden');
+                renderReview(leaderboard[idx].history, leaderboard[idx].qSet, leaderboard[idx].name);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden'); // Hide Spinner
+            }, 500); 
+        }
+
+        function showReviewFromResults() {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex');
+            setTimeout(() => {
+                previousView = views.result;
+                views.result.classList.replace('flex', 'hidden');
+                renderReview(userAnswers, activeQ, userName);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden');
+            }, 500);
+        }
+
+        function renderReview(answers, qData, pName) {
+            views.review.classList.replace('hidden', 'flex');
+            document.getElementById('review-player-name').innerText = pName;
+            
+            // Calculate Stats for Header
+            let c=0, w=0, s=0;
+            answers.forEach((a, i) => { if(a === qData[i].ans) c++; else if(a === -1) s++; else w++; });
+            
+            document.getElementById('review-stats').innerHTML = `
+                <span class="text-green-600">Correct: ${c}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-red-500">Wrong: ${w}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-500">Skipped: ${s}</span>
+            `;
+
+            const cont = document.getElementById('review-container');
+            cont.innerHTML = ''; // Clear previous content
+
+            // Use DocumentFragment for performance with large lists
+            const fragment = document.createDocumentFragment();
+
+            answers.forEach((ansIdx, i) => {
+                const q = qData[i];
+                let statusClass = ansIdx === q.ans ? 'text-green-600 bg-green-50 border-green-100' : ansIdx === -1 ? 'text-slate-500 bg-slate-50 border-slate-100' : 'text-red-500 bg-red-50 border-red-100';
+                let statusText = ansIdx === q.ans ? 'CORRECT (+1)' : ansIdx === -1 ? 'SKIPPED' : 'WRONG (-0.25)';
+
+                let optsHtml = q.opts.map((o, idx) => {
+                    let style = "border-slate-100 text-slate-500";
+                    let icon = "";
+                    if (idx === q.ans) { style = "bg-green-50 border-green-200 text-green-800 font-bold"; icon = "✅"; }
+                    else if (idx === ansIdx) { style = "bg-red-50 border-red-200 text-red-800 line-through"; icon = "❌"; }
+                    return `<div class="p-2.5 rounded-lg border text-xs flex justify-between items-center ${style}">${o} <span>${icon}</span></div>`;
+                }).join('');
+
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm shrink-0";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-slate-400 text-xs">Q${i+1}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-1 leading-relaxed">${q.q}</p>
+                    <p class="text-[10px] text-slate-400 font-mono mb-3">${q.tag}</p>
+                    <div class="space-y-1.5 mb-3">${optsHtml}</div>
+                    <div class="mt-2 text-xs text-yellow-800 bg-yellow-50 border border-yellow-200 p-2.5 rounded-lg leading-relaxed flex gap-2">
+                        <span>💡</span>
+                        <span>${q.why}</span>
+                    </div>`;
+                fragment.appendChild(div);
+            });
+            
+            cont.appendChild(fragment);
+        }
+
+        function closeReview() {
+            views.review.classList.replace('flex', 'hidden');
+            previousView.classList.remove('hidden');
+            if(previousView === views.result) previousView.classList.add('flex');
+        }
+
+        function resetApp() {
+            clearInterval(timerId);
+            document.getElementById('username').value = "";
+            views.result.classList.replace('flex', 'hidden');
+            views.start.classList.remove('hidden');
+            document.getElementById('header').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+```
