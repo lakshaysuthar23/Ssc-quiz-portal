@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science- April Major</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
+        .btn-option { transition: all 0.15s ease; border-width: 2px; }
+        .btn-option:active { transform: scale(0.99); }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 h-screen overflow-hidden">
+
+    <div id="app" class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in relative flex flex-col h-[85vh] md:h-[90vh]">
+        
+        <!-- HEADER -->
+        <div id="header" class="bg-white p-4 flex justify-between items-center border-b border-slate-100 shrink-0 hidden">
+            <div class="flex flex-col">
+                <span class="font-bold text-slate-800 text-sm" id="user-display">Player</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase" id="mode-display">RAPID FIRE</span>
+            </div>
+            <div id="timer-badge" class="flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-mono font-bold text-sm">
+                ⏱️ <span id="timer">20</span>s
+            </div>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white/80 z-50 hidden flex-col items-center justify-center backdrop-blur-sm">
+            <div class="spinner mb-2"></div>
+            <p class="text-sm font-bold text-slate-600">Loading History...</p>
+        </div>
+
+        <!-- VIEW 1: START SCREEN -->
+        <div id="start-view" class="h-full overflow-hidden flex flex-col">
+            <div class="p-8 flex flex-col items-center text-center shrink-0 overflow-y-auto">
+                <div class="text-5xl mb-4">🏛️</div>
+                <h1 class="text-2xl font-bold text-slate-800 mb-2">Science - Unit-measurement, Pessure, Temp, Waves & Sound</h1>
+                <p class="text-slate-500 mb-6 text-sm">
+                    50 Quality Qs<br>
+                    <span class="text-green-600 font-bold">+1.0</span> • <span class="text-red-500 font-bold">-0.25</span>
+                </p>
+                <input type="text" id="username" placeholder="Enter Name" class="w-full p-3 border border-slate-300 rounded-xl mb-4 text-center font-bold text-slate-700 outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors">
+                <button onclick="goToModeSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-blue-200 mb-8">Continue</button>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-100 p-4 flex-1 overflow-y-auto min-h-0">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leaderboard</h3>
+                    <button onclick="clearLeaderboard()" class="text-[10px] text-red-400 hover:text-red-600 font-bold">CLEAR HISTORY</button>
+                </div>
+                <div id="start-leaderboard-list" class="space-y-2 pb-4">
+                    <p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: MODE SELECTION -->
+        <div id="mode-view" class="h-full overflow-y-auto flex flex-col hidden">
+            <div class="p-8 flex flex-col items-center text-center shrink-0">
+                <h1 class="text-2xl font-bold text-slate-800 mb-6">Select Mode</h1>
+                <div class="flex flex-col gap-4 w-full">
+                    <div onclick="startRapidFire()" class="cursor-pointer group p-5 border-2 border-orange-200 bg-orange-50 rounded-xl hover:border-orange-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-orange-900 flex items-center gap-2">🔥 Rapid Fire</div>
+                        <p class="text-xs text-orange-700 mt-1 font-medium">20s Timer • No-Skip</p>
+                    </div>
+                    <div onclick="startPractice()" class="cursor-pointer group p-5 border-2 border-green-200 bg-green-50 rounded-xl hover:border-green-400 hover:shadow-md transition-all text-left">
+                        <div class="font-bold text-green-900 flex items-center gap-2">📚 Practice Mode</div>
+                        <p class="text-xs text-green-700 mt-1 font-medium">No Timer • Review before submit</p>
+                    </div>
+                </div>
+                <button onclick="backToStart()" class="mt-8 text-slate-400 hover:text-slate-600 font-bold text-sm">← Back</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: QUIZ -->
+        <div id="quiz-view" class="p-6 hidden flex-col h-full overflow-y-auto">
+            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-6 shrink-0 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="mb-6 shrink-0">
+                <h2 id="question-text" class="text-lg font-bold text-slate-800 leading-relaxed">Loading...</h2>
+                <div id="pyq-tag" class="inline-block mt-2 px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-mono text-slate-500 font-medium"></div>
+            </div>
+            <div id="options-container" class="space-y-3 pb-4 flex-1"></div>
+            <div id="nav-buttons" class="hidden shrink-0 border-t border-slate-100 pt-4 mt-2 flex gap-3">
+                <button onclick="prevQ()" id="prev-btn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50">← Prev</button>
+                <button onclick="submitQuiz()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow-sm">Submit</button>
+                <button onclick="nextQ()" id="next-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-colors disabled:opacity-50 shadow-sm">Next →</button>
+            </div>
+            <div id="question-indicator" class="hidden shrink-0 text-center text-[10px] text-slate-400 font-bold mt-3">
+                <span id="current-q-num">1</span> / <span id="total-q-num">50</span>
+            </div>
+        </div>
+
+        <!-- VIEW 4: RESULT -->
+        <div id="result-view" class="hidden flex-col h-full overflow-y-auto">
+            <div class="p-8 text-center shrink-0">
+                <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Test Completed</h2>
+                <p class="text-slate-500 text-sm mb-6 font-medium" id="result-name">Well done</p>
+                <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200">
+                    <div class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">FINAL SCORE</div>
+                    <div id="final-score" class="text-6xl font-black text-blue-600 leading-none mb-4 tracking-tight">0</div>
+                    <div class="flex justify-center gap-6 text-sm font-bold border-t border-slate-200 pt-4">
+                        <span class="text-green-600 flex items-center gap-1">✅ <span id="correct-count">0</span></span>
+                        <span class="text-red-500 flex items-center gap-1">❌ <span id="wrong-count">0</span></span>
+                        <span class="text-slate-400 flex items-center gap-1">⚪ <span id="skip-count">0</span></span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="showReviewFromResults()" class="w-full bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-xl transition-colors text-sm">📄 Review Solutions</button>
+                    <button onclick="resetApp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-md shadow-blue-200">🔄 Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: REVIEW HISTORY -->
+        <div id="review-view" class="hidden flex-col h-full bg-slate-50">
+            <div class="p-4 bg-white border-b border-slate-200 flex flex-col gap-2 shrink-0 shadow-sm z-10">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 text-sm">Science: <span id="review-player-name" class="text-blue-600"></span></h3>
+                    <button onclick="closeReview()" class="text-blue-600 font-bold text-xs hover:underline bg-blue-50 px-3 py-1 rounded-full">CLOSE</button>
+                </div>
+                <div id="review-stats" class="text-[10px] flex gap-3 font-bold text-slate-500">
+                    <!-- Stats injected here -->
+                </div>
+            </div>
+            <div id="review-container" class="flex-1 p-4 overflow-y-auto min-h-0 space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- MASTER DATA ---
+        // (Insert the full 100 questions here. I'm using the 5 you provided + will assume you paste the 95 batch)
+        const MASTER_DATA = [
+          { q: "1 Angstrom is equal to which of the following?", tag: "Unit", opts: ["10^-8 meter", "10^-10 meter", "10^-12 meter", "10^-15 meter"], ansText: "10^-10 meter", why: "Important PYQ Fact." },
+    { q: "One Megawatt is equal to how many Watts?", tag: "Unit", opts: ["10^3 Watt", "10^6 Watt", "10^9 Watt", "10^12 Watt"], ansText: "10^6 Watt", why: "Important PYQ Fact." },
+    { q: "Astronomical unit is the average distance between?", tag: "Unit", opts: ["Earth and Moon", "Earth and Sun", "Jupiter and Sun", "Mars and Sun"], ansText: "Earth and Sun", why: "Important PYQ Fact." },
+    { q: "What is the SI unit of Electric Resistance?", tag: "Unit", opts: ["Ampere", "Volts", "Ohms", "Watts"], ansText: "Ohms", why: "Important PYQ Fact." },
+    { q: "1 Kilogram weight is equal to how many Newtons?", tag: "Unit", opts: ["9.8 Newton", "98 Newton", "0.98 Newton", "980 Newton"], ansText: "9.8 Newton", why: "Important PYQ Fact." },
+    { q: "Pressure at depth 'h' in a liquid of density 'd' is given by?", tag: "Pressure", opts: ["h + d + g", "h * d * g", "h / d * g", "h * d / g"], ansText: "h * d * g", why: "Important PYQ Fact." },
+    { q: "Hydraulic brakes work strictly on the principle of?", tag: "Pressure", opts: ["Newton's Law", "Pascal's Law", "Boyle's Law", "Charles's Law"], ansText: "Pascal's Law", why: "Important PYQ Fact." },
+    { q: "A sudden fall in the barometer reading indicates?", tag: "Pressure", opts: ["Clear weather", "Rainy weather", "Stormy weather", "Cold weather"], ansText: "Stormy weather", why: "Important PYQ Fact." },
+    { q: "1 standard atmospheric pressure (1 atm) is equal to?", tag: "Pressure", opts: ["1.013 x 10^5 Pa", "1.013 x 10^4 Pa", "1.013 x 10^3 Pa", "1.013 x 10^2 Pa"], ansText: "1.013 x 10^5 Pa", why: "Important PYQ Fact." },
+    { q: "The instrument used to measure atmospheric pressure is?", tag: "Pressure", opts: ["Thermometer", "Hygrometer", "Barometer", "Manometer"], ansText: "Barometer", why: "Important PYQ Fact." },
+    { q: "Normal temperature of the human body in Kelvin scale is?", tag: "Temperature", opts: ["273 K", "298 K", "310 K", "373 K"], ansText: "310 K", why: "Important PYQ Fact." },
+    { q: "At what temperature do Celsius and Fahrenheit scales show the same reading?", tag: "Temperature", opts: ["-40 Degree", "-32 Degree", "-273 Degree", "-200 Degree"], ansText: "-40 Degree", why: "Important PYQ Fact." },
+    { q: "What is the exact boiling point of water on the Fahrenheit scale?", tag: "Temperature", opts: ["100 Degree F", "212 Degree F", "373 Degree F", "273 Degree F"], ansText: "212 Degree F", why: "Important PYQ Fact." },
+    { q: "The instrument used to measure very high temperature (like the sun) is?", tag: "Temperature", opts: ["Thermometer", "Pyrometer", "Barometer", "Hygrometer"], ansText: "Pyrometer", why: "Important PYQ Fact." },
+    { q: "Heat energy always flows from a body at?", tag: "Temperature", opts: ["Lower to Higher Temp", "Higher to Lower Temp", "Same Temperatures", "None of the above"], ansText: "Higher to Lower Temp", why: "Important PYQ Fact." },
+    { q: "Which of the following is NOT an electromagnetic wave?", tag: "Waves", opts: ["X-Rays", "Light Rays", "Sound Waves", "Radio Waves"], ansText: "Sound Waves", why: "Important PYQ Fact." },
+    { q: "The waves which require a material medium for their propagation are called?", tag: "Waves", opts: ["Mechanical Waves", "Electromagnetic", "Matter Waves", "None of the above"], ansText: "Mechanical Waves", why: "Important PYQ Fact." },
+    { q: "Distance between two consecutive crests or troughs is called?", tag: "Waves", opts: ["Frequency", "Amplitude", "Wavelength", "Time Period"], ansText: "Wavelength", why: "Important PYQ Fact." },
+    { q: "What is the standard SI unit of wave frequency?", tag: "Waves", opts: ["Meter", "Hertz", "Joule", "Pascal"], ansText: "Hertz", why: "Important PYQ Fact." },
+    { q: "The relation between wave velocity (v), frequency (n), and wavelength (L) is?", tag: "Waves", opts: ["v = n / L", "v = L / n", "v = n * L", "v = n + L"], ansText: "v = n * L", why: "Important PYQ Fact." },
+    { q: "Which of the following electromagnetic waves has the highest frequency?", tag: "Waves", opts: ["Radio Waves", "Micro Waves", "Gamma Rays", "X-Rays"], ansText: "Gamma Rays", why: "Important PYQ Fact." },
+    { q: "Which of the following electromagnetic waves has the longest wavelength?", tag: "Waves", opts: ["Radio Waves", "Micro Waves", "Gamma Rays", "Infrared Rays"], ansText: "Radio Waves", why: "Important PYQ Fact." },
+    { q: "The speed of all electromagnetic waves in a vacuum is equal to?", tag: "Waves", opts: ["3 x 10^8 m/s", "3 x 10^10 m/s", "3 x 10^6 m/s", "3 x 10^4 m/s"], ansText: "3 x 10^8 m/s", why: "Important PYQ Fact." },
+    { q: "Infrared radiation was originally discovered by which scientist?", tag: "Waves", opts: ["William Herschel", "Johann Ritter", "Heinrich Hertz", "Isaac Newton"], ansText: "William Herschel", why: "Important PYQ Fact." },
+    { q: "Ultraviolet (UV) rays were originally discovered by which scientist?", tag: "Waves", opts: ["William Herschel", "Johann Ritter", "Heinrich Hertz", "Isaac Newton"], ansText: "Johann Ritter", why: "Important PYQ Fact." },
+    { q: "The phenomenon of bending of light waves around the corners of an obstacle is?", tag: "Waves", opts: ["Interference", "Polarisation", "Diffraction", "Refraction"], ansText: "Diffraction", why: "Important PYQ Fact." },
+    { q: "Cathode rays consist of a high-speed stream of?", tag: "Waves", opts: ["Protons", "Neutrons", "Electrons", "Positrons"], ansText: "Electrons", why: "Important PYQ Fact." },
+    { q: "Water waves produced on the surface of a pond are examples of?", tag: "Waves", opts: ["Transverse Waves", "Longitudinal Waves", "Electromagnetic", "None of the above"], ansText: "Transverse Waves", why: "Important PYQ Fact." },
+    { q: "The energy of a wave is directly proportional to the?", tag: "Waves", opts: ["Square of Amplitude", "Square of Frequency", "Square of Wavelength", "Square of Velocity"], ansText: "Square of Amplitude", why: "Important PYQ Fact." },
+    { q: "The maximum displacement of a vibrating particle from its mean position is?", tag: "Waves", opts: ["Frequency", "Wavelength", "Amplitude", "Time Period"], ansText: "Amplitude", why: "Important PYQ Fact." },
+    { q: "Sound waves traveling through the air are a perfect example of?", tag: "Sound Waves", opts: ["Transverse Waves", "Longitudinal Waves", "Electromagnetic", "Stationary Waves"], ansText: "Longitudinal Waves", why: "Important PYQ Fact." },
+    { q: "In which of the following mediums is the speed of sound the maximum?", tag: "Sound Waves", opts: ["Solid Medium", "Liquid Medium", "Gaseous Medium", "Vacuum Medium"], ansText: "Solid Medium", why: "Important PYQ Fact." },
+    { q: "What is the actual speed of sound in a complete vacuum?", tag: "Sound Waves", opts: ["332 m/s", "3000 m/s", "0 m/s (Zero)", "3 * 10^8 m/s"], ansText: "0 m/s (Zero)", why: "Important PYQ Fact." },
+    { q: "What is the normal audible frequency range for a healthy human ear?", tag: "Sound Waves", opts: ["20 Hz to 20,000 Hz", "2 Hz to 2,000 Hz", "200 Hz to 20,000 Hz", "20 Hz to 2,000 Hz"], ansText: "20 Hz to 20,000 Hz", why: "Important PYQ Fact." },
+    { q: "Sound waves having a frequency higher than 20,000 Hz are properly called?", tag: "Sound Waves", opts: ["Infrasonic Waves", "Ultrasonic Waves", "Audible Waves", "Supersonic Waves"], ansText: "Ultrasonic Waves", why: "Important PYQ Fact." },
+    { q: "Which of the following animals actively uses ultrasonic waves for navigation?", tag: "Sound Waves", opts: ["Dogs", "Cats", "Bats", "Elephants"], ansText: "Bats", why: "Important PYQ Fact." },
+    { q: "What is the approximate speed of sound in air at 0 degree Celsius?", tag: "Sound Waves", opts: ["332 m/s", "1450 m/s", "5130 m/s", "3 * 10^8 m/s"], ansText: "332 m/s", why: "Important PYQ Fact." },
+    { q: "The pitch of a sound depends primarily on its?", tag: "Sound Waves", opts: ["Amplitude", "Frequency", "Wavelength", "Velocity"], ansText: "Frequency", why: "Important PYQ Fact." },
+    { q: "The loudness or intensity of a sound depends primarily on its?", tag: "Sound Waves", opts: ["Amplitude", "Frequency", "Wavelength", "Velocity"], ansText: "Amplitude", why: "Important PYQ Fact." },
+    { q: "What is the standard practical unit used for measuring the loudness of sound?", tag: "Sound Waves", opts: ["Hertz", "Decibel", "Pascal", "Newton"], ansText: "Decibel", why: "Important PYQ Fact." },
+    { q: "What is the minimum physical distance required to hear a distinct echo?", tag: "Sound Waves", opts: ["10 Meters", "17 Meters", "25 Meters", "34 Meters"], ansText: "17 Meters", why: "Important PYQ Fact." },
+    { q: "SONAR works effectively on the principle of reflection of which type of waves?", tag: "Sound Waves", opts: ["Infrasonic Waves", "Ultrasonic Waves", "Radio Waves", "Light Waves"], ansText: "Ultrasonic Waves", why: "Important PYQ Fact." },
+    { q: "The apparent change in frequency of sound due to relative motion is called?", tag: "Sound Waves", opts: ["Raman Effect", "Doppler Effect", "Compton Effect", "Zeeman Effect"], ansText: "Doppler Effect", why: "Important PYQ Fact." },
+    { q: "Which wave phenomenon firmly proves that sound waves are longitudinal and not transverse?", tag: "Sound Waves", opts: ["Reflection", "Refraction", "Diffraction", "Polarisation"], ansText: "Polarisation", why: "Important PYQ Fact." },
+    { q: "When the temperature of the air increases, the speed of sound in air?", tag: "Sound Waves", opts: ["Increases", "Decreases", "Remains Same", "Becomes Zero"], ansText: "Increases", why: "Important PYQ Fact." },
+    { q: "If the frequency of a tuning fork is exactly 50 Hz, what is its time period?", tag: "Sound Waves", opts: ["0.5 Seconds", "0.2 Seconds", "0.05 Seconds", "0.02 Seconds"], ansText: "0.02 Seconds", why: "Important PYQ Fact." },
+    { q: "The speed of sound is strictly minimum in which of the following states of matter?", tag: "Sound Waves", opts: ["Solid State", "Liquid State", "Gaseous State", "Plasma State"], ansText: "Gaseous State", why: "Important PYQ Fact." },
+    { q: "The Mach number is commonly used in connection with the speed of?", tag: "Sound Waves", opts: ["Ships", "Cars", "Aircrafts", "Trains"], ansText: "Aircrafts", why: "Important PYQ Fact." },
+    { q: "Sound waves having a frequency distinctly lower than 20 Hz are called?", tag: "Sound Waves", opts: ["Infrasonic Waves", "Ultrasonic Waves", "Audible Waves", "Supersonic Waves"], ansText: "Infrasonic Waves", why: "Important PYQ Fact." },
+    { q: "Which specific equipment is used to measure the depth of the ocean using sound waves?", tag: "Sound Waves", opts: ["Radar", "Sonar", "Lidar", "Altimeter"], ansText: "Sonar", why: "Important PYQ Fact." }
+        ]
+
+        let activeQ = [], currentIdx = 0, timerId, userAnswers = [], leaderboard = [], mode = "rapid", userName = "";
+        let previousView = null;
+
+        const views = { start: document.getElementById('start-view'), mode: document.getElementById('mode-view'), quiz: document.getElementById('quiz-view'), result: document.getElementById('result-view'), review: document.getElementById('review-view') };
+
+        // --- LOCAL STORAGE LOGIC ---
+        // CHANGED KEY TO START FRESH FOR NEW TOPIC
+        const LB_KEY = 'five-science-topics-major-april'; 
+
+        function loadLeaderboard() {
+            const data = localStorage.getItem(LB_KEY);
+            if (data) leaderboard = JSON.parse(data);
+            updateLeaderboardUI();
+        }
+        function saveLeaderboard() {
+            localStorage.setItem(LB_KEY, JSON.stringify(leaderboard));
+        }
+        function clearLeaderboard() {
+            if(confirm("Clear history?")) {
+                leaderboard = [];
+                saveLeaderboard();
+                updateLeaderboardUI();
+            }
+        }
+        window.onload = loadLeaderboard;
+
+        // --- NAVIGATION ---
+        function goToModeSelection() {
+            userName = document.getElementById('username').value.trim();
+            if (!userName) return alert("Please enter your name");
+            views.start.classList.add('hidden');
+            views.mode.classList.remove('hidden');
+        }
+        function backToStart() { views.mode.classList.add('hidden'); views.start.classList.remove('hidden'); }
+        
+        function startRapidFire() { mode = "rapid"; initQuiz(); }
+        function startPractice() { mode = "practice"; initQuiz(); }
+
+        // --- QUIZ LOGIC ---
+        function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+        function initQuiz() {
+            activeQ = shuffle(JSON.parse(JSON.stringify(MASTER_DATA))).map(q => {
+                let s = shuffle([...q.opts]);
+                return { ...q, opts: s, ans: s.indexOf(q.ansText) };
+            });
+            
+            currentIdx = 0; 
+            userAnswers = Array(activeQ.length).fill(-1);
+            
+            views.mode.classList.add('hidden'); 
+            views.quiz.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.remove('hidden');
+            
+            document.getElementById('user-display').innerText = userName;
+            document.getElementById('mode-display').innerText = mode === 'rapid' ? 'RAPID FIRE' : 'PRACTICE';
+            
+            if(mode === 'rapid') {
+                document.getElementById('nav-buttons').classList.add('hidden');
+                document.getElementById('question-indicator').classList.add('hidden');
+                document.getElementById('timer-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-buttons').classList.remove('hidden');
+                document.getElementById('question-indicator').classList.remove('hidden');
+                document.getElementById('timer-badge').classList.add('hidden');
+                document.getElementById('current-q-num').innerText = 1;
+                document.getElementById('total-q-num').innerText = activeQ.length;
+            }
+            
+            renderQ();
+        }
+
+        function renderQ() {
+            const q = activeQ[currentIdx];
+            document.getElementById('question-text').innerText = `Q${currentIdx+1}. ${q.q}`;
+            document.getElementById('pyq-tag').innerText = q.tag;
+            document.getElementById('progress-bar').style.width = `${((currentIdx+1)/activeQ.length)*100}%`;
+            
+            if(mode === 'practice') document.getElementById('current-q-num').innerText = currentIdx + 1;
+
+            const cont = document.getElementById('options-container');
+            cont.innerHTML = '';
+            
+            q.opts.forEach((o, i) => {
+                const btn = document.createElement('button');
+                let sel = userAnswers[currentIdx] === i;
+                btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-medium border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50`;
+                
+                if (sel) {
+                    btn.className = `btn-option w-full p-4 rounded-xl text-left text-sm font-bold border-blue-500 bg-blue-50 text-blue-800 shadow-sm ring-1 ring-blue-500`;
+                }
+
+                btn.innerText = o;
+                btn.onclick = () => handleSelect(i);
+                cont.appendChild(btn);
+            });
+
+            if(mode === 'practice') {
+                document.getElementById('prev-btn').disabled = currentIdx === 0;
+                document.getElementById('next-btn').disabled = currentIdx === activeQ.length - 1;
+            } else {
+                startTimer();
+            }
+        }
+
+        function handleSelect(i) {
+            userAnswers[currentIdx] = i;
+            renderQ();
+
+            if (mode === 'rapid') {
+                clearInterval(timerId);
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } 
+                    else finish();
+                }, 400);
+            } else {
+                setTimeout(() => {
+                    if (currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); }
+                }, 400);
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerId); 
+            let t = 20;
+            const el = document.getElementById('timer'); 
+            el.innerText = t;
+            
+            timerId = setInterval(() => {
+                t--; 
+                el.innerText = t;
+                if(t <= 0) { 
+                    clearInterval(timerId); 
+                    if(userAnswers[currentIdx] === -1) handleSelect(-1); 
+                }
+            }, 1000);
+        }
+
+        function prevQ() { if(currentIdx > 0) { currentIdx--; renderQ(); } }
+        function nextQ() { if(currentIdx < activeQ.length - 1) { currentIdx++; renderQ(); } }
+        function submitQuiz() { if(confirm("Submit Test?")) finish(); }
+
+        function finish() {
+            clearInterval(timerId);
+            views.quiz.classList.replace('flex', 'hidden'); 
+            views.result.classList.replace('hidden', 'flex');
+            document.getElementById('header').classList.add('hidden');
+
+            let m = 0, c = 0, w = 0, s = 0;
+            userAnswers.forEach((a, i) => {
+                if (a === activeQ[i].ans) { m += 1; c++; }
+                else if (a === -1) { s++; }
+                else { m -= 0.25; w++; }
+            });
+
+            document.getElementById('result-name').innerText = userName;
+            document.getElementById('final-score').innerText = m.toFixed(2);
+            document.getElementById('correct-count').innerText = c;
+            document.getElementById('wrong-count').innerText = w;
+            document.getElementById('skip-count').innerText = s;
+
+            leaderboard.push({
+                name: userName,
+                score: m,
+                date: new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}),
+                mode: mode,
+                qSet: activeQ, 
+                history: userAnswers
+            });
+            saveLeaderboard();
+            updateLeaderboardUI();
+        }
+
+        function updateLeaderboardUI() {
+            leaderboard.sort((a,b) => b.score - a.score);
+            const list = document.getElementById('start-leaderboard-list');
+            
+            if (leaderboard.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 text-sm italic mt-4">No attempts yet.</p>';
+                return;
+            }
+
+            let currentRank = 1;
+            
+            list.innerHTML = leaderboard.map((e, i) => {
+                if (i > 0 && e.score < leaderboard[i-1].score) currentRank = currentRank + 1;
+                
+                let icon = e.mode === 'rapid' ? '🔥' : '📚';
+                let medal = currentRank === 1 ? '🥇' : currentRank === 2 ? '🥈' : currentRank === 3 ? '🥉' : `<span class="text-slate-400 font-bold text-sm">#${currentRank}</span>`;
+
+                return `
+                <div onclick="viewHistory(${i})" class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition-colors group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 flex justify-center text-xl">${medal}</div>
+                        <div>
+                            <div class="font-bold text-slate-700 text-sm group-hover:text-blue-700">${e.name}</div>
+                            <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                <span>${icon}</span> ${e.date}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-slate-800 text-sm">${e.score.toFixed(2)}</div>
+                        <div class="text-[9px] text-blue-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">VIEW</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // --- NEW LOADING & STATS LOGIC ---
+        function viewHistory(idx) {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex'); // Show Spinner
+            
+            // Artificial delay to let UI breathe and show spinner
+            setTimeout(() => {
+                previousView = views.start;
+                views.start.classList.add('hidden');
+                renderReview(leaderboard[idx].history, leaderboard[idx].qSet, leaderboard[idx].name);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden'); // Hide Spinner
+            }, 500); 
+        }
+
+        function showReviewFromResults() {
+            document.getElementById('loading-overlay').classList.replace('hidden', 'flex');
+            setTimeout(() => {
+                previousView = views.result;
+                views.result.classList.replace('flex', 'hidden');
+                renderReview(userAnswers, activeQ, userName);
+                document.getElementById('loading-overlay').classList.replace('flex', 'hidden');
+            }, 500);
+        }
+
+        function renderReview(answers, qData, pName) {
+            views.review.classList.replace('hidden', 'flex');
+            document.getElementById('review-player-name').innerText = pName;
+            
+            // Calculate Stats for Header
+            let c=0, w=0, s=0;
+            answers.forEach((a, i) => { if(a === qData[i].ans) c++; else if(a === -1) s++; else w++; });
+            
+            document.getElementById('review-stats').innerHTML = `
+                <span class="text-green-600">Correct: ${c}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-red-500">Wrong: ${w}</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-500">Skipped: ${s}</span>
+            `;
+
+            const cont = document.getElementById('review-container');
+            cont.innerHTML = ''; // Clear previous content
+
+            // Use DocumentFragment for performance with large lists
+            const fragment = document.createDocumentFragment();
+
+            answers.forEach((ansIdx, i) => {
+                const q = qData[i];
+                let statusClass = ansIdx === q.ans ? 'text-green-600 bg-green-50 border-green-100' : ansIdx === -1 ? 'text-slate-500 bg-slate-50 border-slate-100' : 'text-red-500 bg-red-50 border-red-100';
+                let statusText = ansIdx === q.ans ? 'CORRECT (+1)' : ansIdx === -1 ? 'SKIPPED' : 'WRONG (-0.25)';
+
+                let optsHtml = q.opts.map((o, idx) => {
+                    let style = "border-slate-100 text-slate-500";
+                    let icon = "";
+                    if (idx === q.ans) { style = "bg-green-50 border-green-200 text-green-800 font-bold"; icon = "✅"; }
+                    else if (idx === ansIdx) { style = "bg-red-50 border-red-200 text-red-800 line-through"; icon = "❌"; }
+                    return `<div class="p-2.5 rounded-lg border text-xs flex justify-between items-center ${style}">${o} <span>${icon}</span></div>`;
+                }).join('');
+
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm shrink-0";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-slate-400 text-xs">Q${i+1}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-1 leading-relaxed">${q.q}</p>
+                    <p class="text-[10px] text-slate-400 font-mono mb-3">${q.tag}</p>
+                    <div class="space-y-1.5 mb-3">${optsHtml}</div>
+                    <div class="mt-2 text-xs text-yellow-800 bg-yellow-50 border border-yellow-200 p-2.5 rounded-lg leading-relaxed flex gap-2">
+                        <span>💡</span>
+                        <span>${q.why}</span>
+                    </div>`;
+                fragment.appendChild(div);
+            });
+            
+            cont.appendChild(fragment);
+        }
+
+        function closeReview() {
+            views.review.classList.replace('flex', 'hidden');
+            previousView.classList.remove('hidden');
+            if(previousView === views.result) previousView.classList.add('flex');
+        }
+
+        function resetApp() {
+            clearInterval(timerId);
+            document.getElementById('username').value = "";
+            views.result.classList.replace('flex', 'hidden');
+            views.start.classList.remove('hidden');
+            document.getElementById('header').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+```
