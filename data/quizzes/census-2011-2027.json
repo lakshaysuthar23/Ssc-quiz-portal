@@ -1,0 +1,760 @@
+{
+  "title": "Census 2011 & 2027",
+  "subject": "Static GK & CA",
+  "subjectKey": "static",
+  "emoji": "📋",
+  "published": "2026-05-13",
+  "questionCount": 90,
+  "questions": [
+    {
+      "q": "In which year was the first non-synchronous Census conducted in India?",
+      "tag": "SSC CGL 2023 PYQ",
+      "opts": [
+        "1872",
+        "1881",
+        "1901",
+        "1951"
+      ],
+      "ansText": "1872",
+      "why": "The first ever census in India was conducted non-synchronously in 1872 under the viceroyalty of Lord Mayo."
+    },
+    {
+      "q": "Who was the Viceroy of India when the first synchronous (complete) Census was conducted in 1881?",
+      "tag": "SSC CHSL 2022 PYQ",
+      "opts": [
+        "Lord Lytton",
+        "Lord Ripon",
+        "Lord Mayo",
+        "Lord Curzon"
+      ],
+      "ansText": "Lord Ripon",
+      "why": "Lord Ripon initiated the first synchronous decadal census in 1881, standardizing the 10-year cycle."
+    },
+    {
+      "q": "Which year is famously known as the 'Year of Great Divide' in the demographic history of India?",
+      "tag": "SSC CGL 2021 PYQ",
+      "opts": [
+        "1911",
+        "1921",
+        "1951",
+        "1971"
+      ],
+      "ansText": "1921",
+      "why": "The 1921 Census was the only time India recorded a negative decadal growth rate (-0.31%) due to famines and the Spanish flu."
+    },
+    {
+      "q": "Under which Ministry is the Office of the Registrar General and Census Commissioner functioning?",
+      "tag": "SSC MTS 2021 PYQ",
+      "opts": [
+        "Ministry of Finance",
+        "Ministry of Statistics",
+        "Ministry of Home Affairs",
+        "Ministry of Planning"
+      ],
+      "ansText": "Ministry of Home Affairs",
+      "why": "The Ministry of Home Affairs is the nodal ministry responsible for conducting the decadal census."
+    },
+    {
+      "q": "Under which Schedule of the Indian Constitution is the 'Census' listed?",
+      "tag": "SSC CPO 2020 PYQ",
+      "opts": [
+        "State List (7th Schedule)",
+        "Union List (7th Schedule)",
+        "Concurrent List (7th Schedule)",
+        "Eighth Schedule"
+      ],
+      "ansText": "Union List (7th Schedule)",
+      "why": "Census is listed under Entry 69 of the Union List in the 7th Schedule, making it exclusively a central government subject."
+    },
+    {
+      "q": "Which Article of the Indian Constitution grants the Parliament the exclusive power to legislate on the Census?",
+      "tag": "SSC GD 2023 PYQ",
+      "opts": [
+        "Article 246",
+        "Article 280",
+        "Article 324",
+        "Article 356"
+      ],
+      "ansText": "Article 246",
+      "why": "Article 246 gives the Union Parliament exclusive power to make laws regarding subjects in the Union List, including the Census."
+    },
+    {
+      "q": "The legal framework for conducting the census is provided by the Census Act, which was passed in:",
+      "tag": "RRB NTPC 2021 PYQ",
+      "opts": [
+        "1947",
+        "1948",
+        "1950",
+        "1951"
+      ],
+      "ansText": "1948",
+      "why": "The Census Act of 1948, pioneered by Sardar Vallabhbhai Patel, provides the permanent legal framework for the census."
+    },
+    {
+      "q": "Who is known as the 'Father of Indian Demography'?",
+      "tag": "SSC CGL 2019 PYQ",
+      "opts": [
+        "Henry Walter",
+        "Lord Mayo",
+        "W.C. Plowden",
+        "Dadabhai Naoroji"
+      ],
+      "ansText": "Henry Walter",
+      "why": "Henry Walter conducted the first known local population census in Dacca in 1830, earning him this title."
+    },
+    {
+      "q": "Who was the first Census Commissioner of India during the 1881 Census?",
+      "tag": "SSC CPO 2022 PYQ",
+      "opts": [
+        "Lord Ripon",
+        "W.C. Plowden",
+        "John Marshall",
+        "Alexander Cunningham"
+      ],
+      "ansText": "W.C. Plowden",
+      "why": "W.C. Plowden served as the first Census Commissioner of India for the 1881 synchronous census."
+    },
+    {
+      "q": "In which year did India launch its first National Family Planning Programme?",
+      "tag": "SSC CHSL 2020 PYQ",
+      "opts": [
+        "1951",
+        "1952",
+        "1971",
+        "2000"
+      ],
+      "ansText": "1952",
+      "why": "India was the first country in the world to launch a state-sponsored family planning programme in 1952."
+    },
+    {
+      "q": "According to Census 2011, what is the total population of India?",
+      "tag": "SSC CGL 2022 PYQ",
+      "opts": [
+        "1.15 Billion",
+        "1.21 Billion",
+        "1.25 Billion",
+        "1.30 Billion"
+      ],
+      "ansText": "1.21 Billion",
+      "why": "The exact official figure for the 2011 Census was 1,210,854,977 (approx. 1.21 billion)."
+    },
+    {
+      "q": "What percentage of the total world population did India represent according to the 2011 Census?",
+      "tag": "SSC MTS 2022 PYQ",
+      "opts": [
+        "16.5%",
+        "17.5%",
+        "18.5%",
+        "19.5%"
+      ],
+      "ansText": "17.5%",
+      "why": "In 2011, India accounted for 17.5% of the global population while occupying only 2.4% of the world's land area."
+    },
+    {
+      "q": "What was the decadal population growth rate of India during 2001-2011?",
+      "tag": "SSC CGL 2023 PYQ",
+      "opts": [
+        "17.64%",
+        "21.54%",
+        "16.16%",
+        "19.34%"
+      ],
+      "ansText": "17.64%",
+      "why": "The population grew by 17.64% over the decade, showing a sharp decline from the 21.54% growth rate of the previous decade."
+    },
+    {
+      "q": "According to Census 2011, what is the overall literacy rate of India?",
+      "tag": "SSC CHSL 2023 PYQ",
+      "opts": [
+        "73.04%",
+        "74.04%",
+        "75.04%",
+        "76.04%"
+      ],
+      "ansText": "74.04%",
+      "why": "The overall literacy rate was 74.04%, with significant disparities between male and female literacy."
+    },
+    {
+      "q": "What is the male literacy rate in India as per the 2011 Census?",
+      "tag": "SSC CPO 2023 PYQ",
+      "opts": [
+        "80.14%",
+        "81.14%",
+        "82.14%",
+        "83.14%"
+      ],
+      "ansText": "82.14%",
+      "why": "Male literacy stood at 82.14%, highlighting a persistent gender gap in education."
+    },
+    {
+      "q": "What is the female literacy rate in India as per the 2011 Census?",
+      "tag": "SSC GD 2024 PYQ",
+      "opts": [
+        "63.46%",
+        "64.46%",
+        "65.46%",
+        "66.46%"
+      ],
+      "ansText": "65.46%",
+      "why": "Female literacy was recorded at 65.46%, which was an improvement from 2001 but still 16.68% behind males."
+    },
+    {
+      "q": "What was the overall Sex Ratio of India in the 2011 Census?",
+      "tag": "SSC CGL 2021 PYQ",
+      "opts": [
+        "933 females/1000 males",
+        "940 females/1000 males",
+        "943 females/1000 males",
+        "945 females/1000 males"
+      ],
+      "ansText": "943 females/1000 males",
+      "why": "The final data for the 2011 Census reported a sex ratio of 943 females per 1000 males (up from 933 in 2001)."
+    },
+    {
+      "q": "What was the Child Sex Ratio (0-6 years) in India according to Census 2011?",
+      "tag": "SSC MTS 2023 PYQ",
+      "opts": [
+        "914",
+        "919",
+        "927",
+        "933"
+      ],
+      "ansText": "919",
+      "why": "The final child sex ratio was 919 (provisional was 914), showing a concerning decline from 927 in 2001."
+    },
+    {
+      "q": "Which Indian state has the highest population density as per Census 2011?",
+      "tag": "SSC CGL 2020 PYQ",
+      "opts": [
+        "West Bengal",
+        "Uttar Pradesh",
+        "Bihar",
+        "Kerala"
+      ],
+      "ansText": "Bihar",
+      "why": "Bihar recorded the highest population density with 1,106 persons per square kilometer."
+    },
+    {
+      "q": "Which Indian state has the lowest population density as per Census 2011?",
+      "tag": "SSC CHSL 2021 PYQ",
+      "opts": [
+        "Sikkim",
+        "Mizoram",
+        "Arunachal Pradesh",
+        "Nagaland"
+      ],
+      "ansText": "Arunachal Pradesh",
+      "why": "Arunachal Pradesh has the lowest density with only 17 persons per square kilometer."
+    },
+    {
+      "q": "Which state holds the highest population in India according to Census 2011?",
+      "tag": "RRB Group D 2022 PYQ",
+      "opts": [
+        "Maharashtra",
+        "Bihar",
+        "Uttar Pradesh",
+        "West Bengal"
+      ],
+      "ansText": "Uttar Pradesh",
+      "why": "Uttar Pradesh is the most populous state, housing nearly 16.5% of India's total population."
+    },
+    {
+      "q": "Which is the least populated state in India according to Census 2011?",
+      "tag": "SSC CPO 2021 PYQ",
+      "opts": [
+        "Goa",
+        "Sikkim",
+        "Mizoram",
+        "Arunachal Pradesh"
+      ],
+      "ansText": "Sikkim",
+      "why": "Sikkim is the least populated state, with a total population of just over 6 lakh people."
+    },
+    {
+      "q": "Which state recorded a negative decadal population growth rate in the 2011 Census?",
+      "tag": "SSC CGL 2023 PYQ",
+      "opts": [
+        "Kerala",
+        "Goa",
+        "Nagaland",
+        "Tripura"
+      ],
+      "ansText": "Nagaland",
+      "why": "Nagaland was the only state to record a negative growth rate of -0.58% during the 2001-2011 decade."
+    },
+    {
+      "q": "Which state boasts the highest sex ratio according to Census 2011?",
+      "tag": "SSC MTS 2021 PYQ",
+      "opts": [
+        "Tamil Nadu",
+        "Kerala",
+        "Andhra Pradesh",
+        "Chhattisgarh"
+      ],
+      "ansText": "Kerala",
+      "why": "Kerala has the highest sex ratio with 1,084 females per 1,000 males."
+    },
+    {
+      "q": "Among the Indian states, which has the lowest sex ratio according to Census 2011?",
+      "tag": "SSC CHSL 2022 PYQ",
+      "opts": [
+        "Punjab",
+        "Haryana",
+        "Uttar Pradesh",
+        "Bihar"
+      ],
+      "ansText": "Haryana",
+      "why": "Haryana recorded the lowest sex ratio among states with only 879 females per 1,000 males."
+    },
+    {
+      "q": "Which state has the lowest literacy rate according to Census 2011?",
+      "tag": "SSC CGL 2022 PYQ",
+      "opts": [
+        "Rajasthan",
+        "Jharkhand",
+        "Bihar",
+        "Uttar Pradesh"
+      ],
+      "ansText": "Bihar",
+      "why": "Bihar recorded the lowest overall literacy rate at 61.8%."
+    },
+    {
+      "q": "Which Union Territory has the highest population based on Census 2011?",
+      "tag": "SSC GD 2022 PYQ",
+      "opts": [
+        "Chandigarh",
+        "Puducherry",
+        "Delhi",
+        "Jammu & Kashmir"
+      ],
+      "ansText": "Delhi",
+      "why": "The NCT of Delhi is the most populous Union Territory by a massive margin."
+    },
+    {
+      "q": "Which Union Territory has the least population based on Census 2011?",
+      "tag": "SSC MTS 2020 PYQ",
+      "opts": [
+        "Andaman & Nicobar",
+        "Lakshadweep",
+        "Daman & Diu",
+        "Ladakh"
+      ],
+      "ansText": "Lakshadweep",
+      "why": "Lakshadweep is the least populated UT, with roughly 64,000 residents."
+    },
+    {
+      "q": "Which Union Territory recorded the highest sex ratio in Census 2011?",
+      "tag": "SSC CGL 2023 PYQ",
+      "opts": [
+        "Lakshadweep",
+        "Puducherry",
+        "Chandigarh",
+        "Delhi"
+      ],
+      "ansText": "Puducherry",
+      "why": "Puducherry recorded the highest sex ratio among UTs with 1,037 females per 1,000 males."
+    },
+    {
+      "q": "Which Union Territory recorded the highest literacy rate in Census 2011?",
+      "tag": "SSC CPO 2022 PYQ",
+      "opts": [
+        "Delhi",
+        "Chandigarh",
+        "Lakshadweep",
+        "Puducherry"
+      ],
+      "ansText": "Lakshadweep",
+      "why": "Lakshadweep has the highest literacy rate among UTs at 91.85%."
+    },
+    {
+      "q": "What is the overall population density of India as per Census 2011?",
+      "tag": "SSC CHSL 2021 PYQ",
+      "opts": [
+        "324 persons/sq km",
+        "382 persons/sq km",
+        "394 persons/sq km",
+        "412 persons/sq km"
+      ],
+      "ansText": "382 persons/sq km",
+      "why": "The national average population density increased from 325 in 2001 to 382 persons per sq km in 2011."
+    },
+    {
+      "q": "What percentage of India's population lived in urban areas according to Census 2011?",
+      "tag": "SSC CGL 2022 PYQ",
+      "opts": [
+        "27.81%",
+        "31.16%",
+        "34.20%",
+        "37.10%"
+      ],
+      "ansText": "31.16%",
+      "why": "Exactly 31.16% of the population lived in urban areas, while 68.84% resided in rural areas."
+    },
+    {
+      "q": "Which state has the maximum percentage of urban population?",
+      "tag": "SSC MTS 2023 PYQ",
+      "opts": [
+        "Maharashtra",
+        "Tamil Nadu",
+        "Goa",
+        "Gujarat"
+      ],
+      "ansText": "Goa",
+      "why": "In terms of percentage, Goa is the most urbanized state (62.2%). Maharashtra has the highest absolute urban numbers."
+    },
+    {
+      "q": "Which state has the maximum percentage of rural population?",
+      "tag": "RRB NTPC 2021 PYQ",
+      "opts": [
+        "Uttar Pradesh",
+        "Bihar",
+        "Himachal Pradesh",
+        "Assam"
+      ],
+      "ansText": "Himachal Pradesh",
+      "why": "Himachal Pradesh is the least urbanized state, with exactly 89.97% of its population living in rural areas."
+    },
+    {
+      "q": "Which state has the highest percentage of Scheduled Caste (SC) population?",
+      "tag": "SSC CGL 2021 PYQ",
+      "opts": [
+        "Uttar Pradesh",
+        "Punjab",
+        "West Bengal",
+        "Haryana"
+      ],
+      "ansText": "Punjab",
+      "why": "By percentage, Punjab has the highest SC population (31.9%). UP has the highest absolute number of SCs."
+    },
+    {
+      "q": "Which state has the largest absolute number of Scheduled Tribes (ST)?",
+      "tag": "SSC CHSL 2023 PYQ",
+      "opts": [
+        "Jharkhand",
+        "Chhattisgarh",
+        "Madhya Pradesh",
+        "Odisha"
+      ],
+      "ansText": "Madhya Pradesh",
+      "why": "Madhya Pradesh houses the largest tribal population in terms of sheer numbers."
+    },
+    {
+      "q": "What was the mascot of the 2011 Census of India?",
+      "tag": "SSC CPO 2020 PYQ",
+      "opts": [
+        "A Tiger",
+        "A Female Enumerator",
+        "A Banyan Tree",
+        "An Elephant"
+      ],
+      "ansText": "A Female Enumerator",
+      "why": "A female enumerator was chosen as the mascot to honor the primary data collectors on the ground."
+    },
+    {
+      "q": "What was the official slogan of the 2011 Census?",
+      "tag": "SSC GD 2021 PYQ",
+      "opts": [
+        "Counting India's Future",
+        "Our Census, Our Future",
+        "India Counts 2011",
+        "One Nation, One Census"
+      ],
+      "ansText": "Our Census, Our Future",
+      "why": "The theme highlighted that the data collected dictates the future planning of the nation."
+    },
+    {
+      "q": "Which is the most populous district in India according to Census 2011?",
+      "tag": "SSC CGL 2020 PYQ",
+      "opts": [
+        "Thane",
+        "North 24 Parganas",
+        "Pune",
+        "Mumbai Suburban"
+      ],
+      "ansText": "Thane",
+      "why": "Thane in Maharashtra was the most populous district in 2011, though it was later bifurcated."
+    },
+    {
+      "q": "Which was the least populous district in India according to Census 2011?",
+      "tag": "SSC MTS 2022 PYQ",
+      "opts": [
+        "Lahul and Spiti",
+        "Kargil",
+        "Dibang Valley",
+        "Tawang"
+      ],
+      "ansText": "Dibang Valley",
+      "why": "Dibang Valley in Arunachal Pradesh is the least populous district."
+    },
+    {
+      "q": "Which Indian state recorded the highest decadal population growth rate (2001-2011)?",
+      "tag": "SSC CGL 2023 PYQ",
+      "opts": [
+        "Bihar",
+        "Arunachal Pradesh",
+        "Meghalaya",
+        "Uttar Pradesh"
+      ],
+      "ansText": "Meghalaya",
+      "why": "Meghalaya recorded a massive decadal growth rate of 27.9%."
+    },
+    {
+      "q": "Which linguistic group is the second most spoken in India after Hindi?",
+      "tag": "SSC CHSL 2021 PYQ",
+      "opts": [
+        "Telugu",
+        "Marathi",
+        "Bengali",
+        "Tamil"
+      ],
+      "ansText": "Bengali",
+      "why": "Bengali is the second most spoken language, representing about 8.03% of the population."
+    },
+    {
+      "q": "What percentage of India's population is constituted by Scheduled Tribes (ST) as per 2011?",
+      "tag": "SSC CPO 2023 PYQ",
+      "opts": [
+        "8.6%",
+        "16.6%",
+        "10.4%",
+        "12.2%"
+      ],
+      "ansText": "8.6%",
+      "why": "Scheduled Tribes constitute 8.6%, while Scheduled Castes constitute 16.6% of the total population."
+    },
+    {
+      "q": "Which religious community witnessed the highest decadal growth rate in the 2011 Census?",
+      "tag": "RRB Group D 2022 PYQ",
+      "opts": [
+        "Hindu",
+        "Islam",
+        "Christian",
+        "Sikh"
+      ],
+      "ansText": "Islam",
+      "why": "The Muslim population recorded the highest decadal growth rate at 24.6%."
+    },
+    {
+      "q": "Across how many districts was the Census 2011 conducted?",
+      "tag": "SSC CGL 2019 PYQ",
+      "opts": [
+        "593",
+        "640",
+        "718",
+        "742"
+      ],
+      "ansText": "640",
+      "why": "The 2011 census covered 640 districts across all states and union territories."
+    },
+    {
+      "q": "The delayed Population Census is now officially projected to be completed in which year?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "2025",
+        "2026",
+        "2027",
+        "2030"
+      ],
+      "ansText": "2027",
+      "why": "Due to massive delays caused by the pandemic, the completion target is officially set for 2027."
+    },
+    {
+      "q": "For the first time since 1931, the upcoming 2027 Census will include which specific enumeration?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "Income Enumeration",
+        "Caste Enumeration (OBC)",
+        "Vehicle Ownership",
+        "Blood Group Mapping"
+      ],
+      "ansText": "Caste Enumeration (OBC)",
+      "why": "The government has indicated that a detailed counting of Other Backward Classes (OBCs) will be included."
+    },
+    {
+      "q": "The upcoming 2027 Census will be a landmark event as it will be India's first ever:",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "Biometric Census",
+        "Digital Census",
+        "Sample Census",
+        "Satellite Census"
+      ],
+      "ansText": "Digital Census",
+      "why": "Data will be collected entirely using mobile applications, moving away from pen-and-paper."
+    },
+    {
+      "q": "The data from the 2027 Census is expected to be the crucial baseline for which major constitutional exercise?",
+      "tag": "Expected SSC C026",
+      "opts": [
+        "GST Reallocation",
+        "Delimitation of Constituencies",
+        "Presidential Elections",
+        "Panchayat Elections"
+      ],
+      "ansText": "Delimitation of Constituencies",
+      "why": "The freeze on redrawing Lok Sabha boundaries ends after 2026, making the 2027 data essential for delimitation."
+    },
+    {
+      "q": "According to UN and Worldometer projections, what is the estimated population of India in 2026?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "1.35 Billion",
+        "1.42 Billion",
+        "1.47 Billion",
+        "1.52 Billion"
+      ],
+      "ansText": "1.47 Billion",
+      "why": "Demographic projections place India's population around 1.47 billion for the year 2026."
+    },
+    {
+      "q": "Which innovative citizen feature is being introduced for the 2027 Digital Census?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "Mandatory DNA Swab",
+        "Self-enumeration portal",
+        "Drone Surveillance",
+        "Aadhaar Auto-Sync"
+      ],
+      "ansText": "Self-enumeration portal",
+      "why": "Citizens will have the option to fill in their own census details online through a secure portal."
+    },
+    {
+      "q": "The upcoming 2027 Census will be which edition of the continuous decadal census in India?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "14th",
+        "15th",
+        "16th",
+        "17th"
+      ],
+      "ansText": "16th",
+      "why": "It will be the 16th overall census since 1872, and the 8th since independence."
+    },
+    {
+      "q": "Alongside the house listing phase of the 2027 Census, which other major database will be updated?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "Voter ID List",
+        "National Population Register (NPR)",
+        "Ration Card Database",
+        "PAN Card Database"
+      ],
+      "ansText": "National Population Register (NPR)",
+      "why": "The NPR, which lists 'usual residents', is traditionally updated during the house listing phase of the census."
+    },
+    {
+      "q": "In how many languages will the mobile app for the 2027 Digital Census be available?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "12",
+        "16",
+        "22",
+        "24"
+      ],
+      "ansText": "16",
+      "why": "The digital data collection app is designed to support 16 different languages."
+    },
+    {
+      "q": "Based on 2026-2027 demographic projections, what is the expected median age of the Indian population?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "25.4 years",
+        "27.2 years",
+        "29.2 years",
+        "32.1 years"
+      ],
+      "ansText": "29.2 years",
+      "why": "India is aging slightly, with the median age projected to reach 29.2 years by 2026."
+    },
+    {
+      "q": "According to 2026 projections, roughly what percentage of India's population will be living in urban areas?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "31.1%",
+        "34.5%",
+        "37.6%",
+        "42.0%"
+      ],
+      "ansText": "37.6%",
+      "why": "Urbanization is steadily increasing, with projections showing 37.6% urban population by 2026."
+    },
+    {
+      "q": "Which of the following constitutional amendments currently freezes the total number of Lok Sabha seats until the first census after 2026?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "42nd Amendment",
+        "84th Amendment",
+        "86th Amendment",
+        "101st Amendment"
+      ],
+      "ansText": "84th Amendment",
+      "why": "The 84th Amendment (2001) extended the freeze on Lok Sabha seats until the first census post-2026."
+    },
+    {
+      "q": "Which state is projected to remain the most populous state in the 2027 Census?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "Maharashtra",
+        "Bihar",
+        "Uttar Pradesh",
+        "West Bengal"
+      ],
+      "ansText": "Uttar Pradesh",
+      "why": "Current growth trajectories guarantee that UP will comfortably retain its top spot."
+    },
+    {
+      "q": "The 2011 SECC (Socio-Economic and Caste Census) was conducted by the MHA alongside which other Ministry?",
+      "tag": "SSC CGL 2020 PYQ",
+      "opts": [
+        "Ministry of Finance",
+        "Ministry of Rural Development",
+        "Ministry of Education",
+        "Ministry of Social Justice"
+      ],
+      "ansText": "Ministry of Rural Development",
+      "why": "Unlike the regular census, the 2011 SECC was jointly executed by the Ministry of Rural Development and the MHA."
+    },
+    {
+      "q": "What was the primary reason cited for the unprecedented delay of the 16th Indian Census?",
+      "tag": "Expected SSC 2026",
+      "opts": [
+        "Lack of Funds",
+        "EVM Shortage",
+        "COVID-19 Pandemic",
+        "Delimitation Disputes"
+      ],
+      "ansText": "COVID-19 Pandemic",
+      "why": "The exercise scheduled for 2021 was infinitely delayed due to global COVID-19 lockdowns and administrative backlogs."
+    },
+    {"q":"The upcoming Census 2027 will be the first in India's history to feature which major technological shift?","tag":"Expected SSC 2026","opts":["Drone-based Mapping","Fully Digital Enumeration","Biometric Iris Scanning","Blockchain Verification"],"ansText":"Fully Digital Enumeration","why":"Census 2027 is India's first digital census, utilizing mobile apps and a self-enumeration portal to eliminate traditional paper-based data collection."},
+{"q":"During which phase of Census 2027 has the government officially approved the comprehensive enumeration of Castes?","tag":"Expected SSC 2026","opts":["Phase I (Houselisting)","Phase II (Population Enumeration)","Pre-Census Mapping","Post-Census Survey"],"ansText":"Phase II (Population Enumeration)","why":"The Cabinet Committee on Political Affairs recently decided that a comprehensive caste enumeration will take place during Phase II in February 2027."},
+{"q":"How many languages will be supported on the new citizen Self-Enumeration Portal for Census 2027?","tag":"Expected SSC 2026","opts":["12","16","22","24"],"ansText":"16","why":"The dedicated online portal allows citizens to independently fill their household details in 16 different regional languages prior to field visits."},
+{"q":"What is the official standard 'Reference Date' set for the Population Enumeration phase of Census 2027 across most of India?","tag":"Expected SSC 2026","opts":["January 1, 2027","February 28, 2027","March 1, 2027","April 1, 2027"],"ansText":"March 1, 2027","why":"The official 'Census Moment' or reference date for Census 2027 is fixed at 00:00 hours of March 1, 2027 for most states."},
+{"q":"As per recent demographic projections for 2026, what is the estimated median age of the Indian population?","tag":"Expected SSC 2026","opts":["25.4 years","27.1 years","29.2 years","31.5 years"],"ansText":"29.2 years","why":"India remains a young nation with a projected median age of 29.2 years in 2026, driving the nation's ongoing demographic dividend."},
+{"q":"According to a recent exam, what was the exact overall literacy rate of India at the time of the first post-independence census in 1951?","tag":"SSC GD 2025 PYQ","opts":["12.56%","15.44%","18.33%","22.10%"],"ansText":"18.33%","why":"At the dawn of the republic in 1951, India's overall literacy rate was a mere 18.33%, reflecting massive post-colonial educational challenges."},
+{"q":"According to Census 2011, which Indian state has the highest difference between male and female literacy rates?","tag":"SSC GD 2025 PYQ","opts":["Bihar","Rajasthan","Jharkhand","Madhya Pradesh"],"ansText":"Rajasthan","why":"Rajasthan recorded the highest gender gap in literacy in 2011, with male literacy at 79.2% and female literacy lagging at just 52.1%."},
+{"q":"As per demographic projections for the 2026-2027 cycle, what is India's approximate Total Fertility Rate (TFR)?","tag":"Expected SSC 2026","opts":["1.9","2.1","2.4","2.6"],"ansText":"1.9","why":"India's TFR has officially fallen to 1.9, which is below the replacement level of 2.1, indicating a long-term stabilization of population growth."},
+{"q":"During the Houselisting phase (Phase 1) of Census 2027, which other major national database will simultaneously be updated?","tag":"Expected SSC 2026","opts":["Voter ID Roll","National Population Register (NPR)","Aadhaar Database","Ration Card Registry"],"ansText":"National Population Register (NPR)","why":"The NPR, a register of all 'usual residents' of the country, is systematically updated alongside the house listing phase of the decadal census."},
+{"q":"According to a recent PYQ, which Northeastern state recorded the highest population in Census 2011?","tag":"SSC GD 2025 PYQ","opts":["Arunachal Pradesh","Manipur","Assam","Tripura"],"ansText":"Assam","why":"With a population of over 3.12 crore in 2011, Assam easily remains the most populous state in the entire Northeastern region."},
+{"q":"The Census Management and Monitoring System (CMMS) launched for 2027 primarily serves what purpose?","tag":"Expected SSC 2026","opts":["Issuing Digital IDs","Real-time tracking of enumeration","Printing Census forms","Calculating electoral boundaries"],"ansText":"Real-time tracking of enumeration","why":"The CMMS portal is a near real-time monitoring dashboard for officers to track field performance and enumeration progress instantly."},
+{"q":"What is the projected percentage of India's population living in urban areas by 2026-2027?","tag":"Expected SSC 2026","opts":["31.1%","34.2%","37.6%","41.0%"],"ansText":"37.6%","why":"Driven by rapid internal migration to major metro areas, India's urban population share is projected to rise to approximately 37.6% by 2026."},
+{"q":"For snow-bound and non-synchronous areas like Ladakh and Himachal Pradesh, what is the reference date for Census 2027?","tag":"Expected SSC 2026","opts":["March 1, 2026","September 1, 2026","October 1, 2026","January 1, 2027"],"ansText":"October 1, 2026","why":"Due to harsh winter conditions, snow-bound areas are enumerated earlier, with their specific reference date set to October 1, 2026."},
+{"q":"As per the 2011 Census of India, which state had the lowest child sex ratio (0-6 years)?","tag":"SSC GD 2025 PYQ","opts":["Punjab","Haryana","Uttar Pradesh","Rajasthan"],"ansText":"Haryana","why":"Haryana recorded a concerningly low child sex ratio of just 834 females per 1,000 males, the lowest among all Indian states in 2011."},
+{"q":"Census 2027 marks which specific edition of the continuous decadal census in India since independence?","tag":"Expected SSC 2026","opts":["7th","8th","15th","16th"],"ansText":"8th","why":"While it is the 16th overall census since 1872, Census 2027 specifically marks the 8th demographic enumeration since India gained independence."},
+{"q":"According to Census 2011, which state has the highest percentage of Scheduled Tribe (ST) population to its total population?","tag":"SSC CGL 2023 PYQ","opts":["Madhya Pradesh","Mizoram","Nagaland","Meghalaya"],"ansText":"Mizoram","why":"While MP has the highest absolute ST population, Mizoram leads by percentage with roughly 94.4% tribal population."},
+{"q":"As per the 2011 Census, which state recorded the second highest literacy rate in India?","tag":"SSC CHSL 2023 PYQ","opts":["Mizoram","Goa","Tripura","Himachal Pradesh"],"ansText":"Mizoram","why":"Kerala ranks first (94%), and Mizoram closely follows as the second most literate state with 91.3% literacy."},
+{"q":"What was the rural population percentage of India as per the Census 2011?","tag":"SSC MTS 2024 PYQ","opts":["65.53%","68.84%","72.19%","31.16%"],"ansText":"68.84%","why":"While 31.16% of India is urbanized, the vast majority (68.84%) still resides in rural areas according to 2011 data."},
+{"q":"According to Census 2011, which Union Territory has the lowest sex ratio?","tag":"SSC CPO 2023 PYQ","opts":["Dadra and Nagar Haveli","Daman and Diu","Chandigarh","Lakshadweep"],"ansText":"Daman and Diu","why":"Daman and Diu recorded the lowest sex ratio among UTs with only 618 females per 1,000 males."},
+{"q":"Which state has the highest number of 'Metropolitan Cities' (million-plus population) according to Census 2011?","tag":"SSC Selection Post 2024","opts":["Maharashtra","Uttar Pradesh","Tamil Nadu","Gujarat"],"ansText":"Uttar Pradesh","why":"Uttar Pradesh and Kerala both have 7 million-plus cities, the highest among Indian states in the 2011 data."},
+{"q":"As per Census 2011, which state has the highest percentage of 'Scheduled Caste' population?","tag":"SSC GD 2024 PYQ","opts":["Uttar Pradesh","Punjab","Himachal Pradesh","West Bengal"],"ansText":"Punjab","why":"Punjab has the highest SC population by percentage (31.9%), whereas UP has the highest SC population by absolute numbers."},
+{"q":"The 2027 Digital Census will use which specific method to ensure data security and prevent duplication?","tag":"Expected SSC 2026","opts":["Face Recognition","Aadhaar-linked Validation","Blockchain Storage","Manual Verification"],"ansText":"Aadhaar-linked Validation","why":"The upcoming digital census plans to use Aadhaar-seeded validation to ensure the integrity of self-enumeration data and prevent double counting."},
+{"q":"According to 2011 Census data, which state has the lowest female literacy rate?","tag":"SSC MTS 2023 PYQ","opts":["Bihar","Rajasthan","Jharkhand","Uttar Pradesh"],"ansText":"Bihar","why":"Bihar has the lowest female literacy rate at 51.5%, followed closely by Rajasthan at 52.1%."},
+{"q":"What is the density of population in Delhi (NCT) according to Census 2011?","tag":"SSC CGL 2022 PYQ","opts":["9,340","11,320","12,500","8,200"],"ansText":"11,320","why":"Delhi is the most densely populated UT/State in India, with 11,320 persons per square kilometer as of 2011."},
+{"q":"Which was the first district in India to be fully 'Census-mapped' using GIS technology for the 2027 cycle?","tag":"Expected SSC 2026","opts":["Indore","Varanasi","Gandhinagar","Hyderabad"],"ansText":"Gandhinagar","why":"Gandhinagar was a pilot district for advanced GIS mapping to ensure every household is digitally geotagged for the upcoming census."},
+{"q":"According to Census 2011, what is the work participation rate of females in India?","tag":"SSC CPO 2023 PYQ","opts":["22.5%","25.5%","30.1%","18.9%"],"ansText":"25.5%","why":"The female work participation rate was recorded at 25.5%, showing a significant gap compared to the male rate of 53.3%."},
+{"q":"Which religious group recorded the highest literacy rate in India as per Census 2011?","tag":"SSC CHSL 2022 PYQ","opts":["Christians","Sikhs","Jains","Buddhists"],"ansText":"Jains","why":"Jains are the most literate religious community in India, with an overall literacy rate of approximately 94.1%."},
+{"q":"The upcoming 2027 Census will be conducted under which constitutional provision?","tag":"Expected SSC 2027","opts":["Article 324","Article 246","Article 370","Article 280"],"ansText":"Article 246","why":"Article 246 places the Census in the Union List (Entry 69), giving the Central Government exclusive authority to conduct it."},
+{"q":"As per Census 2011, how many 'Statutory Towns' were there in India?","tag":"SSC CGL 2023 PYQ","opts":["3,892","4,041","5,161","7,935"],"ansText":"4,041","why":"There were 4,041 statutory towns and 3,892 census towns, making a total of 7,935 towns in 2011."},
+{"q":"What is the estimated 'Demographic Dividend' window for India projected to end based on current census trends?","tag":"Expected SSC 2026","opts":["2035","2047","2055","2060"],"ansText":"2055","why":"India's demographic dividend (working-age population bulk) is projected to peak around 2041 and last until approximately 2055-56."}
+  ]
+}

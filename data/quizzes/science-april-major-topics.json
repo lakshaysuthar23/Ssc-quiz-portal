@@ -1,0 +1,610 @@
+{
+  "title": "April Major Topics",
+  "subject": "Physics",
+  "subjectKey": "physics",
+  "emoji": "🔬",
+  "published": "2026-04-24",
+  "questionCount": 50,
+  "questions": [
+    {
+      "q": "1 Angstrom is equal to which of the following?",
+      "tag": "Unit",
+      "opts": [
+        "10^-8 meter",
+        "10^-10 meter",
+        "10^-12 meter",
+        "10^-15 meter"
+      ],
+      "ansText": "10^-10 meter",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "One Megawatt is equal to how many Watts?",
+      "tag": "Unit",
+      "opts": [
+        "10^3 Watt",
+        "10^6 Watt",
+        "10^9 Watt",
+        "10^12 Watt"
+      ],
+      "ansText": "10^6 Watt",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Astronomical unit is the average distance between?",
+      "tag": "Unit",
+      "opts": [
+        "Earth and Moon",
+        "Earth and Sun",
+        "Jupiter and Sun",
+        "Mars and Sun"
+      ],
+      "ansText": "Earth and Sun",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the SI unit of Electric Resistance?",
+      "tag": "Unit",
+      "opts": [
+        "Ampere",
+        "Volts",
+        "Ohms",
+        "Watts"
+      ],
+      "ansText": "Ohms",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "1 Kilogram weight is equal to how many Newtons?",
+      "tag": "Unit",
+      "opts": [
+        "9.8 Newton",
+        "98 Newton",
+        "0.98 Newton",
+        "980 Newton"
+      ],
+      "ansText": "9.8 Newton",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Pressure at depth 'h' in a liquid of density 'd' is given by?",
+      "tag": "Pressure",
+      "opts": [
+        "h + d + g",
+        "h * d * g",
+        "h / d * g",
+        "h * d / g"
+      ],
+      "ansText": "h * d * g",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Hydraulic brakes work strictly on the principle of?",
+      "tag": "Pressure",
+      "opts": [
+        "Newton's Law",
+        "Pascal's Law",
+        "Boyle's Law",
+        "Charles's Law"
+      ],
+      "ansText": "Pascal's Law",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "A sudden fall in the barometer reading indicates?",
+      "tag": "Pressure",
+      "opts": [
+        "Clear weather",
+        "Rainy weather",
+        "Stormy weather",
+        "Cold weather"
+      ],
+      "ansText": "Stormy weather",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "1 standard atmospheric pressure (1 atm) is equal to?",
+      "tag": "Pressure",
+      "opts": [
+        "1.013 x 10^5 Pa",
+        "1.013 x 10^4 Pa",
+        "1.013 x 10^3 Pa",
+        "1.013 x 10^2 Pa"
+      ],
+      "ansText": "1.013 x 10^5 Pa",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The instrument used to measure atmospheric pressure is?",
+      "tag": "Pressure",
+      "opts": [
+        "Thermometer",
+        "Hygrometer",
+        "Barometer",
+        "Manometer"
+      ],
+      "ansText": "Barometer",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Normal temperature of the human body in Kelvin scale is?",
+      "tag": "Temperature",
+      "opts": [
+        "273 K",
+        "298 K",
+        "310 K",
+        "373 K"
+      ],
+      "ansText": "310 K",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "At what temperature do Celsius and Fahrenheit scales show the same reading?",
+      "tag": "Temperature",
+      "opts": [
+        "-40 Degree",
+        "-32 Degree",
+        "-273 Degree",
+        "-200 Degree"
+      ],
+      "ansText": "-40 Degree",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the exact boiling point of water on the Fahrenheit scale?",
+      "tag": "Temperature",
+      "opts": [
+        "100 Degree F",
+        "212 Degree F",
+        "373 Degree F",
+        "273 Degree F"
+      ],
+      "ansText": "212 Degree F",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The instrument used to measure very high temperature (like the sun) is?",
+      "tag": "Temperature",
+      "opts": [
+        "Thermometer",
+        "Pyrometer",
+        "Barometer",
+        "Hygrometer"
+      ],
+      "ansText": "Pyrometer",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Heat energy always flows from a body at?",
+      "tag": "Temperature",
+      "opts": [
+        "Lower to Higher Temp",
+        "Higher to Lower Temp",
+        "Same Temperatures",
+        "None of the above"
+      ],
+      "ansText": "Higher to Lower Temp",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is NOT an electromagnetic wave?",
+      "tag": "Waves",
+      "opts": [
+        "X-Rays",
+        "Light Rays",
+        "Sound Waves",
+        "Radio Waves"
+      ],
+      "ansText": "Sound Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The waves which require a material medium for their propagation are called?",
+      "tag": "Waves",
+      "opts": [
+        "Mechanical Waves",
+        "Electromagnetic",
+        "Matter Waves",
+        "None of the above"
+      ],
+      "ansText": "Mechanical Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Distance between two consecutive crests or troughs is called?",
+      "tag": "Waves",
+      "opts": [
+        "Frequency",
+        "Amplitude",
+        "Wavelength",
+        "Time Period"
+      ],
+      "ansText": "Wavelength",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the standard SI unit of wave frequency?",
+      "tag": "Waves",
+      "opts": [
+        "Meter",
+        "Hertz",
+        "Joule",
+        "Pascal"
+      ],
+      "ansText": "Hertz",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The relation between wave velocity (v), frequency (n), and wavelength (L) is?",
+      "tag": "Waves",
+      "opts": [
+        "v = n / L",
+        "v = L / n",
+        "v = n * L",
+        "v = n + L"
+      ],
+      "ansText": "v = n * L",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following electromagnetic waves has the highest frequency?",
+      "tag": "Waves",
+      "opts": [
+        "Radio Waves",
+        "Micro Waves",
+        "Gamma Rays",
+        "X-Rays"
+      ],
+      "ansText": "Gamma Rays",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following electromagnetic waves has the longest wavelength?",
+      "tag": "Waves",
+      "opts": [
+        "Radio Waves",
+        "Micro Waves",
+        "Gamma Rays",
+        "Infrared Rays"
+      ],
+      "ansText": "Radio Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The speed of all electromagnetic waves in a vacuum is equal to?",
+      "tag": "Waves",
+      "opts": [
+        "3 x 10^8 m/s",
+        "3 x 10^10 m/s",
+        "3 x 10^6 m/s",
+        "3 x 10^4 m/s"
+      ],
+      "ansText": "3 x 10^8 m/s",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Infrared radiation was originally discovered by which scientist?",
+      "tag": "Waves",
+      "opts": [
+        "William Herschel",
+        "Johann Ritter",
+        "Heinrich Hertz",
+        "Isaac Newton"
+      ],
+      "ansText": "William Herschel",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Ultraviolet (UV) rays were originally discovered by which scientist?",
+      "tag": "Waves",
+      "opts": [
+        "William Herschel",
+        "Johann Ritter",
+        "Heinrich Hertz",
+        "Isaac Newton"
+      ],
+      "ansText": "Johann Ritter",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The phenomenon of bending of light waves around the corners of an obstacle is?",
+      "tag": "Waves",
+      "opts": [
+        "Interference",
+        "Polarisation",
+        "Diffraction",
+        "Refraction"
+      ],
+      "ansText": "Diffraction",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Cathode rays consist of a high-speed stream of?",
+      "tag": "Waves",
+      "opts": [
+        "Protons",
+        "Neutrons",
+        "Electrons",
+        "Positrons"
+      ],
+      "ansText": "Electrons",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Water waves produced on the surface of a pond are examples of?",
+      "tag": "Waves",
+      "opts": [
+        "Transverse Waves",
+        "Longitudinal Waves",
+        "Electromagnetic",
+        "None of the above"
+      ],
+      "ansText": "Transverse Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The energy of a wave is directly proportional to the?",
+      "tag": "Waves",
+      "opts": [
+        "Square of Amplitude",
+        "Square of Frequency",
+        "Square of Wavelength",
+        "Square of Velocity"
+      ],
+      "ansText": "Square of Amplitude",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The maximum displacement of a vibrating particle from its mean position is?",
+      "tag": "Waves",
+      "opts": [
+        "Frequency",
+        "Wavelength",
+        "Amplitude",
+        "Time Period"
+      ],
+      "ansText": "Amplitude",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Sound waves traveling through the air are a perfect example of?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Transverse Waves",
+        "Longitudinal Waves",
+        "Electromagnetic",
+        "Stationary Waves"
+      ],
+      "ansText": "Longitudinal Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "In which of the following mediums is the speed of sound the maximum?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Solid Medium",
+        "Liquid Medium",
+        "Gaseous Medium",
+        "Vacuum Medium"
+      ],
+      "ansText": "Solid Medium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the actual speed of sound in a complete vacuum?",
+      "tag": "Sound Waves",
+      "opts": [
+        "332 m/s",
+        "3000 m/s",
+        "0 m/s (Zero)",
+        "3 * 10^8 m/s"
+      ],
+      "ansText": "0 m/s (Zero)",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the normal audible frequency range for a healthy human ear?",
+      "tag": "Sound Waves",
+      "opts": [
+        "20 Hz to 20,000 Hz",
+        "2 Hz to 2,000 Hz",
+        "200 Hz to 20,000 Hz",
+        "20 Hz to 2,000 Hz"
+      ],
+      "ansText": "20 Hz to 20,000 Hz",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Sound waves having a frequency higher than 20,000 Hz are properly called?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Infrasonic Waves",
+        "Ultrasonic Waves",
+        "Audible Waves",
+        "Supersonic Waves"
+      ],
+      "ansText": "Ultrasonic Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following animals actively uses ultrasonic waves for navigation?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Dogs",
+        "Cats",
+        "Bats",
+        "Elephants"
+      ],
+      "ansText": "Bats",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the approximate speed of sound in air at 0 degree Celsius?",
+      "tag": "Sound Waves",
+      "opts": [
+        "332 m/s",
+        "1450 m/s",
+        "5130 m/s",
+        "3 * 10^8 m/s"
+      ],
+      "ansText": "332 m/s",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The pitch of a sound depends primarily on its?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Amplitude",
+        "Frequency",
+        "Wavelength",
+        "Velocity"
+      ],
+      "ansText": "Frequency",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The loudness or intensity of a sound depends primarily on its?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Amplitude",
+        "Frequency",
+        "Wavelength",
+        "Velocity"
+      ],
+      "ansText": "Amplitude",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the standard practical unit used for measuring the loudness of sound?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Hertz",
+        "Decibel",
+        "Pascal",
+        "Newton"
+      ],
+      "ansText": "Decibel",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the minimum physical distance required to hear a distinct echo?",
+      "tag": "Sound Waves",
+      "opts": [
+        "10 Meters",
+        "17 Meters",
+        "25 Meters",
+        "34 Meters"
+      ],
+      "ansText": "17 Meters",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "SONAR works effectively on the principle of reflection of which type of waves?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Infrasonic Waves",
+        "Ultrasonic Waves",
+        "Radio Waves",
+        "Light Waves"
+      ],
+      "ansText": "Ultrasonic Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The apparent change in frequency of sound due to relative motion is called?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Raman Effect",
+        "Doppler Effect",
+        "Compton Effect",
+        "Zeeman Effect"
+      ],
+      "ansText": "Doppler Effect",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which wave phenomenon firmly proves that sound waves are longitudinal and not transverse?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Reflection",
+        "Refraction",
+        "Diffraction",
+        "Polarisation"
+      ],
+      "ansText": "Polarisation",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "When the temperature of the air increases, the speed of sound in air?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Increases",
+        "Decreases",
+        "Remains Same",
+        "Becomes Zero"
+      ],
+      "ansText": "Increases",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "If the frequency of a tuning fork is exactly 50 Hz, what is its time period?",
+      "tag": "Sound Waves",
+      "opts": [
+        "0.5 Seconds",
+        "0.2 Seconds",
+        "0.05 Seconds",
+        "0.02 Seconds"
+      ],
+      "ansText": "0.02 Seconds",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The speed of sound is strictly minimum in which of the following states of matter?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Solid State",
+        "Liquid State",
+        "Gaseous State",
+        "Plasma State"
+      ],
+      "ansText": "Gaseous State",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The Mach number is commonly used in connection with the speed of?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Ships",
+        "Cars",
+        "Aircrafts",
+        "Trains"
+      ],
+      "ansText": "Aircrafts",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Sound waves having a frequency distinctly lower than 20 Hz are called?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Infrasonic Waves",
+        "Ultrasonic Waves",
+        "Audible Waves",
+        "Supersonic Waves"
+      ],
+      "ansText": "Infrasonic Waves",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which specific equipment is used to measure the depth of the ocean using sound waves?",
+      "tag": "Sound Waves",
+      "opts": [
+        "Radar",
+        "Sonar",
+        "Lidar",
+        "Altimeter"
+      ],
+      "ansText": "Sonar",
+      "why": "Important PYQ Fact."
+    }
+  ]
+}

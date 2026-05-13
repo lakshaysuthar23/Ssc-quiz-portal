@@ -1,0 +1,1210 @@
+{
+  "title": "Metal & Non Metal",
+  "subject": "Chemistry",
+  "subjectKey": "chemistry",
+  "emoji": "🧪",
+  "published": "2026-03-27",
+  "questionCount": 100,
+  "questions": [
+    {
+      "q": "Which of the following is the only metal that remains liquid at room temperature?",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Mercury",
+        "Bromine",
+        "Gallium",
+        "Francium"
+      ],
+      "ansText": "Mercury",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is the only non-metal that remains liquid at room temperature?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Mercury",
+        "Bromine",
+        "Chlorine",
+        "Fluorine"
+      ],
+      "ansText": "Bromine",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which metal is considered the most malleable among the following?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Aluminium",
+        "Platinum",
+        "Silver",
+        "Gold"
+      ],
+      "ansText": "Gold",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following metals is the best conductor of heat and electricity?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Copper",
+        "Silver",
+        "Gold",
+        "Aluminium"
+      ],
+      "ansText": "Silver",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Among the following metals, which one is the poorest conductor of heat?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Lead",
+        "Iron",
+        "Zinc",
+        "Copper"
+      ],
+      "ansText": "Lead",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which non-metal is a good conductor of electricity?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Diamond",
+        "Graphite",
+        "Sulphur",
+        "Phosphorus"
+      ],
+      "ansText": "Graphite",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is a non-metal but possesses a metallic luster?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Iodine",
+        "Carbon",
+        "Sulphur",
+        "Oxygen"
+      ],
+      "ansText": "Iodine",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the hardest naturally occurring substance on Earth?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Platinum",
+        "Titanium",
+        "Diamond",
+        "Graphene"
+      ],
+      "ansText": "Diamond",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is the lightest metal in the periodic table?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Lithium",
+        "Sodium",
+        "Helium",
+        "Calcium"
+      ],
+      "ansText": "Lithium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which metal has the highest density (heaviest metal)?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Uranium",
+        "Osmium",
+        "Mercury",
+        "Platinum"
+      ],
+      "ansText": "Osmium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the most abundant element found in the Earth's crust?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Oxygen",
+        "Silicon",
+        "Iron",
+        "Aluminium"
+      ],
+      "ansText": "Oxygen",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the most abundant metal found in the Earth's crust?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Iron",
+        "Aluminium",
+        "Calcium",
+        "Sodium"
+      ],
+      "ansText": "Aluminium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which highly reactive metal is strictly stored under kerosene?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Magnesium",
+        "Potassium",
+        "Sodium",
+        "Both B & C"
+      ],
+      "ansText": "Both B & C",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which reactive non-metal is preserved by keeping it underwater?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Red Phosphorus",
+        "White Phosphorus",
+        "Yellow Sulphur",
+        "Liquid Bromine"
+      ],
+      "ansText": "White Phosphorus",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which metal has such a low melting point that it melts in your hand?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Gallium",
+        "Calcium",
+        "Lithium",
+        "Bismuth"
+      ],
+      "ansText": "Gallium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which metal is used to make the filament of an electric bulb?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Nichrome",
+        "Tungsten",
+        "Titanium",
+        "Platinum"
+      ],
+      "ansText": "Tungsten",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following noble gases is primarily used in electric bulbs?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Argon",
+        "Helium",
+        "Radon",
+        "Xenon"
+      ],
+      "ansText": "Argon",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is the most reactive metal in the reactivity series?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Potassium",
+        "Sodium",
+        "Calcium",
+        "Magnesium"
+      ],
+      "ansText": "Potassium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is considered a 'Noble Metal' due to low reactivity?",
+      "tag": "SSC GD",
+      "opts": [
+        "Platinum",
+        "Titanium",
+        "Uranium",
+        "Tungsten"
+      ],
+      "ansText": "Platinum",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which soft metals can be easily cut with a standard kitchen knife?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Sodium and Potassium",
+        "Zinc and Magnesium",
+        "Iron and Aluminium",
+        "Copper and Silver"
+      ],
+      "ansText": "Sodium and Potassium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Bauxite is the principal commercial ore of which metal?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Iron",
+        "Aluminium",
+        "Copper",
+        "Zinc"
+      ],
+      "ansText": "Aluminium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Cinnabar is the primary ore used for the extraction of which metal?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Mercury",
+        "Silver",
+        "Lead",
+        "Zinc"
+      ],
+      "ansText": "Mercury",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Galena is the most important naturally occurring ore of which metal?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Lead",
+        "Iron",
+        "Gold",
+        "Uranium"
+      ],
+      "ansText": "Lead",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is the magnetic ore of Iron?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Haematite",
+        "Magnetite",
+        "Siderite",
+        "Limonite"
+      ],
+      "ansText": "Magnetite",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following iron ores has a prominent reddish-brown color?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Magnetite",
+        "Haematite",
+        "Iron Pyrite",
+        "Siderite"
+      ],
+      "ansText": "Haematite",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Pitchblende is a highly radioactive ore primarily consisting of:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Thorium",
+        "Uranium",
+        "Radium",
+        "Plutonium"
+      ],
+      "ansText": "Uranium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Monazite sand, found in Kerala, is a major source of which element?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Uranium",
+        "Thorium",
+        "Titanium",
+        "Zirconium"
+      ],
+      "ansText": "Thorium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Calamine is a well-known carbonate ore of which of the following metals?",
+      "tag": "SSC GD",
+      "opts": [
+        "Calcium",
+        "Copper",
+        "Zinc",
+        "Iron"
+      ],
+      "ansText": "Zinc",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Argentite is an important sulfide ore used to commercially extract:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Gold",
+        "Silver",
+        "Platinum",
+        "Mercury"
+      ],
+      "ansText": "Silver",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Cuprite and Malachite are the prominent naturally occurring ores of:",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Cobalt",
+        "Copper",
+        "Carbon",
+        "Calcium"
+      ],
+      "ansText": "Copper",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Heating a sulphide ore strongly in the presence of excess air is called:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Calcination",
+        "Smelting",
+        "Roasting",
+        "Refining"
+      ],
+      "ansText": "Roasting",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Heating a carbonate ore strongly in the absence of limited air is called:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Calcination",
+        "Roasting",
+        "Smelting",
+        "Reduction"
+      ],
+      "ansText": "Calcination",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Galvanization is the process of applying a protective coating of:",
+      "tag": "RRB Group D",
+      "opts": [
+        "Zinc on Iron",
+        "Tin on Iron",
+        "Copper on Iron",
+        "Silver on Iron"
+      ],
+      "ansText": "Zinc on Iron",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which two components are absolutely essential for the rusting of iron?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Oxygen and Moisture",
+        "Nitrogen and Heat",
+        "Carbon and Moisture",
+        "Hydrogen and Heat"
+      ],
+      "ansText": "Oxygen and Moisture",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the accurate chemical formula for the rust formed on iron?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Fe3O4",
+        "Fe2O3.xH2O",
+        "FeSO4.7H2O",
+        "FeO"
+      ],
+      "ansText": "Fe2O3.xH2O",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What happens to the overall weight of iron when it undergoes rusting?",
+      "tag": "SSC CGL",
+      "opts": [
+        "It decreases",
+        "It increases",
+        "Remains same",
+        "Becomes zero"
+      ],
+      "ansText": "It increases",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The earthy or rocky impurities associated with mined metallic ores are called:",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Flux",
+        "Slag",
+        "Gangue",
+        "Alloy"
+      ],
+      "ansText": "Gangue",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "A substance added to the ore to remove infusible impurities is called:",
+      "tag": "SSC GD",
+      "opts": [
+        "Gangue",
+        "Slag",
+        "Flux",
+        "Matrix"
+      ],
+      "ansText": "Flux",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The fusible product formed when flux reacts with gangue is known as:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Slag",
+        "Matte",
+        "Amalgam",
+        "Anode mud"
+      ],
+      "ansText": "Slag",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "In the thermite process used for welding railway tracks, the reducing agent is:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Carbon",
+        "Aluminium",
+        "Sodium",
+        "Magnesium"
+      ],
+      "ansText": "Aluminium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The alloy Brass is a homogeneous mixture of which two specific metals?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Copper and Tin",
+        "Copper and Zinc",
+        "Lead and Tin",
+        "Copper and Iron"
+      ],
+      "ansText": "Copper and Zinc",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The alloy Bronze is a homogeneous mixture of which two specific metals?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Copper and Tin",
+        "Copper and Zinc",
+        "Lead and Zinc",
+        "Iron and Carbon"
+      ],
+      "ansText": "Copper and Tin",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Solder, an alloy used for welding electrical wires, is a mixture of:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Copper and Zinc",
+        "Lead and Tin",
+        "Lead and Zinc",
+        "Copper and Tin"
+      ],
+      "ansText": "Lead and Tin",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "German Silver is a widely used alloy consisting of Copper, Zinc, and:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Silver",
+        "Nickel",
+        "Tin",
+        "Lead"
+      ],
+      "ansText": "Nickel",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the exact percentage of actual silver present in German Silver?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Ten Percent",
+        "Five Percent",
+        "Zero Percent",
+        "Fifty Percent"
+      ],
+      "ansText": "Zero Percent",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Stainless steel primarily contains Iron, Carbon, Nickel, and:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Chromium",
+        "Titanium",
+        "Manganese",
+        "Aluminium"
+      ],
+      "ansText": "Chromium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Gun metal is a robust alloy containing Copper, Tin, Zinc, and:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Iron",
+        "Lead",
+        "Silver",
+        "Nickel"
+      ],
+      "ansText": "Lead",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Bell metal, used for making temple bells, is an alloy consisting of:",
+      "tag": "SSC GD",
+      "opts": [
+        "Copper and Tin",
+        "Copper and Zinc",
+        "Iron and Nickel",
+        "Lead and Tin"
+      ],
+      "ansText": "Copper and Tin",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Duralumin, used extensively in aircraft bodies, mainly consists of:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Iron",
+        "Aluminium",
+        "Copper",
+        "Titanium"
+      ],
+      "ansText": "Aluminium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "For any alloy to be classified as an 'Amalgam', it must contain:",
+      "tag": "RRB Group D",
+      "opts": [
+        "Silver",
+        "Mercury",
+        "Copper",
+        "Gold"
+      ],
+      "ansText": "Mercury",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Magnalium is a light, tough alloy composed of Aluminium and:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Manganese",
+        "Magnesium",
+        "Molybdenum",
+        "Mercury"
+      ],
+      "ansText": "Magnesium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Invar, known for its extremely low coefficient of thermal expansion, contains:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Iron and Nickel",
+        "Iron and Carbon",
+        "Copper and Zinc",
+        "Lead and Tin"
+      ],
+      "ansText": "Iron and Nickel",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Nichrome, used for heating coils in appliances, is an alloy of Nickel, Iron, and:",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Chromium",
+        "Cobalt",
+        "Carbon",
+        "Copper"
+      ],
+      "ansText": "Chromium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The primary difference between standard Steel and Cast Iron is the percentage of:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Nickel",
+        "Carbon",
+        "Chromium",
+        "Sulphur"
+      ],
+      "ansText": "Carbon",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which element is added to steel to make it resistant to rusting (stainless)?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Chromium",
+        "Carbon",
+        "Copper",
+        "Calcium"
+      ],
+      "ansText": "Chromium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Type metal, used historically in printing presses, is an alloy containing:",
+      "tag": "SSC GD",
+      "opts": [
+        "Lead, Antimony, Tin",
+        "Copper, Zinc, Tin",
+        "Iron, Carbon, Nickel",
+        "Silver, Gold, Copper"
+      ],
+      "ansText": "Lead, Antimony, Tin",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which alloy is preferred for aircraft construction due to its light weight and strength?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Solder",
+        "Duralumin",
+        "Brass",
+        "Gun Metal"
+      ],
+      "ansText": "Duralumin",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following groups of metals are historically known as 'Coinage Metals'?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Cu, Ag, Au",
+        "Fe, Co, Ni",
+        "Li, Na, K",
+        "Zn, Cd, Hg"
+      ],
+      "ansText": "Cu, Ag, Au",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which metal is often referred to as a 'Strategic Metal' due to its defense uses?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Titanium",
+        "Uranium",
+        "Platinum",
+        "Plutonium"
+      ],
+      "ansText": "Titanium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The famous rust-resistant iron pillar at Mehrauli is primarily made of:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Pig Iron",
+        "Cast Iron",
+        "Wrought Iron",
+        "Stainless Steel"
+      ],
+      "ansText": "Wrought Iron",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which chemical compound is widely used as the indelible ink for voters?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Silver Bromide",
+        "Silver Nitrate",
+        "Silver Iodide",
+        "Silver Chloride"
+      ],
+      "ansText": "Silver Nitrate",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which chemical compound is sprayed on clouds to induce artificial rain?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Silver Nitrate",
+        "Silver Bromide",
+        "Silver Iodide",
+        "Silver Sulfate"
+      ],
+      "ansText": "Silver Iodide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which chemical compound was heavily used in traditional black-and-white photography?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Silver Nitrate",
+        "Silver Bromide",
+        "Silver Iodide",
+        "Silver Sulfate"
+      ],
+      "ansText": "Silver Bromide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Calcium carbide reacts with water to produce which gas used in fruit ripening?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Ethylene",
+        "Acetylene",
+        "Methane",
+        "Propane"
+      ],
+      "ansText": "Acetylene",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the common chemical name for the substance known as 'Blue Vitriol'?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Copper Sulphate",
+        "Ferrous Sulphate",
+        "Zinc Sulphate",
+        "Sodium Sulphate"
+      ],
+      "ansText": "Copper Sulphate",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the common chemical name for the substance known as 'White Vitriol'?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Zinc Sulphate",
+        "Copper Sulphate",
+        "Ferrous Sulphate",
+        "Calcium Sulphate"
+      ],
+      "ansText": "Zinc Sulphate",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the common chemical name for the substance known as 'Green Vitriol'?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Ferrous Sulphate",
+        "Copper Sulphate",
+        "Zinc Sulphate",
+        "Sodium Sulphate"
+      ],
+      "ansText": "Ferrous Sulphate",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following chemical compounds is popularly known as 'Laughing Gas'?",
+      "tag": "SSC GD",
+      "opts": [
+        "Nitrogen Dioxide",
+        "Nitrous Oxide",
+        "Nitric Oxide",
+        "Nitrogen Pentoxide"
+      ],
+      "ansText": "Nitrous Oxide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following chemicals is the primary component of 'Tear Gas'?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Chloropicrin",
+        "Chloroform",
+        "Chlorine Gas",
+        "Carbonyl Chloride"
+      ],
+      "ansText": "Chloropicrin",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the accurate chemical name for the compound known as 'Washing Soda'?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Sodium Bicarbonate",
+        "Sodium Carbonate",
+        "Sodium Hydroxide",
+        "Sodium Chloride"
+      ],
+      "ansText": "Sodium Carbonate",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the accurate chemical name for the compound known as 'Baking Soda'?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Sodium Bicarbonate",
+        "Sodium Carbonate",
+        "Sodium Hydroxide",
+        "Sodium Chloride"
+      ],
+      "ansText": "Sodium Bicarbonate",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the accurate chemical name for the compound known as 'Caustic Soda'?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Sodium Hydroxide",
+        "Sodium Carbonate",
+        "Sodium Bicarbonate",
+        "Sodium Chloride"
+      ],
+      "ansText": "Sodium Hydroxide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the precise chemical name for the substance commonly called 'Quick Lime'?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Calcium Hydroxide",
+        "Calcium Oxide",
+        "Calcium Carbonate",
+        "Calcium Sulphate"
+      ],
+      "ansText": "Calcium Oxide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the precise chemical name for the substance commonly called 'Slaked Lime'?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Calcium Hydroxide",
+        "Calcium Oxide",
+        "Calcium Carbonate",
+        "Calcium Sulphate"
+      ],
+      "ansText": "Calcium Hydroxide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the chemical formula for Plaster of Paris (used in bone fractures)?",
+      "tag": "SSC CGL",
+      "opts": [
+        "CaSO4.2H2O",
+        "CaSO4.1/2H2O",
+        "CaSO4.10H2O",
+        "CaSO4.5H2O"
+      ],
+      "ansText": "CaSO4.1/2H2O",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "What is the chemical formula for Gypsum (used in cement manufacturing)?",
+      "tag": "RRB Group D",
+      "opts": [
+        "CaSO4.1/2H2O",
+        "CaSO4.2H2O",
+        "CaSO4.5H2O",
+        "CaSO4.10H2O"
+      ],
+      "ansText": "CaSO4.2H2O",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which chemical compound is commonly known as Bleaching Powder?",
+      "tag": "SSC MTS",
+      "opts": [
+        "CaOCl2",
+        "CaCO3",
+        "Ca(OH)2",
+        "CaCl2"
+      ],
+      "ansText": "CaOCl2",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following chemical compounds is commercially known as 'Epsom Salt'?",
+      "tag": "SSC GD",
+      "opts": [
+        "Magnesium Sulphate",
+        "Calcium Sulphate",
+        "Sodium Sulphate",
+        "Potassium Sulphate"
+      ],
+      "ansText": "Magnesium Sulphate",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following compounds is traditionally known as 'Philosopher's Wool'?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Zinc Oxide",
+        "Zinc Sulphide",
+        "Zinc Carbonate",
+        "Zinc Chloride"
+      ],
+      "ansText": "Zinc Oxide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Aqua Regia, which can dissolve gold, is a mixture of HCl and HNO3 in the ratio:",
+      "tag": "RRB NTPC",
+      "opts": [
+        "3:1",
+        "1:3",
+        "2:1",
+        "1:2"
+      ],
+      "ansText": "3:1",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which important metal naturally occurs as the central atom in Chlorophyll?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Magnesium",
+        "Iron",
+        "Cobalt",
+        "Zinc"
+      ],
+      "ansText": "Magnesium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which important metal naturally occurs as the central atom in Hemoglobin?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Iron",
+        "Magnesium",
+        "Cobalt",
+        "Zinc"
+      ],
+      "ansText": "Iron",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which important metal naturally occurs in the structure of Vitamin B12?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Cobalt",
+        "Iron",
+        "Magnesium",
+        "Zinc"
+      ],
+      "ansText": "Cobalt",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which important metal is intrinsically linked to the function of Insulin?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Zinc",
+        "Cobalt",
+        "Iron",
+        "Magnesium"
+      ],
+      "ansText": "Zinc",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The notorious Minamata disease was caused by severe poisoning of which metal?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Mercury",
+        "Cadmium",
+        "Lead",
+        "Arsenic"
+      ],
+      "ansText": "Mercury",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The painful Itai-Itai disease was caused by severe poisoning of which metal?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Cadmium",
+        "Mercury",
+        "Lead",
+        "Arsenic"
+      ],
+      "ansText": "Cadmium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The condition known as Plumbism is directly caused by the toxicity of:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Lead",
+        "Mercury",
+        "Cadmium",
+        "Arsenic"
+      ],
+      "ansText": "Lead",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Wilson's disease is a genetic disorder resulting in the toxic accumulation of:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Copper",
+        "Iron",
+        "Zinc",
+        "Manganese"
+      ],
+      "ansText": "Copper",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which gas is responsible for the discoloration of brass in open air over time?",
+      "tag": "SSC GD",
+      "opts": [
+        "Hydrogen Sulphide",
+        "Carbon Dioxide",
+        "Nitrogen Dioxide",
+        "Sulphur Dioxide"
+      ],
+      "ansText": "Hydrogen Sulphide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which non-metal gas is extensively used for the large-scale purification of water?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Chlorine",
+        "Fluorine",
+        "Nitrogen",
+        "Hydrogen"
+      ],
+      "ansText": "Chlorine",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which non-metal element is essential for the process of vulcanization of rubber?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Sulphur",
+        "Phosphorus",
+        "Carbon",
+        "Silicon"
+      ],
+      "ansText": "Sulphur",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which non-metal is historically used on the striking surface of safety matchboxes?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Red Phosphorus",
+        "White Phosphorus",
+        "Yellow Sulphur",
+        "Black Carbon"
+      ],
+      "ansText": "Red Phosphorus",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which acid is so corrosive that it dissolves glass and cannot be kept in glass bottles?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Hydrofluoric Acid",
+        "Hydrochloric Acid",
+        "Sulphuric Acid",
+        "Nitric Acid"
+      ],
+      "ansText": "Hydrofluoric Acid",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is the most electronegative element in the periodic table?",
+      "tag": "RRB Group D",
+      "opts": [
+        "Fluorine",
+        "Chlorine",
+        "Oxygen",
+        "Nitrogen"
+      ],
+      "ansText": "Fluorine",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is the most electropositive element in the periodic table?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Francium",
+        "Sodium",
+        "Potassium",
+        "Lithium"
+      ],
+      "ansText": "Francium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which element in the periodic table possesses the highest electron affinity?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Chlorine",
+        "Fluorine",
+        "Oxygen",
+        "Sulphur"
+      ],
+      "ansText": "Chlorine",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which of the following is an example of a completely monoatomic gas?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Helium",
+        "Oxygen",
+        "Nitrogen",
+        "Chlorine"
+      ],
+      "ansText": "Helium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "Which common gas turns clear lime water milky due to carbonate formation?",
+      "tag": "RRB NTPC",
+      "opts": [
+        "Carbon Dioxide",
+        "Carbon Monoxide",
+        "Nitrogen Dioxide",
+        "Hydrogen Sulphide"
+      ],
+      "ansText": "Carbon Dioxide",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The brilliant crimson red color in fireworks is caused by the presence of:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Strontium",
+        "Barium",
+        "Sodium",
+        "Copper"
+      ],
+      "ansText": "Strontium",
+      "why": "Important PYQ Fact."
+    },
+    {
+      "q": "The brilliant apple green color in fireworks is caused by the presence of:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Barium",
+        "Strontium",
+        "Sodium",
+        "Copper"
+      ],
+      "ansText": "Barium",
+      "why": "Important PYQ Fact."
+    }
+  ]
+}

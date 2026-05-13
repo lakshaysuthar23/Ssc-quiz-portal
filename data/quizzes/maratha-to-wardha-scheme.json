@@ -1,0 +1,1210 @@
+{
+  "title": "Maratha to Wardha Scheme",
+  "subject": "History",
+  "subjectKey": "history",
+  "emoji": "📜",
+  "published": "2026-03-20",
+  "questionCount": 100,
+  "questions": [
+    {
+      "q": "Which Peshwa provided assistance to Sahu against Tarabai and signed a treaty with the Syed brothers in 1719?",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Balaji Vishwanath",
+        "Baji Rao I",
+        "Balaji Baji Rao",
+        "Madhav Rao II"
+      ],
+      "ansText": "Balaji Vishwanath",
+      "why": "According to your notes, Balaji Vishwanath assisted Sahu and signed the 1719 treaty which led to the removal of Farrukhsiyar."
+    },
+    {
+      "q": "Who was the first Peshwa to attack Delhi (in 1737) during the reign of Mughal Emperor Mohammad Shah?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Balaji Baji Rao",
+        "Balaji Vishwanath",
+        "Baji Rao I",
+        "Nana Fadnavis"
+      ],
+      "ansText": "Baji Rao I",
+      "why": "Baji Rao I attacked Delhi in 1737, directly threatening Mughal Emperor Mohammad Shah."
+    },
+    {
+      "q": "Which of the following pairs of Maratha regions and capitals is INCORRECTLY matched?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Holkar - Indore",
+        "Gaekwad - Baroda",
+        "Bhosale - Gwalior",
+        "Peshwa - Pune"
+      ],
+      "ansText": "Bhosale - Gwalior",
+      "why": "According to your notes, Bhosale's capital was Nagpur, and Scindia's capital was Gwalior."
+    },
+    {
+      "q": "The Treaty of Salbai (1782) was signed by which Maratha leader on behalf of the Peshwa?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Mahadji Scindia",
+        "Nana Fadnavis",
+        "Baji Rao II",
+        "Raghunath Rao"
+      ],
+      "ansText": "Mahadji Scindia",
+      "why": "The Treaty of Salbai ended the First Anglo-Maratha War and was signed by Mahadji Scindia and Warren Hastings."
+    },
+    {
+      "q": "Consider the statements: 1. The Second Anglo-Maratha War occurred during the time of Lord Wellesley. 2. The Treaty of Bassein was signed in 1802. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "Both 1 and 2",
+      "why": "Your notes clearly state that the 2nd War (1803-05) involved Lord Wellesley and the Treaty of Bassein was signed in 1802 by Peshwa Baji Rao II."
+    },
+    {
+      "q": "During which Anglo-Maratha War was the power of the Pindaris suppressed by Lord Hastings?",
+      "tag": "SSC CGL",
+      "opts": [
+        "First Anglo-Maratha War",
+        "Second Anglo-Maratha War",
+        "Third Anglo-Maratha War",
+        "Fourth Anglo-Maratha War"
+      ],
+      "ansText": "Third Anglo-Maratha War",
+      "why": "The Third Anglo-Maratha War (1817-19) under Lord Hastings specifically targeted the suppression of the Pindaris."
+    },
+    {
+      "q": "Who is considered the 'Second Founder' of the Maratha Empire?",
+      "tag": "SSC GD",
+      "opts": [
+        "Balaji Vishwanath",
+        "Baji Rao I",
+        "Balaji Baji Rao",
+        "Madhav Rao II"
+      ],
+      "ansText": "Balaji Baji Rao",
+      "why": "Balaji Baji Rao, also known as Nana Saheb, is noted as the second founder of the Maratha Empire."
+    },
+    {
+      "q": "Which Sikh Guru was a contemporary of Mughal Emperors Babur and Humayun?",
+      "tag": "SSC CPO PYQ",
+      "opts": [
+        "Guru Nanak Dev",
+        "Guru Angad",
+        "Guru Amardas",
+        "Guru Ramdas"
+      ],
+      "ansText": "Guru Nanak Dev",
+      "why": "Guru Nanak Dev (born 1469 in Talwandi) founded Sikhism and was a contemporary of Babur and Humayun."
+    },
+    {
+      "q": "The new script called 'Guru-Mukhi' was invented by which Sikh Guru?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Guru Nanak Dev",
+        "Guru Angad",
+        "Guru Arjan Dev",
+        "Guru Hargobind"
+      ],
+      "ansText": "Guru Angad",
+      "why": "Guru Angad, whose birth name was Lehna, invented the Guru-Mukhi script."
+    },
+    {
+      "q": "Which Sikh Guru set up 22 'Takhts' for the administration of the Sikh community?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Guru Amardas",
+        "Guru Ramdas",
+        "Guru Arjan Dev",
+        "Guru Har Rai"
+      ],
+      "ansText": "Guru Amardas",
+      "why": "Guru Amardas is specifically credited with setting up 22 takhts (manjis)."
+    },
+    {
+      "q": "The city of Amritsar was founded by:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Guru Nanak Dev",
+        "Guru Angad",
+        "Guru Amardas",
+        "Guru Ramdas"
+      ],
+      "ansText": "Guru Ramdas",
+      "why": "Guru Ramdas founded the holy city of Amritsar."
+    },
+    {
+      "q": "Who compiled the 'Guru Granth Saheb' and built the Harmandir Sahib?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Guru Arjan Dev",
+        "Guru Hargobind",
+        "Guru Tegh Bahadur",
+        "Guru Gobind Singh"
+      ],
+      "ansText": "Guru Arjan Dev",
+      "why": "Guru Arjan Dev compiled the scripture and built the Harmandir Sahib (Golden Temple)."
+    },
+    {
+      "q": "Mughal Emperor Jahangir ordered the execution of which Sikh Guru for allegedly supporting the rebel Khusrau?",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Guru Tegh Bahadur",
+        "Guru Arjan Dev",
+        "Guru Hargobind",
+        "Guru Har Rai"
+      ],
+      "ansText": "Guru Arjan Dev",
+      "why": "Jahangir executed Guru Arjan Dev because the rebel prince Khusrau revolted and received the Guru's blessing."
+    },
+    {
+      "q": "Who was the first Sikh Guru to engage in warfare and build the Akal Takht?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Guru Arjan Dev",
+        "Guru Hargobind",
+        "Guru Har Rai",
+        "Guru Gobind Singh"
+      ],
+      "ansText": "Guru Hargobind",
+      "why": "Guru Hargobind militarized the Sikhs and built the Akal Takhat."
+    },
+    {
+      "q": "Which Sikh Guru is also popularly known as the 'Bal Guru'?",
+      "tag": "SSC GD",
+      "opts": [
+        "Guru Har Rai",
+        "Guru Har Kishan",
+        "Guru Tegh Bahadur",
+        "Guru Gobind Singh"
+      ],
+      "ansText": "Guru Har Kishan",
+      "why": "Guru Har Kishan became Guru at a very young age and is called the Bal Guru."
+    },
+    {
+      "q": "Guru Tegh Bahadur, the founder of Anandpur Sahib, was executed under the reign of:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Jahangir",
+        "Shah Jahan",
+        "Aurangzeb",
+        "Bahadur Shah"
+      ],
+      "ansText": "Aurangzeb",
+      "why": "Aurangzeb ordered the execution of Guru Tegh Bahadur."
+    },
+    {
+      "q": "Consider the statements regarding Guru Gobind Singh: 1. He was born in Patna in 1666. 2. He died in Nanded, Maharashtra. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "Both 1 and 2",
+      "why": "He was born in Patna (1666), founded the Khalsa, and died in Nanded (Maharashtra). Veer Bal Diwas is marked for his sons."
+    },
+    {
+      "q": "What was the original birth name of Banda Bahadur?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Lehna",
+        "Madho Das Bairagi",
+        "Zorawar Singh",
+        "Ajit Singh"
+      ],
+      "ansText": "Madho Das Bairagi",
+      "why": "His original name was Lachman Dev or Madho Das Bairagi before Guru Gobind Singh named him Banda Bahadur."
+    },
+    {
+      "q": "Banda Bahadur issued coins in the name of which two Sikh Gurus?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Guru Nanak and Guru Angad",
+        "Guru Arjan and Guru Hargobind",
+        "Guru Nanak and Guru Gobind Singh",
+        "Guru Tegh Bahadur and Guru Gobind Singh"
+      ],
+      "ansText": "Guru Nanak and Guru Gobind Singh",
+      "why": "He established his capital at Lohgarh and issued coins in the names of Guru Nanak and Guru Gobind Singh."
+    },
+    {
+      "q": "Maharaja Ranjit Singh belonged to which Sikh Misal?",
+      "tag": "SSC CHSL PYQ",
+      "opts": [
+        "Bhangi Misal",
+        "Sukerchakia Misal",
+        "Ahluwalia Misal",
+        "Ramgarhia Misal"
+      ],
+      "ansText": "Sukerchakia Misal",
+      "why": "Born in 1780, Maharaja Ranjit Singh belonged to the Sukerchakia Misal."
+    },
+    {
+      "q": "The Treaty of Amritsar (1809) established which river as the boundary between Ranjit Singh's empire and the British?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Beas River",
+        "Ravi River",
+        "Sutlej River",
+        "Chenab River"
+      ],
+      "ansText": "Sutlej River",
+      "why": "Signed by Charles Metcalfe, the treaty made the Sutlej river the boundary."
+    },
+    {
+      "q": "In 1814, Maharaja Ranjit Singh received the famous Kohinoor diamond from which Afghan ruler?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Zaman Shah",
+        "Ahmad Shah Abdali",
+        "Shah Shuja",
+        "Dost Mohammad"
+      ],
+      "ansText": "Shah Shuja",
+      "why": "Afghan ruler Shah Shuja gave him the Kohinoor diamond in 1814."
+    },
+    {
+      "q": "In Maharaja Ranjit Singh's army, the 'Fauj-e-Khas' referred to:",
+      "tag": "SSC CPO",
+      "opts": [
+        "The Regular Army",
+        "The Irregular Army",
+        "The Naval Force",
+        "The Artillery Unit"
+      ],
+      "ansText": "The Regular Army",
+      "why": "Fauj-e-Khas was the regular, disciplined army, while Fauj-e-Bekaid was the irregular army."
+    },
+    {
+      "q": "During the First Anglo-Sikh War (1845-46), who was the Governor General of India?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Lord Dalhousie",
+        "Lord Hardinge I",
+        "Lord Wellesley",
+        "Lord Canning"
+      ],
+      "ansText": "Lord Hardinge I",
+      "why": "Lord Hardinge I was the GG during the First Anglo-Sikh War, where the Sikh army was led by Lal Singh."
+    },
+    {
+      "q": "The First Anglo-Sikh War concluded on 8 March 1846 with the signing of the:",
+      "tag": "SSC GD",
+      "opts": [
+        "Treaty of Lahore",
+        "Treaty of Amritsar",
+        "Treaty of Peshawar",
+        "Treaty of Multan"
+      ],
+      "ansText": "Treaty of Lahore",
+      "why": "The Sikh army was defeated and the Treaty of Lahore was signed with the British on 8 March 1846."
+    },
+    {
+      "q": "Who led the Sikh army against the British during the Second Anglo-Sikh War (1848-49)?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Lal Singh",
+        "Sher Singh",
+        "Tej Singh",
+        "Dalip Singh"
+      ],
+      "ansText": "Sher Singh",
+      "why": "Sher Singh led the Sikh army in the 2nd War, while Lord Dalhousie was the Governor General."
+    },
+    {
+      "q": "Which of the following was the FIRST state to accept the Subsidiary Alliance system?",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Mysore",
+        "Awadh",
+        "Hyderabad",
+        "Tanjore"
+      ],
+      "ansText": "Hyderabad",
+      "why": "The sequence in your notes is: Hyderabad, Mysore, Tanjore, Awadh, Maratha, Berar, Scindia, Holkar."
+    },
+    {
+      "q": "Who gave practical and theoretical form to the 'Subsidiary Alliance' between 1798 and 1805?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Lord Dalhousie",
+        "French Governor Dupleix",
+        "Lord Wellesley",
+        "Lord Cornwallis"
+      ],
+      "ansText": "Lord Wellesley",
+      "why": "Though Dupleix first tried it, Lord Wellesley gave it practical and theoretical form (1798-1805)."
+    },
+    {
+      "q": "Under the Doctrine of Lapse (Dalhousie's Doctrine), which state was annexed FIRST?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Jhansi",
+        "Nagpur",
+        "Satara",
+        "Sambalpur"
+      ],
+      "ansText": "Satara",
+      "why": "The annexation order according to your notes: Satara, Jaitpur, Sambalpur, Baghat, Udaipur, Jhansi, Nagpur."
+    },
+    {
+      "q": "The 'Policy of Ring Fence' was implemented by the British during which period?",
+      "tag": "SSC MTS",
+      "opts": [
+        "1813 to 1858",
+        "1935 to 1947",
+        "1765 to 1813",
+        "1858 to 1947"
+      ],
+      "ansText": "1765 to 1813",
+      "why": "The notes state: Policy of Ring Fence (1765-1813), Policy of Subordinate Isolation (1813-1858)."
+    },
+    {
+      "q": "Consider the statements about the Permanent Settlement: 1. It was founded by Cornwallis in 1793. 2. It covered 51% of total land area. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "1 only",
+      "why": "It was founded by Cornwallis in 1793, but it covered 19% of the land area, not 51% (Ryotwadi covered 51%)."
+    },
+    {
+      "q": "Under the Permanent Settlement, what share of the revenue was kept by the Zamindar?",
+      "tag": "SSC CGL",
+      "opts": [
+        "10/11",
+        "1/11",
+        "2/5",
+        "1/2"
+      ],
+      "ansText": "1/11",
+      "why": "The Company's share was 10/11, and the Zamindar's share was 1/11."
+    },
+    {
+      "q": "Which of the following is an alternate name for the Permanent Settlement system?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Mahalwari",
+        "Ryotwadi",
+        "Istamrari",
+        "Iqtadari"
+      ],
+      "ansText": "Istamrari",
+      "why": "Other names listed in notes: Istamrari, Jagirdari, Malguzari, Bishvedari, Zamindari."
+    },
+    {
+      "q": "The 'Ryotwadi System' was introduced in Madras (1820) by:",
+      "tag": "SSC CHSL PYQ",
+      "opts": [
+        "Holt Mackenzie",
+        "Thomas Munro",
+        "Lord Cornwallis",
+        "Elphinstone"
+      ],
+      "ansText": "Thomas Munro",
+      "why": "Thomas Munro introduced it in Madras (1820), and Elphinstone in Bombay."
+    },
+    {
+      "q": "In the Ryotwadi system, the rent agreement was directly made with:",
+      "tag": "SSC GD",
+      "opts": [
+        "The Zamindars",
+        "The Village Headman",
+        "The Peasants (Ryot)",
+        "The Company Officials"
+      ],
+      "ansText": "The Peasants (Ryot)",
+      "why": "The agreement was made directly with the peasants (Ryot) instead of landlords, covering 51% of the area."
+    },
+    {
+      "q": "The 'Mahalwadi System', covering 30% of the total area, was founded in 1822 by:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Thomas Munro",
+        "Holt Mackenzie",
+        "Lord Dalhousie",
+        "Elphinstone"
+      ],
+      "ansText": "Holt Mackenzie",
+      "why": "Holt Mackenzie founded the Mahalwadi system in 1822. 'Mahal' means village."
+    },
+    {
+      "q": "The first railway in India ran on 16 April 1853 between which two stations?",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Kolkata and Hooghly",
+        "Mumbai and Thane",
+        "Madras and Arcot",
+        "Delhi and Meerut"
+      ],
+      "ansText": "Mumbai and Thane",
+      "why": "First railway ran on 16/Apr/1853 from Mumbai to Thane under Lord Dalhousie."
+    },
+    {
+      "q": "Most of the railway development in India took place during the tenure of:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Lord Dalhousie",
+        "Lord Curzon",
+        "Lord Ripon",
+        "Lord Canning"
+      ],
+      "ansText": "Lord Curzon",
+      "why": "While Dalhousie started it, your notes specifically state 'Lord Curzon, during whom most of the railways were developed'."
+    },
+    {
+      "q": "The first electric train in India ran in 1925 between:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Mumbai to Thane",
+        "Bombay to Kurla",
+        "Howrah to Hooghly",
+        "Delhi to Agra"
+      ],
+      "ansText": "Bombay to Kurla",
+      "why": "In 1925, the first electric train ran from Bombay to Kurla."
+    },
+    {
+      "q": "Who proposed the 'Theory of Drain of Wealth'?",
+      "tag": "SSC MTS PYQ",
+      "opts": [
+        "W.C. Banerjee",
+        "Dadabhai Naoroji",
+        "Mahatma Gandhi",
+        "R.C. Dutt"
+      ],
+      "ansText": "Dadabhai Naoroji",
+      "why": "Dadabhai Naoroji, the Grand Old Man of India, proposed the Drain of Wealth theory."
+    },
+    {
+      "q": "Consider the statements about Dadabhai Naoroji: 1. He used the word 'Swaraj' for the first time in 1906. 2. He was the first Indian elected to the British House of Commons. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "Both 1 and 2",
+      "why": "Both are explicitly mentioned in your notes under his section."
+    },
+    {
+      "q": "The city of Kolkata was founded by:",
+      "tag": "SSC GD",
+      "opts": [
+        "Robert Clive",
+        "Warren Hastings",
+        "Job Charnock",
+        "William Bentinck"
+      ],
+      "ansText": "Job Charnock",
+      "why": "A specific note at the top of page 16 states 'Kolkata, founded by -> Job Charnock'."
+    },
+    {
+      "q": "Who established the Fort William College in Calcutta for training civil servants?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Lord Cornwallis",
+        "Lord Wellesley",
+        "Lord Dalhousie",
+        "Lord Hastings"
+      ],
+      "ansText": "Lord Wellesley",
+      "why": "Lord Wellesley established Fort William College for training civil servants, though Cornwallis is the founder of Civil Services."
+    },
+    {
+      "q": "Who was the first Indian to succeed in the ICS examination in 1863?",
+      "tag": "SSC CPO PYQ",
+      "opts": [
+        "Surendranath Banerjee",
+        "Dadabhai Naoroji",
+        "Satyendra Nath Tagore",
+        "Subhas Chandra Bose"
+      ],
+      "ansText": "Satyendra Nath Tagore",
+      "why": "The first competitive exam was held in England in 1855, and Satyendra Nath Tagore cleared it in 1863."
+    },
+    {
+      "q": "The founder of Police Administration during the British era was:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Lord Canning",
+        "Lord Cornwallis",
+        "Lord Curzon",
+        "Lord Ripon"
+      ],
+      "ansText": "Lord Cornwallis",
+      "why": "Lord Cornwallis is noted as the founder of Police Administration."
+    },
+    {
+      "q": "The Police Act was enacted in 1861 during the time of which Governor General/Viceroy?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Lord Cornwallis",
+        "Lord Dalhousie",
+        "Lord Canning",
+        "Lord Lytton"
+      ],
+      "ansText": "Lord Canning",
+      "why": "The notes specify the Police Act was enacted in 1861 'In the time of Lord Canning'."
+    },
+    {
+      "q": "Consider the statements about the Ilbert Bill: 1. It was introduced during Lord Lytton's tenure. 2. It gave Indian judges the right to hear cases of Europeans. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "2 only",
+      "why": "It gave Indian judges rights over Europeans, but it was during Lord Ripon (1880-1884), not Lytton. Europeans protested in 1883, leading to Ripon's resignation."
+    },
+    {
+      "q": "The founder of the British Military system in India (pre-1857) was:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Major Stringer Lawrence",
+        "Lord Clive",
+        "Lord Cornwallis",
+        "Arthur Wellesley"
+      ],
+      "ansText": "Major Stringer Lawrence",
+      "why": "Pre-1857 military founder is listed as Major Stringer Lawrence."
+    },
+    {
+      "q": "Before 1857, what was the highest rank an Indian soldier could achieve in the British army?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Subedar",
+        "Havildar",
+        "Sepoy",
+        "Captain"
+      ],
+      "ansText": "Subedar",
+      "why": "Notes state: 'Indian soldier = Low salary, highest rank = subedar'."
+    },
+    {
+      "q": "Which of the following changes occurred in the British military system AFTER 1857?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Increase in Indian troops",
+        "Indians given control of artillery",
+        "Reduction in Indian troops and Euro control of artillery",
+        "Equal salary for Indians"
+      ],
+      "ansText": "Reduction in Indian troops and Euro control of artillery",
+      "why": "After 1857, there was 'Reduction and balance in the number of Indian troops' and 'European control over artillery'."
+    },
+    {
+      "q": "The Madras Municipal Corporation, the first of its kind, was established in:",
+      "tag": "SSC MTS",
+      "opts": [
+        "1726",
+        "1793",
+        "1687",
+        "1870"
+      ],
+      "ansText": "1687",
+      "why": "Pre-1857 local self-govt: Madras Municipal Corporation in 1687, Calcutta/Mumbai in 1726."
+    },
+    {
+      "q": "Who is known as the 'Father of Local Self Government' in India?",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Lord Mayo",
+        "Lord Ripon",
+        "Lord Lytton",
+        "Lord Curzon"
+      ],
+      "ansText": "Lord Ripon",
+      "why": "Ripon's proposal of 1882 earned him the title of the father of local self-government."
+    },
+    {
+      "q": "The financial decentralization proposal of 1870 was brought by:",
+      "tag": "SSC GD",
+      "opts": [
+        "Lord Ripon",
+        "Lord Mayo",
+        "Lord Lytton",
+        "Lord Dalhousie"
+      ],
+      "ansText": "Lord Mayo",
+      "why": "Mayo's financial decentralization proposal was in 1870."
+    },
+    {
+      "q": "The Government of India Act 1919 made Local Self Government a:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Reserved Subject",
+        "Transferred Subject",
+        "Federal Subject",
+        "Concurrent Subject"
+      ],
+      "ansText": "Transferred Subject",
+      "why": "Notes state: 'Act 1919 - Local self govt made a transferred subject (to provincial govt)'."
+    },
+    {
+      "q": "The abolition of Sati in 1829 was carried out by:",
+      "tag": "SSC CHSL PYQ",
+      "opts": [
+        "William Bentinck",
+        "Lord Dalhousie",
+        "Lord Canning",
+        "Lord Ellenborough"
+      ],
+      "ansText": "William Bentinck",
+      "why": "1829 - Abolition of Sati by William Bentinck."
+    },
+    {
+      "q": "The Thugee system was abolished in 1830 with the help of which British officer?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Major Stringer Lawrence",
+        "Colonel Sleeman",
+        "Charles Wood",
+        "William Hunter"
+      ],
+      "ansText": "Colonel Sleeman",
+      "why": "1830 - Thugee system abolished with the help of Colonel Sleeman."
+    },
+    {
+      "q": "Slavery in India was officially abolished in 1843 during the tenure of:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Lord Ellenborough",
+        "William Bentinck",
+        "Lord Dalhousie",
+        "Lord Canning"
+      ],
+      "ansText": "Lord Ellenborough",
+      "why": "1843 - Slavery abolished with the help of Lord Ellenborough."
+    },
+    {
+      "q": "Consider the statements about the Widow Remarriage Act (1856): 1. It was drafted by Lord Dalhousie. 2. It was passed by Lord Canning. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "Both 1 and 2",
+      "why": "Your notes specify: 'Widow remarriage act = Drafted by Dalhousie, Passed by Lord Canning'. Ishwar Chandra Vidyasagar was involved."
+    },
+    {
+      "q": "The Sharda Act of 1929, which regulated the marriage age, was passed during the time of:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Lord Irwin",
+        "Lord Linlithgow",
+        "Lord Hardinge",
+        "Lord Reading"
+      ],
+      "ansText": "Lord Irwin",
+      "why": "1929 - Sharda act 1929 (Irwin) -> marriage age. Driven by Harbilas Sarda."
+    },
+    {
+      "q": "The Hindu Women's Rights to Property Act (1937) was enacted during the tenure of:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Lord Linlithgow",
+        "Lord Irwin",
+        "Lord Wavell",
+        "Lord Mountbatten"
+      ],
+      "ansText": "Lord Linlithgow",
+      "why": "1937 - Hindu Women's rights to property act = (Linlithgow)."
+    },
+    {
+      "q": "Human sacrifice was banned (1844-48) during the time of:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Lord Hardinge I",
+        "William Bentinck",
+        "Lord Dalhousie",
+        "Lord Ellenborough"
+      ],
+      "ansText": "Lord Hardinge I",
+      "why": "1844-48 -> Human sacrifice banned - Lord Hardinge."
+    },
+    {
+      "q": "Under William Bentinck's education policy, the 'Anglicist Group' (Anglo Group) was represented by:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Henry Prinsep and H.S. Wilson",
+        "Macaulay and Trevelyan",
+        "Charles Grant and Jonathan Duncan",
+        "William Hunter and Charles Wood"
+      ],
+      "ansText": "Macaulay and Trevelyan",
+      "why": "The Anglo Group (Macaulay, Trevelyan) supported modern subjects in English medium."
+    },
+    {
+      "q": "The 'Oriental Group', which supported traditional Indian subjects and languages, was represented by:",
+      "tag": "SSC CPO",
+      "opts": [
+        "Macaulay and Trevelyan",
+        "Henry Prinsep and James Prinsep",
+        "Charles Wood and Dalhousie",
+        "Lord Ripon and Hunter"
+      ],
+      "ansText": "Henry Prinsep and James Prinsep",
+      "why": "Oriental Group: Henry Prinsep, James Prinsep, H.S. Wilson."
+    },
+    {
+      "q": "Macaulay's proposal for English education was officially recognized in 1835 by:",
+      "tag": "SSC GD",
+      "opts": [
+        "Lord Dalhousie",
+        "William Bentinck",
+        "Lord Auckland",
+        "Lord Hardinge"
+      ],
+      "ansText": "William Bentinck",
+      "why": "1835 recognized by William Bentinck."
+    },
+    {
+      "q": "Who is considered the 'Father of modern education in India'?",
+      "tag": "SSC CHSL PYQ",
+      "opts": [
+        "Lord Macaulay",
+        "Charles Grant",
+        "Jonathan Duncan",
+        "William Bentinck"
+      ],
+      "ansText": "Charles Grant",
+      "why": "Charles Grant was the father of modern education in India, and his idea was to establish such schools."
+    },
+    {
+      "q": "The Banaras Sanskrit College was established in 1791 by:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Warren Hastings",
+        "Jonathan Duncan",
+        "Charles Grant",
+        "William Jones"
+      ],
+      "ansText": "Jonathan Duncan",
+      "why": "1791, Banaras Sanskrit College (By Jonathan Duncan)."
+    },
+    {
+      "q": "Wood's Dispatch on education was issued in 1854 during the tenure of:",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Lord Dalhousie",
+        "Lord Canning",
+        "Lord Ripon",
+        "Lord Curzon"
+      ],
+      "ansText": "Lord Dalhousie",
+      "why": "Wood's Dispatch (1854) - Dalhousie."
+    },
+    {
+      "q": "Which document is considered the 'Magna-Carta' of English Education in India?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Macaulay's Minute",
+        "Hunter Commission Report",
+        "Wood's Dispatch",
+        "Sadler Commission Report"
+      ],
+      "ansText": "Wood's Dispatch",
+      "why": "The Wood's Dispatch is considered as 'Magna-Carta' of English Education in India."
+    },
+    {
+      "q": "According to Wood's Dispatch, the medium of instruction for School education should be:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "English strictly",
+        "Local language",
+        "Sanskrit",
+        "Persian"
+      ],
+      "ansText": "Local language",
+      "why": "Wood's focus: Higher education -> English. School education -> Local language."
+    },
+    {
+      "q": "The Hunter Education Commission (1882-83) was appointed during the tenure of:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Lord Dalhousie",
+        "Lord Ripon",
+        "Lord Curzon",
+        "Lord Chelmsford"
+      ],
+      "ansText": "Lord Ripon",
+      "why": "Hunter Education Commission (1882-83) - Lord Ripon, headed by William Hunter (1882)."
+    },
+    {
+      "q": "Consider the statements about the Hunter Commission: 1. It included 8 Indian members. 2. Its main objective was to review university education. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "1 only",
+      "why": "It did include 8 Indian members, but its main objective was to review the progress of PRIMARY and SECONDARY level education, not universities."
+    },
+    {
+      "q": "The Hunter Commission was also notably associated with investigating the events of:",
+      "tag": "SSC Trivia",
+      "opts": [
+        "The 1857 Revolt",
+        "The Jallianwala Bagh Massacre",
+        "The Chauri Chaura incident",
+        "The Partition of Bengal"
+      ],
+      "ansText": "The Jallianwala Bagh Massacre",
+      "why": "A specific note at the top of the page says 'Hunter Commission - for Jallianwala Bagh Hatyakand'."
+    },
+    {
+      "q": "The Sadler University Commission (1917-19) was appointed during the time of:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Lord Ripon",
+        "Lord Chelmsford",
+        "Lord Curzon",
+        "Lord Irwin"
+      ],
+      "ansText": "Lord Chelmsford",
+      "why": "A handwritten note next to Sadler Commission says 'time of Chelmsford'."
+    },
+    {
+      "q": "Who were the two Indian members included in the Sadler University Commission?",
+      "tag": "SSC CPO",
+      "opts": [
+        "Dr. Ashutosh Mukherjee and Dr. Ziauddin Ahmed",
+        "Dadabhai Naoroji and G.K. Gokhale",
+        "Syed Ahmed Khan and W.C. Banerjee",
+        "Satyendra Nath Tagore and Surendranath Banerjee"
+      ],
+      "ansText": "Dr. Ashutosh Mukherjee and Dr. Ziauddin Ahmed",
+      "why": "Notes state: Two Indian members = Dr. Ashutosh Mukherjee and Dr. Ziauddin Ahmed."
+    },
+    {
+      "q": "The primary objective of the Sadler Commission was to inquire into the conditions of which university?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Bombay University",
+        "Madras University",
+        "Calcutta University",
+        "Delhi University"
+      ],
+      "ansText": "Calcutta University",
+      "why": "Objective - to inquire into the 'conditions and prospects of the university of calcutta'."
+    },
+    {
+      "q": "The Wardha Scheme of Education was formulated in which year?",
+      "tag": "SSC GD",
+      "opts": [
+        "1917",
+        "1882",
+        "1937",
+        "1854"
+      ],
+      "ansText": "1937",
+      "why": "Wardha Scheme of Education 1937."
+    },
+    {
+      "q": "The Wardha Scheme of Education was formulated during the tenure of:",
+      "tag": "SSC MTS",
+      "opts": [
+        "Lord Irwin",
+        "Lord Linlithgow",
+        "Lord Wavell",
+        "Lord Mountbatten"
+      ],
+      "ansText": "Lord Linlithgow",
+      "why": "Notes state 'Lord Linlithgow' right under the Wardha scheme heading."
+    },
+    {
+      "q": "The Wardha Scheme was heavily based on the educational ideas described by Mahatma Gandhi in which magazine?",
+      "tag": "SSC CGL PYQ",
+      "opts": [
+        "Young India",
+        "Navjivan",
+        "Harijan",
+        "Indian Opinion"
+      ],
+      "ansText": "Harijan",
+      "why": "Described by Mahatma Gandhi in the magazine 'Harijan'."
+    },
+    {
+      "q": "According to the Wardha Scheme, education should be free and compulsory for the first:",
+      "tag": "SSC CPO",
+      "opts": [
+        "5 years",
+        "7 years",
+        "10 years",
+        "12 years"
+      ],
+      "ansText": "7 years",
+      "why": "The first seven years of the nation education system should be free and compulsory."
+    },
+    {
+      "q": "Under the Wardha Scheme, the primary medium of instruction was proposed to be:",
+      "tag": "SSC CHSL",
+      "opts": [
+        "English",
+        "Hindi strictly",
+        "The mother tongue",
+        "Sanskrit"
+      ],
+      "ansText": "The mother tongue",
+      "why": "This education should be provided in the mother tongue."
+    },
+    {
+      "q": "Who among the following was the founder of the Sikh religion?",
+      "tag": "SSC Basic",
+      "opts": [
+        "Guru Angad",
+        "Guru Arjan Dev",
+        "Guru Nanak Dev",
+        "Guru Gobind Singh"
+      ],
+      "ansText": "Guru Nanak Dev",
+      "why": "Guru Nanak Dev = Founder of Sikh religion. He started Guru ka Langar."
+    },
+    {
+      "q": "The Battle of Chillianwala is associated with which war?",
+      "tag": "SSC MTS",
+      "opts": [
+        "First Anglo-Maratha War",
+        "Second Anglo-Sikh War",
+        "First Anglo-Sikh War",
+        "Third Anglo-Maratha War"
+      ],
+      "ansText": "Second Anglo-Sikh War",
+      "why": "An arrow under Second Anglo Sikh war points to 'Called Battle of Chillianwala'."
+    },
+    {
+      "q": "Which of the following British Imperialist policies came FIRST chronologically?",
+      "tag": "SSC Conceptual",
+      "opts": [
+        "Doctrine of Lapse",
+        "Policy of Subordinate Isolation",
+        "Policy of Ring Fence",
+        "Policy of Equal Federation"
+      ],
+      "ansText": "Policy of Ring Fence",
+      "why": "Ring Fence (1765-1813) came before Subordinate Isolation (1813-1858) and Equal Federation (1935-1947)."
+    },
+    {
+      "q": "Which British Governor General annexed states like Jaitpur, Baghat, and Udaipur?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Lord Wellesley",
+        "Lord Dalhousie",
+        "Lord Hastings",
+        "Lord Cornwallis"
+      ],
+      "ansText": "Lord Dalhousie",
+      "why": "These were annexed under Dalhousie's Doctrine of Lapse."
+    },
+    {
+      "q": "In the Ryotwadi System, what was the typical rate of taxation on total production?",
+      "tag": "SSC CPO",
+      "opts": [
+        "1/11th",
+        "10/11th",
+        "2/5th",
+        "1/2"
+      ],
+      "ansText": "2/5th",
+      "why": "Notes say: 'Rate, 2/5th of the total production'."
+    },
+    {
+      "q": "What did the word 'Mahal' mean in the Mahalwadi System?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Palace",
+        "Peasant",
+        "Village",
+        "Landlord"
+      ],
+      "ansText": "Village",
+      "why": "Notes explicitly state: 'MAHAL means village'."
+    },
+    {
+      "q": "Who was the President of the Indian National Congress in 1886, 1893, and 1906?",
+      "tag": "SSC MTS",
+      "opts": [
+        "W.C. Banerjee",
+        "Dadabhai Naoroji",
+        "Badruddin Tyabji",
+        "G.K. Gokhale"
+      ],
+      "ansText": "Dadabhai Naoroji",
+      "why": "Dadabhai Naoroji was President of Congress = 1886 Kolkata, 1893 Lahore, 1906 Kolkata."
+    },
+    {
+      "q": "Consider the statements about Dalhousie's tenure: 1. He drafted the Widow Remarriage Act. 2. He introduced the first railway. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "Both 1 and 2",
+      "why": "Both facts are explicitly linked to Dalhousie in your notes."
+    },
+    {
+      "q": "Under the Subsidiary Alliance, the princely states were NOT allowed to have:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Their own currency",
+        "Their own religion",
+        "Their independent armed forces",
+        "A British resident"
+      ],
+      "ansText": "Their independent armed forces",
+      "why": "Notes state: 'Indian rulers were not allowed to have their independent armed forces'."
+    },
+    {
+      "q": "What was the purpose of the 'Subsidiary Forces' maintained by the Company under Wellesley's alliance?",
+      "tag": "SSC CPO",
+      "opts": [
+        "To conquer neighboring states",
+        "To protect the princely states",
+        "To collect land revenue",
+        "To enforce religious laws"
+      ],
+      "ansText": "To protect the princely states",
+      "why": "They were to be protected by the company, but had to pay for the 'subsidiary forces' maintained for this protection."
+    },
+    {
+      "q": "Which education commission was specifically focused on Higher/University education and the spread of western education?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Hunter Commission",
+        "Wood's Dispatch",
+        "Wardha Scheme",
+        "Macaulay's Minute"
+      ],
+      "ansText": "Wood's Dispatch",
+      "why": "Focus = Higher education/university education and spread of western education."
+    },
+    {
+      "q": "Charles Wood, the author of Wood's Dispatch, held which position?",
+      "tag": "SSC GD",
+      "opts": [
+        "Governor General of India",
+        "President of the Board of Control",
+        "Secretary of State",
+        "Viceroy of India"
+      ],
+      "ansText": "President of the Board of Control",
+      "why": "Notes state: 'For Indian Education by Charles Wood (President of the Board of Control)'."
+    },
+    {
+      "q": "Which policy gave Indian princely states a 'British resident to advise on governance'?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Doctrine of Lapse",
+        "Permanent Settlement",
+        "Subsidiary Alliance",
+        "Ring Fence"
+      ],
+      "ansText": "Subsidiary Alliance",
+      "why": "Under Subsidiary Alliance: 'The princely states would have a British resident to advise on governance'."
+    },
+    {
+      "q": "The 73rd and 74th Constitutional Amendment Acts of 1992 are related to:",
+      "tag": "SSC CGL",
+      "opts": [
+        "Education Policy",
+        "Local Self Government",
+        "Police Reforms",
+        "Military System"
+      ],
+      "ansText": "Local Self Government",
+      "why": "Listed under 'After attaining independence' in the Local Self-govt section."
+    },
+    {
+      "q": "Which Governor General is associated with the 'Policy of Subordinate Isolation' (1813-1858)?",
+      "tag": "SSC conceptual",
+      "opts": [
+        "Lord Wellesley",
+        "Lord Hastings",
+        "Lord Dalhousie",
+        "None of the above directly"
+      ],
+      "ansText": "None of the above directly",
+      "why": "It was a broad period (1813-1858) covering multiple GGs from Hastings to Dalhousie."
+    },
+    {
+      "q": "The first competitive examination for the Civil Services was held in England in which year?",
+      "tag": "SSC CPO",
+      "opts": [
+        "1853",
+        "1855",
+        "1861",
+        "1863"
+      ],
+      "ansText": "1855",
+      "why": "Notes say: 'The first competitive examination was held in England in 1855'."
+    },
+    {
+      "q": "Consider the statements about the Military System pre-1857: 1. Major Stringer Lawrence was the founder. 2. Indian soldiers received high salaries. Which are correct?",
+      "tag": "SSC Statement",
+      "opts": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "ansText": "1 only",
+      "why": "Stringer Lawrence was the founder, but Indian soldiers had 'Low salary'."
+    },
+    {
+      "q": "Which Maratha Peshwa was known as Nana Saheb?",
+      "tag": "SSC CHSL",
+      "opts": [
+        "Balaji Vishwanath",
+        "Baji Rao I",
+        "Balaji Baji Rao",
+        "Madhav Rao II"
+      ],
+      "ansText": "Balaji Baji Rao",
+      "why": "Balaji Baji Rao (Nana Saheb) - Second founder."
+    },
+    {
+      "q": "The Khalsa was founded by which Sikh Guru?",
+      "tag": "SSC MTS",
+      "opts": [
+        "Guru Nanak",
+        "Guru Arjan",
+        "Guru Tegh Bahadur",
+        "Guru Gobind Singh"
+      ],
+      "ansText": "Guru Gobind Singh",
+      "why": "Guru Gobind Singh -> Founding the Khalsa."
+    },
+    {
+      "q": "The Battle of Chillianwala was fought during the reign of which Sikh ruler?",
+      "tag": "SSC CGL",
+      "opts": [
+        "Ranjit Singh",
+        "Kharak Singh",
+        "Sher Singh",
+        "Dilip Singh"
+      ],
+      "ansText": "Dilip Singh",
+      "why": "It was during the 2nd Anglo-Sikh war. The ruler of Punjab was Dilip Singh."
+    }
+  ]
+}

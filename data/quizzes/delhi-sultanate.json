@@ -1,0 +1,835 @@
+{
+  "title": "Delhi Sultanate Quiz",
+  "subject": "History",
+  "subjectKey": "history",
+  "emoji": "🛡️",
+  "published": "2026-02-15",
+  "questionCount": 75,
+  "questions": [
+    {
+      "q": "Who founded the Slave Dynasty?",
+      "opts": [
+        "Iltutmish",
+        "Qutubuddin Aibak",
+        "Balban",
+        "Razia Sultan"
+      ],
+      "ans": 1,
+      "why": "Qutubuddin Aibak (1206)."
+    },
+    {
+      "q": "Who was called 'Lakh Baksh'?",
+      "opts": [
+        "Iltutmish",
+        "Balban",
+        "Aibak",
+        "Firoz Tughlaq"
+      ],
+      "ans": 2,
+      "why": "Aibak; known for generosity."
+    },
+    {
+      "q": "Real founder of Delhi Sultanate?",
+      "opts": [
+        "Aibak",
+        "Iltutmish",
+        "Balban",
+        "Alauddin"
+      ],
+      "ans": 1,
+      "why": "Iltutmish; consolidated rule."
+    },
+    {
+      "q": "First woman ruler of Delhi?",
+      "opts": [
+        "Nur Jahan",
+        "Razia Sultan",
+        "Chand Bibi",
+        "Mumtaz"
+      ],
+      "ans": 1,
+      "why": "Razia (1236-1240)."
+    },
+    {
+      "q": "Who introduced Silver Tanka and Copper Jital?",
+      "opts": [
+        "Balban",
+        "Iltutmish",
+        "Alauddin",
+        "Aibak"
+      ],
+      "ans": 1,
+      "why": "Iltutmish; first Arabic coinage."
+    },
+    {
+      "q": "Who destroyed the power of 'Chahalgani'?",
+      "opts": [
+        "Iltutmish",
+        "Razia",
+        "Balban",
+        "Alauddin"
+      ],
+      "ans": 2,
+      "why": "Balban; broke the 40 nobles."
+    },
+    {
+      "q": "Who introduced Blood and Iron policy?",
+      "opts": [
+        "Balban",
+        "Alauddin",
+        "Aibak",
+        "Ghiyasuddin"
+      ],
+      "ans": 0,
+      "why": "Balban; strict administration."
+    },
+    {
+      "q": "Who introduced Sajda and Paibos?",
+      "opts": [
+        "Iltutmish",
+        "Balban",
+        "Firoz Tughlaq",
+        "Sikandar Lodi"
+      ],
+      "ans": 1,
+      "why": "Balban; Persian court rituals."
+    },
+    {
+      "q": "Founder of Khalji Dynasty?",
+      "opts": [
+        "Alauddin",
+        "Jalaluddin",
+        "Mubarak Shah",
+        "Khizr Khan"
+      ],
+      "ans": 1,
+      "why": "Jalaluddin Firoz Khalji."
+    },
+    {
+      "q": "Who was called 'Sikandar-i-Sani' (Second Alexander)?",
+      "opts": [
+        "Alauddin Khalji",
+        "Balban",
+        "M.B. Tughlaq",
+        "Akbar"
+      ],
+      "ans": 0,
+      "why": "Alauddin Khalji; world conqueror aim."
+    },
+    {
+      "q": "Who introduced the Market Control Policy?",
+      "opts": [
+        "Balban",
+        "Alauddin Khalji",
+        "M.B. Tughlaq",
+        "Iltutmish"
+      ],
+      "ans": 1,
+      "why": "Alauddin; fixed prices for army."
+    },
+    {
+      "q": "Who introduced 'Daag' and 'Huliya' in the army?",
+      "opts": [
+        "Balban",
+        "Iltutmish",
+        "Alauddin Khalji",
+        "Firoz Tughlaq"
+      ],
+      "ans": 2,
+      "why": "Alauddin; branding horses/descriptive roll."
+    },
+    {
+      "q": "Who was the first Sultan to invade South India?",
+      "opts": [
+        "Alauddin Khalji",
+        "Balban",
+        "Iltutmish",
+        "M.B. Tughlaq"
+      ],
+      "ans": 0,
+      "why": "Alauddin; via Malik Kafur."
+    },
+    {
+      "q": "Malik Kafur was the commander of:",
+      "opts": [
+        "Balban",
+        "Alauddin Khalji",
+        "Iltutmish",
+        "Razia"
+      ],
+      "ans": 1,
+      "why": "Alauddin's trusted general."
+    },
+    {
+      "q": "Founder of Tughlaq Dynasty?",
+      "opts": [
+        "M.B. Tughlaq",
+        "Ghiyasuddin Tughlaq",
+        "Firoz Tughlaq",
+        "Nasiruddin"
+      ],
+      "ans": 1,
+      "why": "Ghiyasuddin Tughlaq (Ghazi Malik)."
+    },
+    {
+      "q": "Who shifted capital from Delhi to Daulatabad?",
+      "opts": [
+        "Ghiyasuddin",
+        "M.B. Tughlaq",
+        "Firoz Tughlaq",
+        "Iltutmish"
+      ],
+      "ans": 1,
+      "why": "Muhammad bin Tughlaq."
+    },
+    {
+      "q": "Who introduced Token Currency?",
+      "opts": [
+        "Firoz Tughlaq",
+        "M.B. Tughlaq",
+        "Alauddin",
+        "Balban"
+      ],
+      "ans": 1,
+      "why": "M.B. Tughlaq; bronze coins."
+    },
+    {
+      "q": "Department of Agriculture 'Diwan-i-Kohi' was set up by:",
+      "opts": [
+        "Firoz Tughlaq",
+        "M.B. Tughlaq",
+        "Alauddin",
+        "Iltutmish"
+      ],
+      "ans": 1,
+      "why": "M.B. Tughlaq; for crop rotation."
+    },
+    {
+      "q": "Ibn Battuta visited during whose reign?",
+      "opts": [
+        "Alauddin",
+        "M.B. Tughlaq",
+        "Firoz Tughlaq",
+        "Balban"
+      ],
+      "ans": 1,
+      "why": "M.B. Tughlaq (1333)."
+    },
+    {
+      "q": "Ibn Battuta belonged to which country?",
+      "opts": [
+        "Iran",
+        "Turkey",
+        "Morocco",
+        "China"
+      ],
+      "ans": 2,
+      "why": "Morocco, Africa."
+    },
+    {
+      "q": "Who imposed Jizya on Brahmins?",
+      "opts": [
+        "Alauddin",
+        "Balban",
+        "Firoz Shah Tughlaq",
+        "Aurangzeb"
+      ],
+      "ans": 2,
+      "why": "Firoz Tughlaq; first time."
+    },
+    {
+      "q": "Who founded the city of Jaunpur?",
+      "opts": [
+        "M.B. Tughlaq",
+        "Firoz Shah Tughlaq",
+        "Alauddin",
+        "Sikandar Lodi"
+      ],
+      "ans": 1,
+      "why": "Firoz Shah (in memory of Jauna Khan)."
+    },
+    {
+      "q": "Department of Slaves 'Diwan-i-Bandagan' was by:",
+      "opts": [
+        "Alauddin",
+        "Balban",
+        "Firoz Shah Tughlaq",
+        "Iltutmish"
+      ],
+      "ans": 2,
+      "why": "Firoz Shah; had 1.8 lakh slaves."
+    },
+    {
+      "q": "Charity Dept 'Diwan-i-Khairat' was by:",
+      "opts": [
+        "M.B. Tughlaq",
+        "Firoz Shah Tughlaq",
+        "Alauddin",
+        "Balban"
+      ],
+      "ans": 1,
+      "why": "Firoz Shah Tughlaq."
+    },
+    {
+      "q": "Timur invaded India in which year?",
+      "opts": [
+        "1298",
+        "1398",
+        "1498",
+        "1526"
+      ],
+      "ans": 1,
+      "why": "During Nasiruddin Mahmud's reign."
+    },
+    {
+      "q": "Founder of Sayyid Dynasty?",
+      "opts": [
+        "Mubarak Shah",
+        "Khizr Khan",
+        "Alam Shah",
+        "Bahlul"
+      ],
+      "ans": 1,
+      "why": "Khizr Khan."
+    },
+    {
+      "q": "Founder of Lodi Dynasty?",
+      "opts": [
+        "Sikandar Lodi",
+        "Bahlul Lodi",
+        "Ibrahim Lodi",
+        "Daulat Khan"
+      ],
+      "ans": 1,
+      "why": "Bahlul Lodi."
+    },
+    {
+      "q": "Who founded the city of Agra?",
+      "opts": [
+        "Bahlul Lodi",
+        "Sikandar Lodi",
+        "Akbar",
+        "Shah Jahan"
+      ],
+      "ans": 1,
+      "why": "Sikandar Lodi (1504)."
+    },
+    {
+      "q": "Who used 'Gaz-i-Sikandari' for land measurement?",
+      "opts": [
+        "Bahlul Lodi",
+        "Sikandar Lodi",
+        "Sher Shah",
+        "Akbar"
+      ],
+      "ans": 1,
+      "why": "Sikandar Lodi; 32 digits scale."
+    },
+    {
+      "q": "Last Sultan of Delhi Sultanate?",
+      "opts": [
+        "Sikandar Lodi",
+        "Bahlul Lodi",
+        "Ibrahim Lodi",
+        "Nasiruddin"
+      ],
+      "ans": 2,
+      "why": "Ibrahim Lodi."
+    },
+    {
+      "q": "First Battle of Panipat was in:",
+      "opts": [
+        "1521",
+        "1526",
+        "1556",
+        "1761"
+      ],
+      "ans": 1,
+      "why": "Babur vs Ibrahim Lodi."
+    },
+    {
+      "q": "Qutub Minar was completed by:",
+      "opts": [
+        "Aibak",
+        "Iltutmish",
+        "Balban",
+        "Firoz Tughlaq"
+      ],
+      "ans": 1,
+      "why": "Started by Aibak, completed by Iltutmish."
+    },
+    {
+      "q": "Quwat-ul-Islam mosque was built by:",
+      "opts": [
+        "Iltutmish",
+        "Aibak",
+        "Alauddin",
+        "Firoz Tughlaq"
+      ],
+      "ans": 1,
+      "why": "Aibak; first mosque in India."
+    },
+    {
+      "q": "Who built 'Alai Darwaza'?",
+      "opts": [
+        "Balban",
+        "Alauddin Khalji",
+        "Iltutmish",
+        "Sikandar Lodi"
+      ],
+      "ans": 1,
+      "why": "Alauddin; entrance to Qutub."
+    },
+    {
+      "q": "Adhai Din Ka Jhonpra (Ajmer) was built by:",
+      "opts": [
+        "Balban",
+        "Iltutmish",
+        "Aibak",
+        "Razia"
+      ],
+      "ans": 2,
+      "why": "Aibak; was a Sanskrit college."
+    },
+    {
+      "q": "Sultan who abolished Zakat on grain?",
+      "opts": [
+        "Alauddin",
+        "Sikandar Lodi",
+        "Balban",
+        "M.B. Tughlaq"
+      ],
+      "ans": 1,
+      "why": "Sikandar Lodi; welfare measure."
+    },
+    {
+      "q": "Sultan who called himself 'Shadow of God' (Zil-i-Ilahi)?",
+      "opts": [
+        "Iltutmish",
+        "Balban",
+        "Alauddin",
+        "M.B. Tughlaq"
+      ],
+      "ans": 1,
+      "why": "Balban; absolute monarchy."
+    },
+    {
+      "q": "Who shifted capital from Delhi to Agra?",
+      "opts": [
+        "Bahlul Lodi",
+        "Sikandar Lodi",
+        "Ibrahim Lodi",
+        "Babur"
+      ],
+      "ans": 1,
+      "why": "Sikandar Lodi (1506)."
+    },
+    {
+      "q": "Which Sultanate dynasty ruled for the shortest time?",
+      "opts": [
+        "Slave",
+        "Khalji",
+        "Tughlaq",
+        "Lodi"
+      ],
+      "ans": 1,
+      "why": "Khaljis (30 years)."
+    },
+    {
+      "q": "Which dynasty ruled for the longest time?",
+      "opts": [
+        "Slave",
+        "Khalji",
+        "Tughlaq",
+        "Lodi"
+      ],
+      "ans": 2,
+      "why": "Tughlaqs (94 years)."
+    },
+    {
+      "q": "First Sultan to issue regular currency?",
+      "opts": [
+        "Aibak",
+        "Iltutmish",
+        "Balban",
+        "Alauddin"
+      ],
+      "ans": 1,
+      "why": "Iltutmish; established monetary system."
+    },
+    {
+      "q": "The group of 'Chahalgani' was created by:",
+      "opts": [
+        "Balban",
+        "Iltutmish",
+        "Razia",
+        "Aibak"
+      ],
+      "ans": 1,
+      "why": "Iltutmish; trusted slaves."
+    },
+    {
+      "q": "Who built Siri Fort?",
+      "opts": [
+        "Iltutmish",
+        "Balban",
+        "Alauddin Khalji",
+        "Ghiyasuddin Tughlaq"
+      ],
+      "ans": 2,
+      "why": "Alauddin Khalji."
+    },
+    {
+      "q": "Hauz Khas was built by:",
+      "opts": [
+        "Alauddin Khalji",
+        "Iltutmish",
+        "Firoz Tughlaq",
+        "M.B. Tughlaq"
+      ],
+      "ans": 0,
+      "why": "Alauddin Khalji."
+    },
+    {
+      "q": "The traveler Nicolo Conti visited during whose reign?",
+      "opts": [
+        "M.B. Tughlaq",
+        "Firoz Tughlaq",
+        "Deva Raya II",
+        "Sikandar Lodi"
+      ],
+      "ans": 2,
+      "why": "Vijayanagara king; contemporary."
+    },
+    {
+      "q": "Official language of Delhi Sultanate?",
+      "opts": [
+        "Arabic",
+        "Persian",
+        "Urdu",
+        "Turkish"
+      ],
+      "ans": 1,
+      "why": "Persian."
+    },
+    {
+      "q": "Who was the 'Parrot of India' (Tut-i-Hind)?",
+      "opts": [
+        "Amir Khusrau",
+        "Ibn Battuta",
+        "Ziauddin Barani",
+        "Abul Fazl"
+      ],
+      "ans": 0,
+      "why": "Amir Khusrau; court poet."
+    },
+    {
+      "q": "Who wrote 'Tarikh-i-Firoz Shahi'?",
+      "opts": [
+        "Barani",
+        "Amir Khusrau",
+        "Al-Biruni",
+        "Firoz Tughlaq"
+      ],
+      "ans": 0,
+      "why": "Ziauddin Barani."
+    },
+    {
+      "q": "Amir Khusrau was court poet of how many Sultans?",
+      "opts": [
+        "5",
+        "7",
+        "8",
+        "3"
+      ],
+      "ans": 2,
+      "why": "Served 8 Sultans (Balban to Tughlaqs)."
+    },
+    {
+      "q": "Who started the construction of Qutub Minar?",
+      "opts": [
+        "Iltutmish",
+        "Aibak",
+        "Balban",
+        "Alauddin"
+      ],
+      "ans": 1,
+      "why": "In memory of Bakhtiyar Kaki."
+    },
+    {
+      "q": "Which Sultan introduced 'Shorter than Actual' measurement unit?",
+      "opts": [
+        "Alauddin",
+        "Sikandar Lodi",
+        "Balban",
+        "Sher Shah"
+      ],
+      "ans": 1,
+      "why": "Gaz-i-Sikandari."
+    },
+    {
+      "q": "Who was the only Sultan to die while playing Chaugan (Polo)?",
+      "opts": [
+        "Iltutmish",
+        "Balban",
+        "Aibak",
+        "Nasiruddin"
+      ],
+      "ans": 2,
+      "why": "Qutubuddin Aibak (1210)."
+    },
+    {
+      "q": "First Sultan to cross the Vindhyas?",
+      "opts": [
+        "Balban",
+        "Alauddin Khalji",
+        "Iltutmish",
+        "M.B. Tughlaq"
+      ],
+      "ans": 1,
+      "why": "Alauddin Khalji."
+    },
+    {
+      "q": "The term 'Mamluk' means:",
+      "opts": [
+        "Slave born to free parents",
+        "Soldier",
+        "Noble",
+        "Merchant"
+      ],
+      "ans": 0,
+      "why": "Arabic for 'owned'."
+    },
+    {
+      "q": "Who built Tughlaqabad city?",
+      "opts": [
+        "M.B. Tughlaq",
+        "Firoz Tughlaq",
+        "Ghiyasuddin Tughlaq",
+        "Nasiruddin"
+      ],
+      "ans": 2,
+      "why": "Ghiyasuddin Tughlaq."
+    },
+    {
+      "q": "Who started the Iqta system in India?",
+      "opts": [
+        "Aibak",
+        "Iltutmish",
+        "Balban",
+        "Alauddin"
+      ],
+      "ans": 1,
+      "why": "Iltutmish; land revenue system."
+    },
+    {
+      "q": "Which Sultan made the Iqta system hereditary?",
+      "opts": [
+        "Alauddin",
+        "M.B. Tughlaq",
+        "Firoz Shah Tughlaq",
+        "Balban"
+      ],
+      "ans": 2,
+      "why": "Firoz Shah Tughlaq."
+    },
+    {
+      "q": "Who was called the 'Wise Fool'?",
+      "opts": [
+        "Balban",
+        "Alauddin",
+        "Muhammad bin Tughlaq",
+        "Ibrahim Lodi"
+      ],
+      "ans": 2,
+      "why": "M.B. Tughlaq; failed projects."
+    },
+    {
+      "q": "The Lodi Dynasty was of which origin?",
+      "opts": [
+        "Turkish",
+        "Afghan",
+        "Persian",
+        "Mongol"
+      ],
+      "ans": 1,
+      "why": "First Afghan dynasty."
+    },
+    {
+      "q": "Who wrote 'Kitab-ul-Hind'?",
+      "opts": [
+        "Ibn Battuta",
+        "Al-Biruni",
+        "Amir Khusrau",
+        "Abul Fazl"
+      ],
+      "ans": 1,
+      "why": "Al-Biruni; came with Ghazni."
+    },
+    {
+      "q": "Sultan who used to write poems with pen name 'Gulrukhi'?",
+      "opts": [
+        "Bahlul Lodi",
+        "Sikandar Lodi",
+        "Firoz Tughlaq",
+        "Alauddin"
+      ],
+      "ans": 1,
+      "why": "Sikandar Lodi."
+    },
+    {
+      "q": "Who was the Sultan when Vijayanagara Empire was founded?",
+      "opts": [
+        "Alauddin",
+        "Ghiyasuddin",
+        "Muhammad bin Tughlaq",
+        "Firoz Tughlaq"
+      ],
+      "ans": 2,
+      "why": "M.B. Tughlaq (1336)."
+    },
+    {
+      "q": "Who established the 'Diwan-i-Mustakhraj' (Arrears)?",
+      "opts": [
+        "Balban",
+        "Iltutmish",
+        "Alauddin Khalji",
+        "M.B. Tughlaq"
+      ],
+      "ans": 2,
+      "why": "Alauddin; to check corruption."
+    },
+    {
+      "q": "Which Sultan shifted two Ashokan pillars to Delhi?",
+      "opts": [
+        "Alauddin",
+        "Ghiyasuddin",
+        "Firoz Shah Tughlaq",
+        "Balban"
+      ],
+      "ans": 2,
+      "why": "Firoz Shah Tughlaq."
+    },
+    {
+      "q": "Who was called 'Darvesh King' for his simple life?",
+      "opts": [
+        "Iltutmish",
+        "Balban",
+        "Nasiruddin Mahmud",
+        "Firoz Tughlaq"
+      ],
+      "ans": 2,
+      "why": "Slave dynasty ruler."
+    },
+    {
+      "q": "Who wrote the autobiography 'Futuhat-i-Firoz Shahi'?",
+      "opts": [
+        "Barani",
+        "Firoz Shah Tughlaq",
+        "Amir Khusrau",
+        "Al-Biruni"
+      ],
+      "ans": 1,
+      "why": "Firoz Shah Tughlaq."
+    },
+    {
+      "q": "Which Sultan ended the policy of expansion?",
+      "opts": [
+        "Alauddin",
+        "Balban",
+        "Firoz Shah Tughlaq",
+        "M.B. Tughlaq"
+      ],
+      "ans": 2,
+      "why": "Firoz Shah; focused on welfare."
+    },
+    {
+      "q": "Sultan who started 'Nauroz' festival in India?",
+      "opts": [
+        "Balban",
+        "Iltutmish",
+        "Alauddin",
+        "Sikandar Lodi"
+      ],
+      "ans": 0,
+      "why": "Balban; Persian New Year."
+    },
+    {
+      "q": "Who built Quwat-ul-Islam mosque?",
+      "opts": [
+        "Iltutmish",
+        "Aibak",
+        "Balban",
+        "Alauddin"
+      ],
+      "ans": 1,
+      "why": "Aibak; from Jain/Hindu temple ruins."
+    },
+    {
+      "q": "The term 'Sultan' was first used by:",
+      "opts": [
+        "Aibak",
+        "Iltutmish",
+        "Mahmud of Ghazni",
+        "Ghori"
+      ],
+      "ans": 2,
+      "why": "Mahmud of Ghazni."
+    },
+    {
+      "q": "Who was the founder of the Khalji revolution?",
+      "opts": [
+        "Alauddin",
+        "Jalaluddin",
+        "Mubarak Shah",
+        "Balban"
+      ],
+      "ans": 1,
+      "why": "Marked end of Turkish monopoly."
+    },
+    {
+      "q": "Who wrote 'Khazain-ul-Futuh'?",
+      "opts": [
+        "Barani",
+        "Al-Biruni",
+        "Amir Khusrau",
+        "Ibn Battuta"
+      ],
+      "ans": 2,
+      "why": "Amir Khusrau; on Alauddin's conquests."
+    },
+    {
+      "q": "Who completed the second storey of Qutub Minar?",
+      "opts": [
+        "Aibak",
+        "Iltutmish",
+        "Firoz Tughlaq",
+        "Alauddin"
+      ],
+      "ans": 1,
+      "why": "Iltutmish."
+    },
+    {
+      "q": "Who was the Hindu commander of Mahmud Ghazni?",
+      "opts": [
+        "Tilak",
+        "Jai Singh",
+        "Man Singh",
+        "Hemu"
+      ],
+      "ans": 0,
+      "why": "Tilak; general in Ghazni's army."
+    },
+    {
+      "q": "Which Sultanate city was called 'Shiraz of the East'?",
+      "opts": [
+        "Jaunpur",
+        "Delhi",
+        "Agra",
+        "Lahore"
+      ],
+      "ans": 0,
+      "why": "Jaunpur; during Sharqi rule."
+    }
+  ]
+}

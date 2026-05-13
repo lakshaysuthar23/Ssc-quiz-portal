@@ -13,99 +13,191 @@
       --text-muted: #64748b;
       --primary: #2563eb;
       --border-color: #e6e0ac;
-      
-      --badge-history-bg: #fef3c7;
-      --badge-history-text: #b45309;
-      --badge-chem-bg: #dcfce7;
-      --badge-chem-text: #15803d;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Inter", sans-serif; }
 
     body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.5; padding: 0 16px; }
     .container { max-width: 1000px; margin: 0 auto; padding: 40px 0; }
-
-    /* Header */
     .header { text-align: center; margin-bottom: 32px; }
-    
-    .pill { 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 6px; 
-      background: #eff6ff; 
-      color: var(--primary); 
-      padding: 4px 12px; 
-      border-radius: 999px; 
-      font-size: 0.8rem; 
-      font-weight: 600; 
-      margin-bottom: 12px; 
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 12px;
     }
-    
-    /* Blinking Dot */
+
     .pill::before {
-      content: '';
+      content: "";
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background-color: #10b981; /* Green for "Live" status */
+      background-color: #10b981;
       animation: pulse 1.5s infinite ease-in-out;
     }
+
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.3; transform: scale(0.6); }
     }
-    
+
     .header h1 { font-size: 2.8rem; font-weight: 800; color: var(--text-main); line-height: 1.1; }
-    .header-name { font-family: 'Caveat', cursive; font-size: 4rem; color: var(--primary); display: block; margin-top: -4px; }
+    .header-name {
+      position: relative;
+      display: inline-block;
+      font-family: "Caveat", cursive;
+      font-size: 4rem;
+      color: var(--primary);
+      margin-top: -4px;
+    }
+
+    .header-name::after {
+      content: "";
+      position: absolute;
+      left: 5%;
+      right: 3%;
+      bottom: 0.02em;
+      height: 0.18em;
+      border: solid currentColor;
+      border-width: 0 0 4px 0;
+      border-radius: 50%;
+      transform: rotate(-1.5deg);
+      opacity: 0.72;
+      pointer-events: none;
+    }
     .header p { color: var(--text-muted); font-size: 1rem; margin-top: 8px; }
 
-    /* Stats Grid */
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
     .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; text-align: center; }
+    .stat-button {
+      position: relative;
+      width: 100%;
+      color: inherit;
+      cursor: pointer;
+      border-color: rgba(37, 99, 235, 0.32);
+      background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.1);
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .stat-button::after {
+      content: "Browse";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 7px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .stat-button:hover { border-color: var(--primary); box-shadow: 0 12px 24px rgba(37, 99, 235, 0.14); transform: translateY(-1px); }
+    .stat-button[aria-expanded="true"] { border-color: var(--primary); background: #eff6ff; }
+    .stat-button[aria-expanded="true"]::after { content: "Hide"; background: #1d4ed8; }
     .stat-value { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
-    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em;}
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* Section Title */
     .section-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
     .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
-
-    /* Quiz Grid */
     .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .subject-panel { display: none; margin: -18px 0 28px; }
+    .subject-panel.visible { display: block; }
+    .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+    .subject-card {
+      --accent: #2563eb;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+      padding: 12px;
+      background: #ffffff;
+      color: var(--text-main);
+      text-align: left;
+      cursor: pointer;
+    }
+    .subject-card:hover { border-color: var(--accent); }
+    .subject-name { display: block; font-size: 0.9rem; font-weight: 700; }
+    .subject-count { display: block; margin-top: 2px; color: var(--text-muted); font-size: 0.76rem; }
+    .subject-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .subject-heading { color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .clear-filter { border: 0; border-radius: 999px; padding: 7px 10px; background: #eff6ff; color: var(--primary); font-size: 0.76rem; font-weight: 700; cursor: pointer; }
 
-    /* Quiz Card */
-    .quiz-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-decoration: none; display: flex; flex-direction: column; transition: all 0.2s ease; }
-    .quiz-card:hover { border-color: var(--primary); box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.05); transform: translateY(-2px); }
-    
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-    .subject-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-    .badge-chem { background: var(--badge-chem-bg); color: var(--badge-chem-text); }
-    .badge-history { background: var(--badge-history-bg); color: var(--badge-history-text); }
+    .quiz-card {
+      --accent: #2563eb;
+      --badge-bg: #eff6ff;
+      --badge-text: #1d4ed8;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      min-height: 172px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
 
+    .quiz-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .subject-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+    }
+
+    .card-emoji { font-size: 1.45rem; line-height: 1; }
     .card-title { font-size: 1rem; font-weight: 600; color: var(--text-main); margin-bottom: 12px; line-height: 1.4; flex-grow: 1; }
-    
-    .card-meta { display: flex; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 12px; margin-bottom: 12px; }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 10px 12px; border-top: 1px solid var(--border-color); padding-top: 12px; margin-bottom: 12px; }
     .meta-item { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--text-muted); }
-    .meta-icon { width: 14px; height: 14px; opacity: 0.7; }
-
+    .meta-icon { width: 14px; height: 14px; opacity: 0.7; flex: 0 0 auto; }
     .card-action { display: flex; align-items: center; justify-content: space-between; color: var(--primary); font-weight: 500; font-size: 0.85rem; }
     .card-action svg { transition: transform 0.2s; }
     .quiz-card:hover .card-action svg { transform: translateX(4px); }
 
+    .state-card {
+      grid-column: 1 / -1;
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 24px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
     footer { text-align: center; padding: 30px 0; color: var(--text-muted); font-size: 0.8rem; }
     .heart { color: #ef4444; }
 
-    /* Responsive Mobile */
     @media (max-width: 768px) {
+      .container { padding-top: 28px; }
       .header h1 { font-size: 2.2rem; }
       .header-name { font-size: 3.2rem; }
-      .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 32px; }
       .stat-card { padding: 10px 6px; }
       .quiz-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <header class="header">
       <span class="pill">SSC Mock Portal</span>
@@ -114,10 +206,10 @@
     </header>
 
     <div class="stats">
-      <div class="stat-card">
+      <button class="stat-card stat-button" id="quiz-stat-card" type="button" aria-expanded="false">
         <div class="stat-value" id="stat-quizzes">0</div>
         <div class="stat-label">Quizzes</div>
-      </div>
+      </button>
       <div class="stat-card">
         <div class="stat-value" id="stat-questions">0</div>
         <div class="stat-label">Questions</div>
@@ -132,185 +224,206 @@
       </div>
     </div>
 
-    <h2 class="section-title">Available Quizzes</h2>
+    <div class="subject-panel" id="subject-panel">
+      <div class="subject-toolbar">
+        <div class="subject-heading">Browse by subject</div>
+        <button class="clear-filter" id="clear-subject-filter" type="button">Show all</button>
+      </div>
+      <div class="subject-grid" id="subject-grid"></div>
+    </div>
 
+    <h2 class="section-title" id="quiz-section-title">Available Quizzes</h2>
     <div class="quiz-grid" id="quiz-container">
-      
-      <a href="quizzes/Census-2011-2027.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-statik">Statik & CA</span>
-        </div>
-        <h3 class="card-title">Census 2011 & 2027</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">60 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            May 13, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-
-      <a href="quizzes/five-science-topics-major-april.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-phy">Physics</span>
-        </div>
-        <h3 class="card-title">April Major Topics</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">50 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            April 24, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-      
-      <a href="quizzes/metal-non-metal.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-chem">Chemistry</span>
-        </div>
-        <h3 class="card-title">Metal &amp; Non Metal</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">100 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Mar 27, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-
-      <a href="quizzes/viceroy-of-india.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-history">History</span>
-        </div>
-        <h3 class="card-title">Viceroy of India</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">100 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Mar 26, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-
-      <a href="quizzes/maratha to wardha scheme.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-history">History</span>
-        </div>
-        <h3 class="card-title">Maratha to Wardha Scheme</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">100 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Mar 20, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-
-      <a href="quizzes/Vijayanagaram-Bahmani-Malwa-Mewar-Sufi-Bhakti movement.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-history">History</span>
-        </div>
-        <h3 class="card-title">Vijayanagara, Bahmani, Malwa, Mewar, Sufi &amp; Bhakti Movement</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">115 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Feb 17, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-
-      <a href="quizzes/Mughal-empire.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-history">History</span>
-        </div>
-        <h3 class="card-title">Mughal Empire Quiz</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">190 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Feb 17, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-
-      <a href="quizzes/delhi-sultanate.html" class="quiz-card">
-        <div class="card-header">
-          <span class="subject-badge badge-history">History</span>
-        </div>
-        <h3 class="card-title">Delhi Sultanate Quiz</h3>
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="q-count">75 Qs</span>
-          </div>
-          <div class="meta-item">
-            <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Feb 15, 2026
-          </div>
-        </div>
-        <div class="card-action">Start Quiz <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
-      </a>
-
+      <div class="state-card">Loading quizzes...</div>
     </div>
 
     <footer>
-      <p>Made with <span class="heart">♥</span> by Lakshay Suthar</p>
+      <p>Made with <span class="heart">&hearts;</span> by Lakshay Suthar</p>
     </footer>
-
   </div>
 
   <script>
-    function updateStats() {
-      const cards = document.querySelectorAll('.quiz-card');
-      let totalQuestions = 0;
-      const subjects = new Set();
+    const subjectStyles = {
+      history: { accent: "#c9a84c", bg: "#fef3c7", text: "#92400e" },
+      chemistry: { accent: "#35a66f", bg: "#dcfce7", text: "#166534" },
+      physics: { accent: "#4c8dcc", bg: "#dbeafe", text: "#1e40af" },
+      science: { accent: "#4c8dcc", bg: "#e0f2fe", text: "#075985" },
+      static: { accent: "#7c5cff", bg: "#ede9fe", text: "#5b21b6" },
+      "static-gk-ca": { accent: "#7c5cff", bg: "#ede9fe", text: "#5b21b6" },
+      math: { accent: "#0f766e", bg: "#ccfbf1", text: "#115e59" },
+      reasoning: { accent: "#db2777", bg: "#fce7f3", text: "#9d174d" },
+      default: { accent: "#2563eb", bg: "#eff6ff", text: "#1d4ed8" }
+    };
 
-      cards.forEach(card => {
-        const subjectBadge = card.querySelector('.subject-badge');
-        if (subjectBadge) subjects.add(subjectBadge.textContent.trim());
+    const quizContainer = document.getElementById("quiz-container");
+    const subjectPanel = document.getElementById("subject-panel");
+    const subjectGrid = document.getElementById("subject-grid");
+    const quizStatCard = document.getElementById("quiz-stat-card");
+    const clearSubjectFilter = document.getElementById("clear-subject-filter");
+    const quizSectionTitle = document.getElementById("quiz-section-title");
+    let allQuizzes = [];
+    let activeSubject = "";
 
-        const qCountElement = card.querySelector('.q-count');
-        if (qCountElement) {
-          const num = parseInt(qCountElement.textContent.replace(/\D/g, ''));
-          if (!isNaN(num)) totalQuestions += num;
-        }
-      });
-
-      document.getElementById('stat-quizzes').textContent = cards.length;
-      document.getElementById('stat-questions').textContent = totalQuestions;
-      document.getElementById('stat-subjects').textContent = subjects.size;
+    function slugify(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
     }
 
-    document.addEventListener('DOMContentLoaded', updateStats);
+    function colorForSubject(key) {
+      const palette = [
+        ["#c9a84c", "#fef3c7", "#92400e"],
+        ["#35a66f", "#dcfce7", "#166534"],
+        ["#4c8dcc", "#dbeafe", "#1e40af"],
+        ["#7c5cff", "#ede9fe", "#5b21b6"],
+        ["#0f766e", "#ccfbf1", "#115e59"],
+        ["#db2777", "#fce7f3", "#9d174d"],
+        ["#ea580c", "#ffedd5", "#9a3412"],
+        ["#0891b2", "#cffafe", "#155e75"],
+        ["#9333ea", "#f3e8ff", "#6b21a8"]
+      ];
+      let hash = 0;
+      for (const char of String(key || "default")) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+      const color = palette[hash % palette.length];
+      return { accent: color[0], bg: color[1], text: color[2] };
+    }
+
+    function styleForSubject(quiz) {
+      const key = quiz.subjectKey || slugify(quiz.subject) || "default";
+      return subjectStyles[key] || colorForSubject(key);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function formatDate(value) {
+      if (!value) return "Recently added";
+      const date = new Date(`${value}T00:00:00`);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    }
+
+    function renderStats(quizzes) {
+      const totalQuestions = allQuizzes.reduce((sum, quiz) => sum + Number(quiz.questionCount || 0), 0);
+      const subjects = new Set(allQuizzes.map(quiz => quiz.subject).filter(Boolean));
+      document.getElementById("stat-quizzes").textContent = allQuizzes.length;
+      document.getElementById("stat-questions").textContent = totalQuestions;
+      document.getElementById("stat-subjects").textContent = subjects.size;
+    }
+
+    function groupedSubjects(quizzes) {
+      const groups = new Map();
+      quizzes.forEach(quiz => {
+        const subject = quiz.subject || "General";
+        const key = quiz.subjectKey || slugify(subject) || "general";
+        const existing = groups.get(key) || { key, subject, count: 0, questions: 0, sample: quiz };
+        existing.count += 1;
+        existing.questions += Number(quiz.questionCount || 0);
+        groups.set(key, existing);
+      });
+      return [...groups.values()].sort((a, b) => a.subject.localeCompare(b.subject));
+    }
+
+    function renderSubjects() {
+      const subjects = groupedSubjects(allQuizzes);
+      subjectGrid.innerHTML = subjects.map(subject => {
+        const style = styleForSubject({ subject: subject.subject, subjectKey: subject.key });
+        return `
+          <button class="subject-card" type="button" data-subject="${escapeHtml(subject.key)}" style="--accent:${style.accent};">
+            <span class="subject-name">${escapeHtml(subject.subject)}</span>
+            <span class="subject-count">${subject.count} quizzes | ${subject.questions} Qs</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function setSubjectFilter(subjectKey) {
+      activeSubject = subjectKey || "";
+      const visibleQuizzes = activeSubject
+        ? allQuizzes.filter(quiz => (quiz.subjectKey || slugify(quiz.subject)) === activeSubject)
+        : allQuizzes;
+      const label = activeSubject
+        ? groupedSubjects(allQuizzes).find(subject => subject.key === activeSubject)?.subject || "Subject"
+        : "Available Quizzes";
+      quizSectionTitle.textContent = activeSubject ? `${label} Quizzes` : "Available Quizzes";
+      renderQuizzes(visibleQuizzes);
+    }
+
+    function renderQuizzes(quizzes) {
+      if (!quizzes.length) {
+        quizContainer.innerHTML = '<div class="state-card">No quizzes found. Add a JSON file inside <strong>data/quizzes</strong>.</div>';
+        renderStats([]);
+        return;
+      }
+
+      quizContainer.innerHTML = quizzes.map(quiz => {
+        const style = styleForSubject(quiz);
+        const questionCount = Number(quiz.questionCount || 0);
+        return `
+          <a href="quiz.html?id=${encodeURIComponent(quiz.id)}" class="quiz-card" style="--accent:${style.accent};--badge-bg:${style.bg};--badge-text:${style.text};">
+            <div class="card-header">
+              <span class="subject-badge">${escapeHtml(quiz.subject || "General")}</span>
+              <span class="card-emoji" aria-hidden="true">${escapeHtml(quiz.emoji || "")}</span>
+            </div>
+            <h3 class="card-title">${escapeHtml(quiz.title || quiz.id)}</h3>
+            <div class="card-meta">
+              <div class="meta-item">
+                <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>${questionCount} Qs</span>
+              </div>
+              <div class="meta-item">
+                <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>${escapeHtml(formatDate(quiz.published))}</span>
+              </div>
+            </div>
+            <div class="card-action">
+              Start Quiz
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </div>
+          </a>
+        `;
+      }).join("");
+
+      renderStats(allQuizzes);
+    }
+
+    async function loadQuizzes() {
+      try {
+        const response = await fetch("data/quiz-manifest.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);
+        const manifest = await response.json();
+        allQuizzes = Array.isArray(manifest.quizzes) ? manifest.quizzes : [];
+        renderSubjects();
+        setSubjectFilter("");
+      } catch (error) {
+        console.error(error);
+        quizContainer.innerHTML = '<div class="state-card">Could not load quiz list. If you opened the file directly, use GitHub Pages or a local server.</div>';
+      }
+    }
+
+    quizStatCard.addEventListener("click", () => {
+      const willShow = !subjectPanel.classList.contains("visible");
+      subjectPanel.classList.toggle("visible", willShow);
+      quizStatCard.setAttribute("aria-expanded", String(willShow));
+    });
+
+    clearSubjectFilter.addEventListener("click", () => setSubjectFilter(""));
+
+    subjectGrid.addEventListener("click", event => {
+      const card = event.target.closest(".subject-card");
+      if (!card) return;
+      setSubjectFilter(card.dataset.subject || "");
+    });
+
+    document.addEventListener("DOMContentLoaded", loadQuizzes);
   </script>
 </body>
 </html>

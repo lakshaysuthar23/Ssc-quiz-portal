@@ -1,0 +1,84 @@
+{
+  "quizzes": [
+    {
+      "id": "census-2011-2027",
+      "title": "Census 2011 & 2027",
+      "subject": "Static GK & CA",
+      "subjectKey": "static",
+      "emoji": "📋",
+      "published": "2026-05-13",
+      "questionCount": 90,
+      "file": "data/quizzes/census-2011-2027.json"
+    },
+    {
+      "id": "science-april-major-topics",
+      "title": "April Major Topics",
+      "subject": "Physics",
+      "subjectKey": "physics",
+      "emoji": "🔬",
+      "published": "2026-04-24",
+      "questionCount": 50,
+      "file": "data/quizzes/science-april-major-topics.json"
+    },
+    {
+      "id": "metal-non-metal",
+      "title": "Metal & Non Metal",
+      "subject": "Chemistry",
+      "subjectKey": "chemistry",
+      "emoji": "🧪",
+      "published": "2026-03-27",
+      "questionCount": 100,
+      "file": "data/quizzes/metal-non-metal.json"
+    },
+    {
+      "id": "viceroy-of-india",
+      "title": "Viceroy of India",
+      "subject": "History",
+      "subjectKey": "history",
+      "emoji": "🏛️",
+      "published": "2026-03-26",
+      "questionCount": 101,
+      "file": "data/quizzes/viceroy-of-india.json"
+    },
+    {
+      "id": "maratha-to-wardha-scheme",
+      "title": "Maratha to Wardha Scheme",
+      "subject": "History",
+      "subjectKey": "history",
+      "emoji": "📜",
+      "published": "2026-03-20",
+      "questionCount": 100,
+      "file": "data/quizzes/maratha-to-wardha-scheme.json"
+    },
+    {
+      "id": "mughal-empire",
+      "title": "Mughal Empire Quiz",
+      "subject": "History",
+      "subjectKey": "history",
+      "emoji": "👑",
+      "published": "2026-02-17",
+      "questionCount": 190,
+      "file": "data/quizzes/mughal-empire.json"
+    },
+    {
+      "id": "vijayanagara-bahmani-malwa-mewar-sufi-bhakti-movement",
+      "title": "Vijayanagara, Bahmani, Malwa, Mewar, Sufi & Bhakti Movement",
+      "subject": "History",
+      "subjectKey": "history",
+      "emoji": "🕌",
+      "published": "2026-02-17",
+      "questionCount": 115,
+      "file": "data/quizzes/vijayanagara-bahmani-malwa-mewar-sufi-bhakti-movement.json"
+    },
+    {
+      "id": "delhi-sultanate",
+      "title": "Delhi Sultanate Quiz",
+      "subject": "History",
+      "subjectKey": "history",
+      "emoji": "🛡️",
+      "published": "2026-02-15",
+      "questionCount": 75,
+      "file": "data/quizzes/delhi-sultanate.json"
+    }
+  ]
+}

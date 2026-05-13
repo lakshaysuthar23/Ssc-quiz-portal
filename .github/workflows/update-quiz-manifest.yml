@@ -1,0 +1,41 @@
+name: Update quiz manifest
+
+on:
+  push:
+    paths:
+      - "data/quizzes/**"
+      - "scripts/build-quiz-manifest.mjs"
+      - ".github/workflows/update-quiz-manifest.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build quiz manifest
+        run: node scripts/build-quiz-manifest.mjs
+
+      - name: Commit manifest if changed
+        run: |
+          if git diff --quiet -- data/quiz-manifest.json data/quizzes; then
+            echo "No manifest changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/quiz-manifest.json data/quizzes
+          git commit -m "Update quiz manifest"
+          git push
