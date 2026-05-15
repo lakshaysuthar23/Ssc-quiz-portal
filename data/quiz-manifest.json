@@ -1,6 +1,16 @@
 {
   "quizzes": [
     {
+      "id": "5-year-plans",
+      "title": "5 Year Plans",
+      "subject": "Economy",
+      "subjectKey": "economy",
+      "emoji": "💰",
+      "published": "2026-05-15",
+      "questionCount": 100,
+      "file": "data/quizzes/5-year-plans.json"
+    },
+    {
       "id": "census-2011-2027",
       "title": "Census 2011 & 2027",
       "subject": "Static GK & CA",
