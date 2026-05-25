@@ -1,6 +1,16 @@
 {
   "quizzes": [
     {
+      "id": "ramsar-sites-99",
+      "title": "Ramsar Sites 99",
+      "subject": "Static GK & CA",
+      "subjectKey": "static",
+      "emoji": "🦩",
+      "published": "2026-05-25",
+      "questionCount": 145,
+      "file": "data/quizzes/Ramsar-sites-99.json"
+    },
+    {
       "id": "5-year-plans",
       "title": "5 Year Plans",
       "subject": "Economy",
