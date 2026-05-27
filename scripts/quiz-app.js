@@ -641,6 +641,29 @@
     beginQuizView(true);
   }
 
+  async function confirmAndCreateAttempt(mode, config = {}) {
+    const summary = startSummary(mode, config);
+    const shouldStart = await appConfirm({
+      title: "Ready to start?",
+      message: summary,
+      confirmText: "Start Test",
+      cancelText: "Review Setup"
+    });
+    if (!shouldStart) return;
+    createAttempt(mode, config);
+  }
+
+  function startSummary(mode, config = {}) {
+    if (mode === modes.rapid) {
+      return `Rapid Fire will start with ${config.rapidSeconds || state.rapidSeconds}s per question. Answers, skips, and score will be saved to this quiz leaderboard.`;
+    }
+    if (mode === modes.pro) {
+      const levelText = config.level ? `${levelLabels[config.level] || config.level} level` : "all levels";
+      return `Practice Pro will start with ${config.count} questions, ${levelText}, and a ${config.timerMinutes} minute countdown. This attempt will be saved to the leaderboard.`;
+    }
+    return `Practice Mode will start with all ${state.questions.length} questions. You can move freely, mark questions for review, and submit when ready.`;
+  }
+
   function beginQuizView(resetRapidTimer) {
     el("user-display").textContent = state.userName || "Player";
     el("mode-display").textContent = modeTopLabel();
@@ -1477,9 +1500,9 @@
       const button = event.target.closest(".timer-choice");
       if (!button) return;
       state.rapidSeconds = Number(button.dataset.seconds) || defaultTimePerQuestion;
-      createAttempt(modes.rapid, { rapidSeconds: state.rapidSeconds });
+      confirmAndCreateAttempt(modes.rapid, { rapidSeconds: state.rapidSeconds });
     });
-    el("practice-card").addEventListener("click", () => createAttempt(modes.practice));
+    el("practice-card").addEventListener("click", () => confirmAndCreateAttempt(modes.practice));
     el("practice-pro-card").addEventListener("click", () => {
       el("timer-panel").classList.remove("open");
       el("pro-panel").classList.toggle("open");
@@ -1494,7 +1517,7 @@
       setProLevel(button.dataset.level || "");
     });
     el("pro-start-btn").addEventListener("click", () => {
-      createAttempt(modes.pro, {
+      confirmAndCreateAttempt(modes.pro, {
         count: state.pro.count,
         level: hasLevelData() ? state.pro.level : "",
         timerMinutes: state.pro.timerMinutes
