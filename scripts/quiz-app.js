@@ -905,10 +905,9 @@
   function mistakeOptionNote(question, index, selected) {
     const previous = question.previousAnswer;
     const notes = [];
-    if (!unanswered(previous) && index === previous) notes.push("Previously chosen");
     if (index === question.ans) notes.push("Correct answer");
-    if (index === selected && selected !== question.ans) notes.push("Your new wrong answer");
-    if (index === selected && selected === question.ans) notes.push("Your new correct answer");
+    if (index === selected) notes.push("Your answer");
+    if (!unanswered(previous) && index === previous && previous !== selected && previous !== question.ans) notes.push("First attempt");
     return notes.join(" | ");
   }
 
@@ -1108,11 +1107,13 @@
       return;
     }
 
-    state.reviewSessionResult = {
-      type: state.reviewSessionType,
-      attempt,
-      parentId: state.reviewParentAttempt?.id || ""
-    };
+    if (!state.config.suppressReviewResult) {
+      state.reviewSessionResult = {
+        type: state.reviewSessionType,
+        attempt,
+        parentId: state.reviewParentAttempt?.id || ""
+      };
+    }
     renderReview(state.reviewParentAttempt || attempt, state.reviewReturnView, "all");
   }
 
@@ -1197,17 +1198,12 @@
       fragment.append(createAnalysisDashboard(attempt, items, counts, accuracy));
     }
 
-    if (filter === "all") {
-      const placeholder = document.createElement("div");
-      placeholder.className = "review-placeholder";
-      placeholder.textContent = "Detailed improvement sections will appear here soon. Use the filters above when you want to inspect Correct, Wrong, or Skipped questions.";
-      fragment.append(placeholder);
-    } else if (!visibleItems.length) {
+    if (filter !== "all" && !visibleItems.length) {
       const empty = document.createElement("p");
       empty.className = "empty-note";
       empty.textContent = `No ${filter} questions.`;
       fragment.append(empty);
-    } else {
+    } else if (filter !== "all") {
       visibleItems.forEach(item => fragment.append(createReviewCard(item)));
     }
 
@@ -1274,9 +1270,32 @@
     if (state.reviewSessionResult && state.reviewSessionResult.parentId === attempt.id) {
       const follow = document.createElement("div");
       follow.className = "followup-box";
-      const label = state.reviewSessionResult.type === "reattempt" ? "Reattempt Score" : "Mistake Practice Score";
       const result = state.reviewSessionResult.attempt;
-      follow.textContent = `${label}: ${formatScore(result.score)} | Accuracy ${result.accuracy}% | Correct ${result.correct}, Wrong ${result.wrong}, Skipped ${result.skip}`;
+      if (state.reviewSessionResult.type === "reattempt") {
+        const toggle = document.createElement("button");
+        toggle.className = "followup-toggle";
+        toggle.type = "button";
+        toggle.textContent = "See reattempt score ↓";
+        const panel = document.createElement("div");
+        panel.className = "followup-panel";
+        panel.append(createCompactAnalysis(result, "Reattempt Score Analysis"));
+        const resultWeakness = getAttemptItems(result).filter(item => ["wrong", "skipped"].includes(itemStatus(item)));
+        if (resultWeakness.length) {
+          const textAction = document.createElement("button");
+          textAction.className = "text-action";
+          textAction.type = "button";
+          textAction.textContent = "practice reattempt mistakes";
+          textAction.addEventListener("click", () => startReviewPractice("quiet-mistakes", result));
+          panel.append(textAction);
+        }
+        toggle.addEventListener("click", () => {
+          const open = panel.classList.toggle("open");
+          toggle.textContent = open ? "Hide reattempt score ↑" : "See reattempt score ↓";
+        });
+        follow.append(toggle, panel);
+      } else {
+        follow.textContent = `Mistake Practice Score: ${formatScore(result.score)} | Accuracy ${result.accuracy}% | Correct ${result.correct}, Wrong ${result.wrong}, Skipped ${result.skip}`;
+      }
       card.append(follow);
     }
 
@@ -1296,6 +1315,67 @@
     actions.append(mistakeButton, reattemptButton);
     card.append(actions);
 
+    return card;
+  }
+
+  function createCompactAnalysis(attempt, titleText) {
+    const items = getAttemptItems(attempt);
+    const counts = items.reduce((total, item) => {
+      total[itemStatus(item)] += 1;
+      return total;
+    }, { correct: 0, wrong: 0, skipped: 0 });
+    const total = items.length || 1;
+    const accuracy = attempt.accuracy ?? accuracyPercent(counts.correct, counts.wrong);
+    const correctPct = (counts.correct / total) * 100;
+    const wrongPct = (counts.wrong / total) * 100;
+    const times = items.map(item => Number(item.timeSpent || 0)).filter(Boolean);
+    const averageTime = times.length ? Math.round(times.reduce((sum, value) => sum + value, 0) / times.length) : 0;
+
+    const card = document.createElement("article");
+    card.className = "analysis-card compact";
+    const head = document.createElement("div");
+    head.className = "analysis-head";
+    const titleWrap = document.createElement("div");
+    const title = document.createElement("h3");
+    title.className = "analysis-title";
+    title.textContent = titleText;
+    const subtitle = document.createElement("p");
+    subtitle.className = "analysis-subtitle";
+    subtitle.textContent = `${counts.correct + counts.wrong}/${items.length} attempted`;
+    titleWrap.append(title, subtitle);
+    const donut = document.createElement("div");
+    donut.className = "donut";
+    donut.style.setProperty("--correct", `${correctPct}%`);
+    donut.style.setProperty("--wrong", `${wrongPct}%`);
+    const donutInner = document.createElement("div");
+    donutInner.className = "donut-inner";
+    donutInner.textContent = `${accuracy}%`;
+    donut.append(donutInner);
+    head.append(titleWrap, donut);
+    card.append(head);
+
+    const metrics = document.createElement("div");
+    metrics.className = "analysis-metrics";
+    [
+      ["Score", formatScore(attempt.score)],
+      ["Accuracy", `${accuracy}%`],
+      ["Correct", counts.correct],
+      ["Wrong", counts.wrong],
+      ["Skipped", counts.skipped],
+      ["Avg Time", averageTime ? `${averageTime}s` : "Not tracked"]
+    ].forEach(([label, value]) => {
+      const tile = document.createElement("div");
+      tile.className = "metric-tile";
+      const metricLabel = document.createElement("span");
+      metricLabel.className = "metric-label";
+      metricLabel.textContent = label;
+      const metricValue = document.createElement("span");
+      metricValue.className = "metric-value";
+      metricValue.textContent = value;
+      tile.append(metricLabel, metricValue);
+      metrics.append(tile);
+    });
+    card.append(metrics);
     return card;
   }
 
@@ -1386,10 +1466,10 @@
     return card;
   }
 
-  function startReviewPractice(type) {
-    const parent = state.currentReviewAttempt;
+  function startReviewPractice(type, sourceAttempt = null) {
+    const parent = sourceAttempt || state.currentReviewAttempt;
     if (!parent) return;
-    const sourceItems = type === "mistakes"
+    const sourceItems = ["mistakes", "quiet-mistakes"].includes(type)
       ? getAttemptItems(parent).filter(item => ["wrong", "skipped"].includes(itemStatus(item)))
       : getAttemptItems(parent);
     if (!sourceItems.length) return;
@@ -1401,8 +1481,9 @@
     createAttempt(type === "reattempt" ? modes.reattempt : modes.mistakes, {
       sourceQuestions,
       saveToLeaderboard: false,
-      reviewParentAttempt: parent,
-      reviewType: type
+      reviewParentAttempt: state.currentReviewAttempt || parent,
+      reviewType: type,
+      suppressReviewResult: type === "quiet-mistakes"
     });
   }
 
