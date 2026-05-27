@@ -76,45 +76,20 @@
 
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
     .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; text-align: center; }
-    .stat-button {
-      position: relative;
-      width: 100%;
-      color: inherit;
-      cursor: pointer;
-      border-color: rgba(37, 99, 235, 0.32);
-      background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
-      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.1);
-      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
-    }
-    .stat-button::after {
-      content: "Browse";
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 7px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: var(--primary);
-      color: #ffffff;
-      font-size: 0.62rem;
-      font-weight: 800;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-    .stat-button:hover { border-color: var(--primary); box-shadow: 0 12px 24px rgba(37, 99, 235, 0.14); transform: translateY(-1px); }
-    .stat-button[aria-expanded="true"] { border-color: var(--primary); background: #eff6ff; }
-    .stat-button[aria-expanded="true"]::after { content: "Hide"; background: #1d4ed8; }
     .stat-value { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
     .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
 
     .section-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
     .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
     .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .subject-panel { display: none; margin: -18px 0 28px; }
-    .subject-panel.visible { display: block; }
+    .subject-panel { display: block; margin: -14px 0 28px; }
     .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
     .subject-card {
       --accent: #2563eb;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 10px;
       border: 1px solid var(--border-color);
       border-left: 4px solid var(--accent);
       border-radius: 10px;
@@ -125,6 +100,17 @@
       cursor: pointer;
     }
     .subject-card:hover { border-color: var(--accent); }
+    .subject-card.active { border-color: var(--accent); background: #f8fbff; }
+    .subject-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--icon-bg, #eff6ff);
+      color: var(--accent);
+    }
+    .subject-icon svg { width: 21px; height: 21px; stroke-width: 2; }
     .subject-name { display: block; font-size: 0.9rem; font-weight: 700; }
     .subject-count { display: block; margin-top: 2px; color: var(--text-muted); font-size: 0.76rem; }
     .subject-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
@@ -206,10 +192,10 @@
     </header>
 
     <div class="stats">
-      <button class="stat-card stat-button" id="quiz-stat-card" type="button" aria-expanded="false">
+      <div class="stat-card">
         <div class="stat-value" id="stat-quizzes">0</div>
         <div class="stat-label">Quizzes</div>
-      </button>
+      </div>
       <div class="stat-card">
         <div class="stat-value" id="stat-questions">0</div>
         <div class="stat-label">Questions</div>
@@ -245,6 +231,8 @@
   <script>
     const subjectStyles = {
       history: { accent: "#c9a84c", bg: "#fef3c7", text: "#92400e" },
+      polity: { accent: "#2563eb", bg: "#dbeafe", text: "#1e40af" },
+      economy: { accent: "#0f766e", bg: "#ccfbf1", text: "#115e59" },
       chemistry: { accent: "#35a66f", bg: "#dcfce7", text: "#166534" },
       physics: { accent: "#4c8dcc", bg: "#dbeafe", text: "#1e40af" },
       science: { accent: "#4c8dcc", bg: "#e0f2fe", text: "#075985" },
@@ -255,10 +243,19 @@
       default: { accent: "#2563eb", bg: "#eff6ff", text: "#1d4ed8" }
     };
 
+    const subjectIcons = {
+      history: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z"></path></svg>',
+      polity: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M5 21V9l7-5 7 5v12"></path><path d="M9 21v-7h6v7"></path></svg>',
+      economy: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16l3-4 3 2 5-7"></path></svg>',
+      chemistry: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 2h6"></path><path d="M10 2v6l-5 9a3 3 0 002.6 4.5h8.8A3 3 0 0019 17l-5-9V2"></path><path d="M7.5 15h9"></path></svg>',
+      physics: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.8"></circle><path d="M4.5 12c0-2.5 3.4-4.5 7.5-4.5s7.5 2 7.5 4.5-3.4 4.5-7.5 4.5-7.5-2-7.5-4.5z"></path><path d="M8.25 5.5c2.15-1.25 5.12.7 7.17 4.25s2.25 7.1.1 8.34-5.12-.7-7.17-4.25-2.25-7.1-.1-8.34z"></path><path d="M15.75 5.5c-2.15-1.25-5.12.7-7.17 4.25s-2.25 7.1-.1 8.34 5.12-.7 7.17-4.25 2.25-7.1.1-8.34z"></path></svg>',
+      static: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3.6 9h16.8"></path><path d="M3.6 15h16.8"></path><path d="M12 3a14 14 0 010 18"></path><path d="M12 3a14 14 0 000 18"></path></svg>',
+      "static-gk-ca": '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3.6 9h16.8"></path><path d="M3.6 15h16.8"></path><path d="M12 3a14 14 0 010 18"></path><path d="M12 3a14 14 0 000 18"></path></svg>',
+      default: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 3l8 4.5-8 4.5-8-4.5L12 3z"></path><path d="M4 12l8 4.5 8-4.5"></path><path d="M4 16.5l8 4.5 8-4.5"></path></svg>'
+    };
+
     const quizContainer = document.getElementById("quiz-container");
-    const subjectPanel = document.getElementById("subject-panel");
     const subjectGrid = document.getElementById("subject-grid");
-    const quizStatCard = document.getElementById("quiz-stat-card");
     const clearSubjectFilter = document.getElementById("clear-subject-filter");
     const quizSectionTitle = document.getElementById("quiz-section-title");
     let allQuizzes = [];
@@ -294,6 +291,10 @@
       return subjectStyles[key] || colorForSubject(key);
     }
 
+    function iconForSubject(key) {
+      return subjectIcons[key] || subjectIcons.default;
+    }
+
     function escapeHtml(value) {
       return String(value ?? "").replace(/[&<>"']/g, char => ({
         "&": "&amp;",
@@ -309,6 +310,11 @@
       const date = new Date(`${value}T00:00:00`);
       if (Number.isNaN(date.getTime())) return value;
       return date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    }
+
+    function dateScore(value) {
+      const time = Date.parse(`${value || ""}T00:00:00`);
+      return Number.isNaN(time) ? 0 : time;
     }
 
     function renderStats(quizzes) {
@@ -336,10 +342,14 @@
       const subjects = groupedSubjects(allQuizzes);
       subjectGrid.innerHTML = subjects.map(subject => {
         const style = styleForSubject({ subject: subject.subject, subjectKey: subject.key });
+        const activeClass = activeSubject === subject.key ? " active" : "";
         return `
-          <button class="subject-card" type="button" data-subject="${escapeHtml(subject.key)}" style="--accent:${style.accent};">
-            <span class="subject-name">${escapeHtml(subject.subject)}</span>
-            <span class="subject-count">${subject.count} quizzes | ${subject.questions} Qs</span>
+          <button class="subject-card${activeClass}" type="button" data-subject="${escapeHtml(subject.key)}" style="--accent:${style.accent};--icon-bg:${style.bg};">
+            <span class="subject-icon" aria-hidden="true">${iconForSubject(subject.key)}</span>
+            <span>
+              <span class="subject-name">${escapeHtml(subject.subject)}</span>
+              <span class="subject-count">${subject.count} quizzes | ${subject.questions} Qs</span>
+            </span>
           </button>
         `;
       }).join("");
@@ -354,6 +364,7 @@
         ? groupedSubjects(allQuizzes).find(subject => subject.key === activeSubject)?.subject || "Subject"
         : "Available Quizzes";
       quizSectionTitle.textContent = activeSubject ? `${label} Quizzes` : "Available Quizzes";
+      renderSubjects();
       renderQuizzes(visibleQuizzes);
     }
 
@@ -401,6 +412,7 @@
         if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);
         const manifest = await response.json();
         allQuizzes = Array.isArray(manifest.quizzes) ? manifest.quizzes : [];
+        allQuizzes.sort((a, b) => dateScore(b.published) - dateScore(a.published));
         renderSubjects();
         setSubjectFilter("");
       } catch (error) {
@@ -408,12 +420,6 @@
         quizContainer.innerHTML = '<div class="state-card">Could not load quiz list. If you opened the file directly, use GitHub Pages or a local server.</div>';
       }
     }
-
-    quizStatCard.addEventListener("click", () => {
-      const willShow = !subjectPanel.classList.contains("visible");
-      subjectPanel.classList.toggle("visible", willShow);
-      quizStatCard.setAttribute("aria-expanded", String(willShow));
-    });
 
     clearSubjectFilter.addEventListener("click", () => setSubjectFilter(""));
 
