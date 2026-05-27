@@ -905,7 +905,7 @@
   function mistakeOptionNote(question, index, selected) {
     const previous = question.previousAnswer;
     const oldWrong = !unanswered(previous) && previous !== question.ans;
-    if (oldWrong && previous !== selected && index === previous) return "First attempt";
+    if (oldWrong && index === previous) return "First attempt";
     return "";
   }
 
