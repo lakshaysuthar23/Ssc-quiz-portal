@@ -1412,13 +1412,14 @@
     const layout = {
       width: 595.28,
       height: 841.89,
-      margin: 36,
+      margin: 30,
       top: 50,
       bottom: 42,
-      columnGap: 16,
+      columnGap: 12,
+      questionColumns: 3,
       questionGap: 5
     };
-    layout.columnWidth = (layout.width - layout.margin * 2 - layout.columnGap) / 2;
+    layout.columnWidth = (layout.width - layout.margin * 2 - layout.columnGap * (layout.questionColumns - 1)) / layout.questionColumns;
     const pages = [];
     const newPage = () => {
       const page = { ops: [] };
@@ -1451,15 +1452,13 @@
     state.questions.forEach((question, index) => {
       const block = buildQuestionPdfBlock(question, index + 1, layout.columnWidth);
       if (y - block.height < layout.bottom) {
-        if (column === 0) {
-          column = 1;
-          y = pdfBodyStartY(layout);
-        } else {
+        column += 1;
+        if (column >= layout.questionColumns) {
           page = newPage();
           drawPdfSectionTitle(page, layout, "Question Paper");
           column = 0;
-          y = pdfBodyStartY(layout);
         }
+        y = pdfBodyStartY(layout);
       }
 
       const x = layout.margin + column * (layout.columnWidth + layout.columnGap);
@@ -1506,15 +1505,11 @@
 
   function buildQuestionPdfBlock(question, number, columnWidth) {
     const parts = [];
-    const tag = cleanPdfText(question.tag);
-    const tagSize = tag && pdfTextWidth(tag, 6.8) > columnWidth * 0.45 ? 6.2 : 6.8;
-    const tagWidth = tag ? pdfTextWidth(tag, tagSize) : 0;
-    const firstLineWidth = tag ? Math.max(columnWidth * 0.50, columnWidth - tagWidth - 8) : columnWidth;
-    wrapPdfTextWithFirstWidth(`${number}. ${question.q}`, firstLineWidth, columnWidth, 9).forEach((text, index) => {
-      parts.push({ text, size: 9, font: "F2", leading: 10.4, tag: index === 0 ? tag : "", tagSize });
+    wrapPdfText(`${number}. ${question.q}`, columnWidth, 9.5).forEach(text => {
+      parts.push({ text, size: 9.5, font: "F2", leading: 10.8 });
     });
     if (question.image) {
-      parts.push({ text: "[Diagram/image available in app]", size: 7.3, font: "F3", leading: 8.8, color: "0.39 0.45 0.55" });
+      parts.push({ text: "[Diagram/image available in app]", size: 7.6, font: "F3", leading: 8.9, color: "0.39 0.45 0.55" });
     }
 
     const optionLines = buildPdfOptionLines(question, columnWidth);
@@ -1531,12 +1526,12 @@
     for (let index = 0; index < optionTexts.length; index += 1) {
       const current = optionTexts[index];
       const next = optionTexts[index + 1];
-      if (next && pdfTextWidth(current, 8) <= halfWidth && pdfTextWidth(next, 8) <= halfWidth) {
-        lines.push({ pair: [current, next], size: 8, font: "F1", leading: 9.3 });
+      if (next && pdfTextWidth(current, 8.4) <= halfWidth && pdfTextWidth(next, 8.4) <= halfWidth) {
+        lines.push({ pair: [current, next], size: 8.4, font: "F1", leading: 9.6 });
         index += 1;
       } else {
-        wrapPdfText(current, columnWidth, 8).forEach(text => {
-          lines.push({ text, size: 8, font: "F1", leading: 9.3 });
+        wrapPdfText(current, columnWidth, 8.4).forEach(text => {
+          lines.push({ text, size: 8.4, font: "F1", leading: 9.6 });
         });
       }
     }
@@ -1551,9 +1546,6 @@
         drawPdfText(page, part.pair[1], x + (columnWidth + 10) / 2, y, part.size, part.font, part.color || "0.06 0.09 0.16");
       } else {
         drawPdfText(page, part.text, x, y, part.size, part.font, part.color || "0.06 0.09 0.16");
-        if (part.tag) {
-          drawPdfText(page, part.tag, x + columnWidth - pdfTextWidth(part.tag, part.tagSize), y, part.tagSize, "F3", "0.39 0.45 0.55");
-        }
       }
       y -= part.leading;
     });
@@ -1595,37 +1587,6 @@
         line = word;
       } else {
         const chunks = breakPdfWord(word, maxWidth, size);
-        lines.push(...chunks.slice(0, -1));
-        line = chunks[chunks.length - 1] || "";
-      }
-    });
-
-    if (line) lines.push(line);
-    return lines.length ? lines : [""];
-  }
-
-  function wrapPdfTextWithFirstWidth(text, firstWidth, nextWidth, size) {
-    const words = cleanPdfText(text).split(/\s+/).filter(Boolean);
-    const lines = [];
-    let line = "";
-
-    words.forEach(word => {
-      const maxWidth = lines.length ? nextWidth : firstWidth;
-      const trial = line ? `${line} ${word}` : word;
-      if (pdfTextWidth(trial, size) <= maxWidth) {
-        line = trial;
-        return;
-      }
-      if (line) {
-        lines.push(line);
-        line = "";
-      }
-
-      const nextMaxWidth = lines.length ? nextWidth : firstWidth;
-      if (pdfTextWidth(word, size) <= nextMaxWidth) {
-        line = word;
-      } else {
-        const chunks = breakPdfWord(word, nextMaxWidth, size);
         lines.push(...chunks.slice(0, -1));
         line = chunks[chunks.length - 1] || "";
       }
