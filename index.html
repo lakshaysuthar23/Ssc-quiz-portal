@@ -83,36 +83,57 @@
     .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
     .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
     .subject-panel { display: block; margin: -14px 0 28px; }
-    .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+    .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
     .subject-card {
       --accent: #2563eb;
-      display: grid;
-      grid-template-columns: 42px 1fr;
-      align-items: center;
-      gap: 10px;
+      --subject-image: none;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 8px;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
       border: 1px solid var(--border-color);
-      border-left: 4px solid var(--accent);
-      border-radius: 10px;
-      padding: 12px;
-      background: #ffffff;
-      color: var(--text-main);
+      border-radius: 12px;
+      padding: 10px;
+      background:
+        linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.72)),
+        var(--subject-image),
+        var(--tile-bg, #eff6ff);
+      background-size: cover;
+      background-position: center;
+      color: #ffffff;
       text-align: left;
       cursor: pointer;
+      isolation: isolate;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .subject-card:hover { border-color: var(--accent); }
-    .subject-card.active { border-color: var(--accent); background: #f8fbff; }
+    .subject-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 42%, transparent), transparent 54%);
+      opacity: 0.52;
+      z-index: -1;
+    }
+    .subject-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.13); }
+    .subject-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent), 0 12px 24px rgba(15, 23, 42, 0.15); }
     .subject-icon {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       display: grid;
       place-items: center;
-      border-radius: 10px;
-      background: var(--icon-bg, #eff6ff);
-      color: var(--accent);
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      backdrop-filter: blur(5px);
     }
-    .subject-icon svg { width: 21px; height: 21px; stroke-width: 2; }
-    .subject-name { display: block; font-size: 0.9rem; font-weight: 700; }
-    .subject-count { display: block; margin-top: 2px; color: var(--text-muted); font-size: 0.76rem; }
+    .subject-icon svg { width: 19px; height: 19px; stroke-width: 2; }
+    .subject-copy { display: block; min-width: 0; text-shadow: 0 1px 8px rgba(15, 23, 42, 0.45); }
+    .subject-name { display: block; font-size: 0.82rem; font-weight: 800; line-height: 1.12; overflow-wrap: anywhere; }
+    .subject-count { display: block; margin-top: 3px; color: rgba(255, 255, 255, 0.84); font-size: 0.68rem; font-weight: 700; line-height: 1.15; }
     .subject-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .subject-heading { color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .clear-filter { border: 0; border-radius: 999px; padding: 7px 10px; background: #eff6ff; color: var(--primary); font-size: 0.76rem; font-weight: 700; cursor: pointer; }
@@ -179,6 +200,12 @@
       .header-name { font-size: 3.2rem; }
       .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 32px; }
       .stat-card { padding: 10px 6px; }
+      .subject-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .subject-card { border-radius: 10px; padding: 8px; }
+      .subject-icon { width: 28px; height: 28px; border-radius: 8px; }
+      .subject-icon svg { width: 16px; height: 16px; }
+      .subject-name { font-size: 0.72rem; }
+      .subject-count { font-size: 0.58rem; }
       .quiz-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -295,6 +322,10 @@
       return subjectIcons[key] || subjectIcons.default;
     }
 
+    function coverForSubject(key) {
+      return `assets/subject-covers/${encodeURIComponent(key || "default")}.webp`;
+    }
+
     function escapeHtml(value) {
       return String(value ?? "").replace(/[&<>"']/g, char => ({
         "&": "&amp;",
@@ -343,10 +374,11 @@
       subjectGrid.innerHTML = subjects.map(subject => {
         const style = styleForSubject({ subject: subject.subject, subjectKey: subject.key });
         const activeClass = activeSubject === subject.key ? " active" : "";
+        const cover = coverForSubject(subject.key);
         return `
-          <button class="subject-card${activeClass}" type="button" data-subject="${escapeHtml(subject.key)}" style="--accent:${style.accent};--icon-bg:${style.bg};">
+          <button class="subject-card${activeClass}" type="button" data-subject="${escapeHtml(subject.key)}" style="--accent:${style.accent};--tile-bg:${style.bg};--subject-image:url('${escapeHtml(cover)}');">
             <span class="subject-icon" aria-hidden="true">${iconForSubject(subject.key)}</span>
-            <span>
+            <span class="subject-copy">
               <span class="subject-name">${escapeHtml(subject.subject)}</span>
               <span class="subject-count">${subject.count} quizzes | ${subject.questions} Qs</span>
             </span>

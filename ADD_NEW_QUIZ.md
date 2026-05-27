@@ -26,6 +26,8 @@ You do not need to edit `index.html`, create a quiz HTML file, count questions, 
 
 Use `subject` for the display name and `subjectKey` for the stable code. Keep the same `subjectKey` for future quizzes of that subject, for example `history`, `polity`, `economy`, `physics`, `chemistry`, or `static`.
 
+Subject cover images are optional. Put WebP subject images in `assets/subject-covers` and name each file exactly like the `subjectKey`. Example: if `subjectKey` is `geography`, use `assets/subject-covers/geography.webp`. If the image is missing, the homepage automatically uses the subject color fallback.
+
 For new quizzes, add `level` to every question. Use only `easy`, `moderate`, or `pro`. A good mix is about 30% easy, 50% moderate, and 20% pro. Old quizzes without `level` still work, and Practice Pro will simply use all questions.
 
 Use `ansText` as the full correct answer text, not `A`, `B`, `C`, or `D`. It must exactly match one option inside `opts`.
