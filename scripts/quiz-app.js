@@ -1316,6 +1316,13 @@
     actions.append(mistakeButton, reattemptButton);
     card.append(actions);
 
+    const pdfButton = document.createElement("button");
+    pdfButton.className = "pdf-download-button";
+    pdfButton.type = "button";
+    pdfButton.textContent = "Download all the most important questions of this topic & PYQs";
+    pdfButton.addEventListener("click", downloadFullQuizPdf);
+    card.append(pdfButton);
+
     return card;
   }
 
@@ -1378,6 +1385,308 @@
     });
     card.append(metrics);
     return card;
+  }
+
+  function downloadFullQuizPdf() {
+    if (!state.questions.length) {
+      appAlert({
+        title: "PDF unavailable",
+        message: "This quiz does not have question data loaded yet."
+      });
+      return;
+    }
+
+    const bytes = buildQuizPdf();
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${fileSafeName(state.quiz.title || "quiz")}-question-paper.pdf`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function buildQuizPdf() {
+    const layout = {
+      width: 595.28,
+      height: 841.89,
+      margin: 42,
+      top: 58,
+      bottom: 64,
+      columnGap: 20
+    };
+    layout.columnWidth = (layout.width - layout.margin * 2 - layout.columnGap) / 2;
+    const pages = [];
+    const newPage = () => {
+      const page = { ops: [] };
+      pages.push(page);
+      return page;
+    };
+
+    drawPdfCover(newPage(), layout);
+    drawPdfQuestions(pages, newPage, layout);
+    drawPdfAnswerKey(pages, newPage, layout);
+    pages.forEach((page, index) => drawPdfFooter(page, layout, index + 1));
+    return finalizePdf(pages, layout);
+  }
+
+  function drawPdfCover(page, layout) {
+    drawCenteredPdfText(page, "Quizzes by Lakshay Suthar", layout.width / 2, 560, 28, "F2", "0.11 0.30 0.70");
+    drawCenteredPdfText(page, cleanPdfText(state.quiz.title || "Quiz"), layout.width / 2, 485, 24, "F2", "0.06 0.09 0.16");
+    drawCenteredPdfText(page, cleanPdfText(state.quiz.subject || "General"), layout.width / 2, 450, 16, "F1", "0.25 0.31 0.40");
+    drawCenteredPdfText(page, `${state.questions.length} questions`, layout.width / 2, 420, 11, "F1", "0.39 0.45 0.55");
+    page.ops.push("0.82 0.86 0.91 RG 1 w 112 392 m 483 392 l S");
+    drawCenteredPdfText(page, `Downloaded on ${downloadDateLabel()}`, layout.width / 2, 62, 10, "F3", "0.39 0.45 0.55");
+  }
+
+  function drawPdfQuestions(pages, newPage, layout) {
+    let page = newPage();
+    drawPdfSectionTitle(page, layout, "Question Paper");
+    let column = 0;
+    let y = layout.height - layout.top - 28;
+
+    state.questions.forEach((question, index) => {
+      const block = buildQuestionPdfBlock(question, index + 1, layout.columnWidth);
+      if (y - block.height < layout.bottom) {
+        if (column === 0) {
+          column = 1;
+          y = layout.height - layout.top - 28;
+        } else {
+          page = newPage();
+          drawPdfSectionTitle(page, layout, "Question Paper");
+          column = 0;
+          y = layout.height - layout.top - 28;
+        }
+      }
+
+      const x = layout.margin + column * (layout.columnWidth + layout.columnGap);
+      y = drawQuestionPdfBlock(page, block, x, y, layout.columnWidth) - 8;
+    });
+  }
+
+  function drawPdfAnswerKey(pages, newPage, layout) {
+    let page = newPage();
+    drawPdfSectionTitle(page, layout, "Answer Key");
+    let column = 0;
+    let y = layout.height - layout.top - 28;
+
+    state.questions.forEach((question, index) => {
+      const line = `${index + 1}. ${letters[question.ans] || question.ans + 1}. ${question.ansText}`;
+      const lines = wrapPdfText(line, layout.columnWidth, 8.8);
+      const height = Math.max(1, lines.length) * 10.5 + 4;
+      if (y - height < layout.bottom) {
+        if (column === 0) {
+          column = 1;
+          y = layout.height - layout.top - 28;
+        } else {
+          page = newPage();
+          drawPdfSectionTitle(page, layout, "Answer Key");
+          column = 0;
+          y = layout.height - layout.top - 28;
+        }
+      }
+
+      const x = layout.margin + column * (layout.columnWidth + layout.columnGap);
+      lines.forEach(lineText => {
+        drawPdfText(page, lineText, x, y, 8.8, "F1", "0.06 0.09 0.16");
+        y -= 10.5;
+      });
+      y -= 4;
+    });
+  }
+
+  function drawPdfSectionTitle(page, layout, title) {
+    drawCenteredPdfText(page, title, layout.width / 2, layout.height - 34, 13, "F2", "0.11 0.30 0.70");
+    page.ops.push("0.82 0.86 0.91 RG 0.75 w 42 786 m 553 786 l S");
+  }
+
+  function buildQuestionPdfBlock(question, number, columnWidth) {
+    const parts = [];
+    wrapPdfText(`${number}. ${question.q}`, columnWidth, 9.1).forEach(text => {
+      parts.push({ text, size: 9.1, font: "F2", leading: 11.2 });
+    });
+    if (question.tag) {
+      parts.push({ text: `[${question.tag}]`, size: 7.3, font: "F3", leading: 9.2, color: "0.39 0.45 0.55" });
+    }
+    if (question.image) {
+      parts.push({ text: "[Diagram/image available in app]", size: 7.5, font: "F3", leading: 9.5, color: "0.39 0.45 0.55" });
+    }
+
+    const optionLines = buildPdfOptionLines(question, columnWidth);
+    optionLines.forEach(line => parts.push(line));
+    const height = parts.reduce((sum, part) => sum + part.leading, 0) + 6;
+    return { parts, height };
+  }
+
+  function buildPdfOptionLines(question, columnWidth) {
+    const optionTexts = question.opts.map((option, index) => `${letters[index] || index + 1}. ${option}`);
+    const lines = [];
+    const halfWidth = (columnWidth - 10) / 2;
+
+    for (let index = 0; index < optionTexts.length; index += 1) {
+      const current = optionTexts[index];
+      const next = optionTexts[index + 1];
+      if (next && pdfTextWidth(current, 8.2) <= halfWidth && pdfTextWidth(next, 8.2) <= halfWidth) {
+        lines.push({ pair: [current, next], size: 8.2, font: "F1", leading: 10.2 });
+        index += 1;
+      } else {
+        wrapPdfText(current, columnWidth, 8.2).forEach(text => {
+          lines.push({ text, size: 8.2, font: "F1", leading: 10.2 });
+        });
+      }
+    }
+
+    return lines;
+  }
+
+  function drawQuestionPdfBlock(page, block, x, y, columnWidth) {
+    block.parts.forEach(part => {
+      if (part.pair) {
+        drawPdfText(page, part.pair[0], x, y, part.size, part.font, part.color || "0.06 0.09 0.16");
+        drawPdfText(page, part.pair[1], x + (columnWidth + 10) / 2, y, part.size, part.font, part.color || "0.06 0.09 0.16");
+      } else {
+        drawPdfText(page, part.text, x, y, part.size, part.font, part.color || "0.06 0.09 0.16");
+      }
+      y -= part.leading;
+    });
+    return y;
+  }
+
+  function drawPdfFooter(page, layout, pageNumber) {
+    page.ops.push("0.88 0.91 0.95 RG 0.5 w 238 31 m 357 31 l S");
+    drawCenteredPdfText(page, `Page ${pageNumber}`, layout.width / 2, 22, 8.5, "F2", "0.39 0.45 0.55");
+  }
+
+  function drawCenteredPdfText(page, text, centerX, y, size, font, color) {
+    const cleaned = cleanPdfText(text);
+    drawPdfText(page, cleaned, centerX - pdfTextWidth(cleaned, size) / 2, y, size, font, color);
+  }
+
+  function drawPdfText(page, text, x, y, size, font = "F1", color = "0 0 0") {
+    const cleaned = cleanPdfText(text);
+    page.ops.push(`${color} rg BT /${font} ${size.toFixed(2)} Tf ${x.toFixed(2)} ${y.toFixed(2)} Td (${escapePdfString(cleaned)}) Tj ET`);
+  }
+
+  function wrapPdfText(text, maxWidth, size) {
+    const words = cleanPdfText(text).split(/\s+/).filter(Boolean);
+    const lines = [];
+    let line = "";
+
+    words.forEach(word => {
+      const trial = line ? `${line} ${word}` : word;
+      if (pdfTextWidth(trial, size) <= maxWidth) {
+        line = trial;
+        return;
+      }
+      if (line) lines.push(line);
+      if (pdfTextWidth(word, size) <= maxWidth) {
+        line = word;
+      } else {
+        const chunks = breakPdfWord(word, maxWidth, size);
+        lines.push(...chunks.slice(0, -1));
+        line = chunks[chunks.length - 1] || "";
+      }
+    });
+
+    if (line) lines.push(line);
+    return lines.length ? lines : [""];
+  }
+
+  function breakPdfWord(word, maxWidth, size) {
+    const chunks = [];
+    let chunk = "";
+    for (const char of word) {
+      const trial = `${chunk}${char}`;
+      if (pdfTextWidth(trial, size) <= maxWidth || !chunk) {
+        chunk = trial;
+      } else {
+        chunks.push(chunk);
+        chunk = char;
+      }
+    }
+    if (chunk) chunks.push(chunk);
+    return chunks;
+  }
+
+  function pdfTextWidth(text, size) {
+    return cleanPdfText(text).split("").reduce((sum, char) => {
+      if (char === " ") return sum + size * 0.25;
+      if ("il.,'|!".includes(char)) return sum + size * 0.22;
+      if ("mwMW@#%&".includes(char)) return sum + size * 0.78;
+      if (/[A-Z0-9]/.test(char)) return sum + size * 0.54;
+      return sum + size * 0.46;
+    }, 0);
+  }
+
+  function finalizePdf(pages, layout) {
+    const objects = [
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman >>",
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold >>",
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Times-Italic >>",
+      "",
+      "<< /Type /Catalog /Pages 4 0 R >>"
+    ];
+    const addObject = content => {
+      objects.push(content);
+      return objects.length;
+    };
+    const pageIds = [];
+
+    pages.forEach(page => {
+      const stream = page.ops.join("\n");
+      const contentId = addObject(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);
+      const pageId = addObject(`<< /Type /Page /Parent 4 0 R /MediaBox [0 0 ${layout.width.toFixed(2)} ${layout.height.toFixed(2)}] /Resources << /Font << /F1 1 0 R /F2 2 0 R /F3 3 0 R >> >> /Contents ${contentId} 0 R >>`);
+      pageIds.push(pageId);
+    });
+
+    objects[3] = `<< /Type /Pages /Kids [${pageIds.map(id => `${id} 0 R`).join(" ")}] /Count ${pageIds.length} >>`;
+
+    let pdf = "%PDF-1.4\n% SSC Quiz PDF\n";
+    const offsets = [0];
+    objects.forEach((object, index) => {
+      offsets[index + 1] = pdf.length;
+      pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
+    });
+    const xref = pdf.length;
+    pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+    for (let index = 1; index <= objects.length; index += 1) {
+      pdf += `${String(offsets[index]).padStart(10, "0")} 00000 n \n`;
+    }
+    pdf += `trailer\n<< /Size ${objects.length + 1} /Root 5 0 R >>\nstartxref\n${xref}\n%%EOF`;
+    return asciiBytes(pdf);
+  }
+
+  function escapePdfString(text) {
+    return cleanPdfText(text).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+  }
+
+  function cleanPdfText(text) {
+    return String(text ?? "")
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u2013\u2014]/g, "-")
+      .replace(/\u20B9/g, "Rs")
+      .replace(/[^\x20-\x7E]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function asciiBytes(text) {
+    const bytes = new Uint8Array(text.length);
+    for (let index = 0; index < text.length; index += 1) bytes[index] = text.charCodeAt(index) & 0xff;
+    return bytes;
+  }
+
+  function fileSafeName(value) {
+    return cleanPdfText(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "quiz";
+  }
+
+  function downloadDateLabel() {
+    return new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
   }
 
   function createReviewCard(item) {
