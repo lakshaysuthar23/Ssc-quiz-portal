@@ -1420,6 +1420,8 @@
       questionGap: 5
     };
     layout.columnWidth = (layout.width - layout.margin * 2 - layout.columnGap * (layout.questionColumns - 1)) / layout.questionColumns;
+    const paperCode = makePdfPaperCode();
+    const paperQuestions = buildPdfPaperQuestions();
     const pages = [];
     const newPage = () => {
       const page = { ops: [] };
@@ -1427,29 +1429,48 @@
       return page;
     };
 
-    drawPdfCover(newPage(), layout);
-    drawPdfQuestions(pages, newPage, layout);
-    drawPdfAnswerKey(pages, newPage, layout);
+    drawPdfCover(newPage(), layout, paperCode);
+    drawPdfQuestions(pages, newPage, layout, paperQuestions);
+    drawPdfAnswerKey(pages, newPage, layout, paperQuestions, paperCode);
     pages.forEach((page, index) => drawPdfFooter(page, layout, index + 1));
     return finalizePdf(pages, layout);
   }
 
-  function drawPdfCover(page, layout) {
+  function buildPdfPaperQuestions() {
+    return state.questions.map(question => {
+      const shuffledOptions = shuffle(question.opts.map((text, index) => ({ text, index })));
+      const pdfAns = shuffledOptions.findIndex(option => option.index === question.ans);
+      const safeAnswerIndex = pdfAns >= 0 ? pdfAns : question.ans;
+      return {
+        ...question,
+        pdfOpts: shuffledOptions.map(option => option.text),
+        pdfAns: safeAnswerIndex,
+        pdfAnsText: shuffledOptions[safeAnswerIndex]?.text || question.ansText
+      };
+    });
+  }
+
+  function makePdfPaperCode() {
+    return `LS-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  }
+
+  function drawPdfCover(page, layout, paperCode) {
     drawCenteredPdfText(page, "Quizzes by Lakshay Suthar", layout.width / 2, 560, 28, "F2", "0.11 0.30 0.70");
     drawCenteredPdfText(page, cleanPdfText(state.quiz.title || "Quiz"), layout.width / 2, 485, 24, "F2", "0.06 0.09 0.16");
     drawCenteredPdfText(page, cleanPdfText(state.quiz.subject || "General"), layout.width / 2, 450, 16, "F1", "0.25 0.31 0.40");
     drawCenteredPdfText(page, `${state.questions.length} questions`, layout.width / 2, 420, 11, "F1", "0.39 0.45 0.55");
+    drawCenteredPdfText(page, `Paper Code: ${paperCode}`, layout.width / 2, 398, 10, "F2", "0.11 0.30 0.70");
     page.ops.push("0.82 0.86 0.91 RG 1 w 112 392 m 483 392 l S");
     drawCenteredPdfText(page, `Downloaded on ${downloadDateLabel()}`, layout.width / 2, 62, 10, "F3", "0.39 0.45 0.55");
   }
 
-  function drawPdfQuestions(pages, newPage, layout) {
+  function drawPdfQuestions(pages, newPage, layout, paperQuestions) {
     let page = newPage();
     drawPdfSectionTitle(page, layout, "Question Paper");
     let column = 0;
     let y = pdfBodyStartY(layout);
 
-    state.questions.forEach((question, index) => {
+    paperQuestions.forEach((question, index) => {
       const block = buildQuestionPdfBlock(question, index + 1, layout.columnWidth);
       if (y - block.height < layout.bottom) {
         column += 1;
@@ -1466,24 +1487,26 @@
     });
   }
 
-  function drawPdfAnswerKey(pages, newPage, layout) {
+  function drawPdfAnswerKey(pages, newPage, layout, paperQuestions, paperCode) {
     let page = newPage();
-    drawPdfSectionTitle(page, layout, "Answer Key");
+    drawPdfSectionTitle(page, layout, `Answer Key | ${paperCode}`);
     const columns = 4;
     const gap = 12;
     const columnWidth = (layout.width - layout.margin * 2 - gap * (columns - 1)) / columns;
     let column = 0;
     let y = pdfBodyStartY(layout);
 
-    state.questions.forEach((question, index) => {
-      const line = `${index + 1}. ${letters[question.ans] || question.ans + 1} - ${question.ansText}`;
+    paperQuestions.forEach((question, index) => {
+      const answerIndex = Number.isInteger(question.pdfAns) ? question.pdfAns : question.ans;
+      const answerText = question.pdfAnsText || question.ansText;
+      const line = `${index + 1}. ${letters[answerIndex] || answerIndex + 1} - ${answerText}`;
       const lines = wrapPdfText(line, columnWidth, 7.4);
       const height = Math.max(1, lines.length) * 8.4 + 3;
       if (y - height < layout.bottom) {
         column += 1;
         if (column >= columns) {
           page = newPage();
-          drawPdfSectionTitle(page, layout, "Answer Key");
+          drawPdfSectionTitle(page, layout, `Answer Key | ${paperCode}`);
           column = 0;
         }
         y = pdfBodyStartY(layout);
@@ -1519,7 +1542,8 @@
   }
 
   function buildPdfOptionLines(question, columnWidth) {
-    const optionTexts = question.opts.map((option, index) => `${letters[index] || index + 1}. ${option}`);
+    const options = question.pdfOpts || question.opts;
+    const optionTexts = options.map((option, index) => `${letters[index] || index + 1}. ${option}`);
     const lines = [];
     const halfWidth = (columnWidth - 10) / 2;
 
