@@ -94,6 +94,8 @@
       font-weight: 900;
     }
 
+    .timer-badge.compact { min-width: 0; }
+
     .qtime-badge {
       display: none;
       min-width: 58px;
@@ -388,6 +390,27 @@
       font-weight: 800;
     }
     .recommended-note.visible { display: block; }
+    .range-control {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    .range-control input[type="range"] {
+      width: 100%;
+      accent-color: #7c3aed;
+    }
+    .range-value {
+      min-width: 62px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: #ffffff;
+      color: #312e81;
+      font-size: 0.86rem;
+      font-weight: 900;
+    }
 
     .quiz-panel {
       padding: 22px;
@@ -702,6 +725,70 @@
     .analysis-actions .primary-button,
     .analysis-actions .secondary-button { margin-top: 0; padding: 11px 10px; font-size: 0.76rem; }
     .analysis-actions button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .analysis-actions .mistake-action {
+      border: 0;
+      background: linear-gradient(135deg, #f97316, #dc2626);
+      color: #ffffff;
+      box-shadow: 0 12px 22px rgba(220, 38, 38, 0.18);
+    }
+    .review-placeholder {
+      padding: 18px 14px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #64748b;
+      text-align: center;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+    .inline-result {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid #bfdbfe;
+      border-radius: 13px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+    .option-button.previous {
+      border-color: #f59e0b;
+      background: #fffbeb;
+      color: #92400e;
+    }
+    .option-button.locked { cursor: default; }
+    .option-note {
+      display: block;
+      grid-column: 2;
+      margin-top: -4px;
+      color: inherit;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+    .app-dialog-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.38);
+    }
+    .app-dialog-backdrop.open { display: flex; }
+    .app-dialog {
+      width: min(100%, 340px);
+      padding: 18px;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 22px 45px rgba(15, 23, 42, 0.22);
+    }
+    .app-dialog-title { font-size: 1rem; font-weight: 850; color: #0f172a; }
+    .app-dialog-message { margin-top: 7px; color: #475569; font-size: 0.84rem; line-height: 1.45; }
+    .app-dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 16px; }
+    .app-dialog-actions.single { grid-template-columns: 1fr; }
+    .app-dialog-actions .primary-button,
+    .app-dialog-actions .secondary-button { margin-top: 0; padding: 11px 12px; }
     .palette-backdrop {
       position: absolute;
       inset: 0;
@@ -797,6 +884,7 @@
         <span class="mode-label" id="mode-display">Rapid Fire</span>
       </div>
       <div class="top-actions">
+        <div class="timer-badge compact" id="timer-badge"><span id="timer">20s</span></div>
         <button class="palette-toggle" id="palette-toggle" type="button" aria-label="Open question palette">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
             <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
@@ -807,7 +895,6 @@
           <span>Question Palette</span>
         </button>
         <div class="qtime-badge" id="qtime-badge" aria-live="polite">0s</div>
-        <div class="timer-badge" id="timer-badge"><span id="timer">20s</span></div>
       </div>
     </div>
 
@@ -880,10 +967,9 @@
               <span>Questions</span>
               <span class="pro-muted"><span id="pro-total-value">0</span> available</span>
             </div>
-            <div class="stepper">
-              <button id="pro-count-minus" type="button" aria-label="Decrease question count">-</button>
-              <div class="stepper-value"><span id="pro-count-value">0</span> Qs</div>
-              <button id="pro-count-plus" type="button" aria-label="Increase question count">+</button>
+            <div class="range-control">
+              <input id="pro-count-slider" type="range" min="1" max="1" value="1" aria-label="Select question count">
+              <div class="range-value"><span id="pro-count-value">0</span> Qs</div>
             </div>
           </div>
           <div class="pro-row">
@@ -1002,6 +1088,17 @@
         <button class="primary-button" id="palette-submit" type="button">Submit Test</button>
       </div>
     </aside>
+
+    <div class="app-dialog-backdrop" id="app-dialog" aria-hidden="true" hidden>
+      <div class="app-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+        <div class="app-dialog-title" id="dialog-title">Confirm</div>
+        <div class="app-dialog-message" id="dialog-message"></div>
+        <div class="app-dialog-actions" id="dialog-actions">
+          <button class="secondary-button" id="dialog-cancel" type="button">Cancel</button>
+          <button class="primary-button" id="dialog-confirm" type="button">Continue</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script src="scripts/quiz-app.js"></script>

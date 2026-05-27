@@ -57,6 +57,11 @@
     reviewParentAttempt: null,
     reviewSessionType: "",
     reviewSessionResult: null,
+    revealedAnswers: [],
+    currentView: "loading",
+    historyReady: false,
+    handlingPop: false,
+    dialogResolver: null,
     draft: null,
     pro: {
       count: 1,
@@ -67,14 +72,24 @@
     }
   };
 
-  function showView(name) {
+  function showView(name, options = {}) {
+    const { push = true } = options;
     Object.values(views).forEach(view => { view.hidden = true; });
     views[name].hidden = false;
+    state.currentView = name;
     el("header").hidden = name !== "quiz";
     if (name !== "quiz") {
       closePalette();
       stopClock();
     }
+    if (push && state.historyReady && !state.handlingPop) pushAppHistory(name);
+  }
+
+  function pushAppHistory(name) {
+    const url = new URL(window.location.href);
+    url.hash = name;
+    if (history.state?.appView === name && window.location.hash === `#${name}`) return;
+    history.pushState({ appView: name }, "", url);
   }
 
   function setEmptyState(title, message, emoji = "") {
@@ -204,7 +219,9 @@
     setupPracticePro();
     loadDraft();
     renderResumeCard();
-    showView("start");
+    history.replaceState({ appView: "start" }, "", window.location.pathname + window.location.search + "#start");
+    state.historyReady = true;
+    showView("start", { push: false });
   }
 
   function leaderboardKey() {
@@ -331,9 +348,13 @@
     beginQuizView(false);
   }
 
-  function discardDraft() {
+  async function discardDraft() {
     if (!state.draft) return;
-    if (!confirm("Discard the saved in-progress test?")) return;
+    if (!await appConfirm({
+      title: "Discard saved test?",
+      message: "Your saved progress for this quiz will be removed.",
+      confirmText: "Discard"
+    })) return;
     clearDraft();
   }
 
@@ -426,18 +447,25 @@
     });
   }
 
-  function clearLeaderboard() {
+  async function clearLeaderboard() {
     if (!state.leaderboard.length) return;
-    if (!confirm("Clear history for this quiz?")) return;
+    if (!await appConfirm({
+      title: "Clear leaderboard?",
+      message: "This will remove saved attempts for this quiz on this device.",
+      confirmText: "Clear"
+    })) return;
     state.leaderboard = [];
     saveLeaderboard();
     renderLeaderboard();
   }
 
-  function goToModeSelection() {
+  async function goToModeSelection() {
     state.userName = normalizeText(el("username").value);
     if (!state.userName) {
-      alert("Please enter your name");
+      await appAlert({
+        title: "Enter your name",
+        message: "Add a name before choosing a test mode."
+      });
       return;
     }
     el("timer-panel").classList.remove("open");
@@ -522,6 +550,9 @@
 
     el("pro-total-value").textContent = maxCount;
     el("pro-count-value").textContent = state.pro.count;
+    const slider = el("pro-count-slider");
+    slider.max = String(maxCount);
+    slider.value = String(state.pro.count);
     el("pro-timer-value").textContent = state.pro.timerMinutes;
     el("pro-recommended-note").classList.toggle("visible", state.pro.timerMinutes === state.pro.recommendedMinutes);
     el("pro-level-note").textContent = hasLevels ? "Choose level" : "No level data";
@@ -535,10 +566,10 @@
     });
   }
 
-  function changeProCount(delta) {
+  function setProCount(value) {
     const maxCount = Math.max(1, practiceProPool().length || state.questions.length);
     const oldRecommended = state.pro.recommendedMinutes;
-    state.pro.count = clamp(state.pro.count + delta, 1, maxCount);
+    state.pro.count = clamp(Number(value || 1), 1, maxCount);
     state.pro.recommendedMinutes = recommendedMinutes(state.pro.count);
     if (!state.pro.timerTouched || state.pro.timerMinutes === oldRecommended) {
       state.pro.timerMinutes = state.pro.recommendedMinutes;
@@ -582,7 +613,10 @@
       : selectQuestionSet(mode, config);
 
     if (!source.length) {
-      alert("No questions are available for this setup.");
+      appAlert({
+        title: "No questions available",
+        message: "This setup does not have any questions yet."
+      });
       return;
     }
 
@@ -596,6 +630,7 @@
     state.markedForReview = Array(source.length).fill(false);
     state.questionVisited = Array(source.length).fill(false);
     state.questionTimes = Array(source.length).fill(0);
+    state.revealedAnswers = Array(source.length).fill(false);
     state.timeLeft = Number(config.rapidSeconds || state.rapidSeconds || defaultTimePerQuestion);
     state.rapidSeconds = Number(config.rapidSeconds || state.rapidSeconds || defaultTimePerQuestion);
     state.totalSeconds = mode === modes.pro ? Math.max(60, Number(config.timerMinutes || 1) * 60) : 0;
@@ -639,7 +674,7 @@
   }
 
   function isPerQuestionTimingMode() {
-    return isPracticeLike();
+    return [modes.practice, modes.pro, modes.reattempt].includes(state.mode);
   }
 
   function stopClock() {
@@ -769,6 +804,14 @@
       button.type = "button";
 
       if (isPracticeLike() && selected === index) button.classList.add("selected");
+      if (state.mode === modes.mistakes && state.revealedAnswers[state.currentIdx]) {
+        button.disabled = true;
+        button.classList.add("locked");
+        const previous = question.previousAnswer;
+        if (index === question.ans) button.classList.add("correct");
+        if (index === selected && selected !== question.ans) button.classList.add("wrong");
+        if (!unanswered(previous) && index === previous && index !== selected && index !== question.ans) button.classList.add("previous");
+      }
       if (state.mode === modes.rapid && !unanswered(selected)) {
         button.disabled = true;
         if (index === question.ans) button.classList.add("correct");
@@ -781,9 +824,22 @@
       const text = document.createElement("span");
       text.textContent = option;
       button.append(letter, text);
+      if (state.mode === modes.mistakes && state.revealedAnswers[state.currentIdx]) {
+        const note = mistakeOptionNote(question, index, selected);
+        if (note) {
+          const noteEl = document.createElement("span");
+          noteEl.className = "option-note";
+          noteEl.textContent = note;
+          button.append(noteEl);
+        }
+      }
       button.addEventListener("click", () => chooseAnswer(index));
       container.append(button);
     });
+
+    const oldResult = document.querySelector(".inline-result");
+    if (oldResult) oldResult.remove();
+    if (state.mode === modes.mistakes) renderInlineMistakeScore();
 
     const rapidRow = el("rapid-row");
     rapidRow.hidden = state.mode !== modes.rapid;
@@ -797,6 +853,15 @@
 
   function chooseAnswer(index) {
     const selected = state.userAnswers[state.currentIdx];
+    if (state.mode === modes.mistakes) {
+      if (state.revealedAnswers[state.currentIdx]) return;
+      state.userAnswers[state.currentIdx] = index;
+      state.questionVisited[state.currentIdx] = true;
+      state.revealedAnswers[state.currentIdx] = true;
+      renderQuestion();
+      return;
+    }
+
     if (state.mode === modes.rapid) {
       if (!unanswered(selected)) return;
       state.userAnswers[state.currentIdx] = index;
@@ -812,6 +877,26 @@
     state.questionVisited[state.currentIdx] = true;
     renderQuestion();
     saveDraft();
+  }
+
+  function mistakeOptionNote(question, index, selected) {
+    const previous = question.previousAnswer;
+    const notes = [];
+    if (!unanswered(previous) && index === previous) notes.push("Previously chosen");
+    if (index === question.ans) notes.push("Correct answer");
+    if (index === selected && selected !== question.ans) notes.push("Your new wrong answer");
+    if (index === selected && selected === question.ans) notes.push("Your new correct answer");
+    return notes.join(" | ");
+  }
+
+  function renderInlineMistakeScore() {
+    const panel = document.createElement("div");
+    panel.className = "inline-result";
+    const answered = state.userAnswers.filter(answer => !unanswered(answer)).length;
+    const correct = state.activeQ.reduce((sum, question, index) => sum + (state.userAnswers[index] === question.ans ? 1 : 0), 0);
+    const wrong = answered - correct;
+    panel.textContent = `Mistake Practice: ${correct} correct, ${wrong} wrong, ${state.activeQ.length - answered} left`;
+    el("quiz-view").querySelector(".quiz-panel").append(panel);
   }
 
   function unanswered(answer) {
@@ -858,9 +943,13 @@
     enterQuestion(state.currentIdx + 1);
   }
 
-  function submitPractice() {
+  async function submitPractice() {
     const skipped = state.userAnswers.filter(unanswered).length;
-    if (skipped && !confirm(`${skipped} questions are unanswered. Submit anyway?`)) return;
+    if (skipped && !await appConfirm({
+      title: "Submit test?",
+      message: `${skipped} questions are still unanswered. Submit anyway?`,
+      confirmText: "Submit"
+    })) return;
     finishAttempt();
   }
 
@@ -1085,7 +1174,12 @@
       fragment.append(createAnalysisDashboard(attempt, items, counts, accuracy));
     }
 
-    if (!visibleItems.length) {
+    if (filter === "all") {
+      const placeholder = document.createElement("div");
+      placeholder.className = "review-placeholder";
+      placeholder.textContent = "Detailed improvement sections will appear here soon. Use the filters above when you want to inspect Correct, Wrong, or Skipped questions.";
+      fragment.append(placeholder);
+    } else if (!visibleItems.length) {
       const empty = document.createElement("p");
       empty.className = "empty-note";
       empty.textContent = `No ${filter} questions.`;
@@ -1106,9 +1200,6 @@
     const weaknessCount = counts.wrong + counts.skipped;
     const times = items.map(item => Number(item.timeSpent || 0)).filter(Boolean);
     const averageTime = times.length ? Math.round(times.reduce((sum, value) => sum + value, 0) / times.length) : 0;
-    const fast = times.filter(value => value <= 25).length;
-    const medium = times.filter(value => value > 25 && value <= 45).length;
-    const slow = times.filter(value => value > 45).length;
 
     const card = document.createElement("article");
     card.className = "analysis-card";
@@ -1157,20 +1248,6 @@
     });
     card.append(metrics);
 
-    if (times.length) {
-      const timing = document.createElement("div");
-      timing.className = "weakness-box";
-      timing.textContent = `Speed split: ${fast} fast (0-25s), ${medium} steady (26-45s), ${slow} slow (46s+). Use slow questions for revision first.`;
-      card.append(timing);
-    }
-
-    const weakness = document.createElement("div");
-    weakness.className = "weakness-box";
-    weakness.textContent = weaknessCount
-      ? `${weaknessCount} questions need attention. Practice Mistakes creates a no-timer set from your wrong and skipped questions without changing leaderboard rank.`
-      : "No wrong or skipped questions in this attempt. Reattempt the same set if you want to check consistency.";
-    card.append(weakness);
-
     if (state.reviewSessionResult && state.reviewSessionResult.parentId === attempt.id) {
       const follow = document.createElement("div");
       follow.className = "followup-box";
@@ -1183,7 +1260,7 @@
     const actions = document.createElement("div");
     actions.className = "analysis-actions";
     const mistakeButton = document.createElement("button");
-    mistakeButton.className = "secondary-button";
+    mistakeButton.className = "secondary-button mistake-action";
     mistakeButton.type = "button";
     mistakeButton.textContent = "Practice Mistakes";
     mistakeButton.disabled = weaknessCount === 0;
@@ -1294,7 +1371,10 @@
       : getAttemptItems(parent);
     if (!sourceItems.length) return;
     state.userName = parent.name || state.userName || "Player";
-    const sourceQuestions = sourceItems.map(item => cloneQuestion(item.question));
+    const sourceQuestions = sourceItems.map(item => ({
+      ...cloneQuestion(item.question),
+      previousAnswer: item.answer
+    }));
     createAttempt(type === "reattempt" ? modes.reattempt : modes.mistakes, {
       sourceQuestions,
       saveToLeaderboard: false,
@@ -1307,6 +1387,78 @@
     el("username").value = "";
     state.userName = "";
     showView("start");
+  }
+
+  function appConfirm({ title = "Confirm", message = "", confirmText = "Continue", cancelText = "Cancel" } = {}) {
+    return new Promise(resolve => {
+      openDialog({ title, message, confirmText, cancelText, single: false, resolve });
+    });
+  }
+
+  function appAlert({ title = "Notice", message = "", confirmText = "OK" } = {}) {
+    return new Promise(resolve => {
+      openDialog({ title, message, confirmText, cancelText: "", single: true, resolve: () => resolve(true) });
+    });
+  }
+
+  function openDialog({ title, message, confirmText, cancelText, single, resolve }) {
+    const dialog = el("app-dialog");
+    state.dialogResolver = resolve;
+    el("dialog-title").textContent = title;
+    el("dialog-message").textContent = message;
+    el("dialog-confirm").textContent = confirmText;
+    el("dialog-cancel").textContent = cancelText;
+    el("dialog-cancel").hidden = Boolean(single);
+    el("dialog-actions").classList.toggle("single", Boolean(single));
+    dialog.hidden = false;
+    dialog.classList.add("open");
+    dialog.setAttribute("aria-hidden", "false");
+    el("dialog-confirm").focus();
+  }
+
+  function closeDialog(value) {
+    const dialog = el("app-dialog");
+    dialog.classList.remove("open");
+    dialog.hidden = true;
+    dialog.setAttribute("aria-hidden", "true");
+    const resolver = state.dialogResolver;
+    state.dialogResolver = null;
+    if (resolver) resolver(Boolean(value));
+  }
+
+  async function handleBrowserBack() {
+    if (!state.historyReady) return;
+    state.handlingPop = true;
+
+    if (state.currentView === "quiz") {
+      const leave = await appConfirm({
+        title: "Leave this test?",
+        message: isMainMode() ? "Your progress is saved. You can resume this test from the quiz page." : "This practice session result will not be saved.",
+        confirmText: "Leave test"
+      });
+      if (leave) {
+        if (isMainMode()) saveDraft();
+        showView(state.reviewParentAttempt ? "review" : "start", { push: false });
+      } else {
+        pushAppHistory("quiz");
+      }
+      state.handlingPop = false;
+      return;
+    }
+
+    if (state.currentView === "review") {
+      showView(state.reviewReturnView || "start", { push: false });
+      state.handlingPop = false;
+      return;
+    }
+
+    if (state.currentView === "mode" || state.currentView === "result") {
+      showView("start", { push: false });
+      state.handlingPop = false;
+      return;
+    }
+
+    state.handlingPop = false;
   }
 
   function attachEvents() {
@@ -1333,8 +1485,7 @@
       el("pro-panel").classList.toggle("open");
       renderPracticeProSetup();
     });
-    el("pro-count-minus").addEventListener("click", () => changeProCount(-1));
-    el("pro-count-plus").addEventListener("click", () => changeProCount(1));
+    el("pro-count-slider").addEventListener("input", event => setProCount(event.target.value));
     el("pro-timer-minus").addEventListener("click", () => changeProTimer(-1));
     el("pro-timer-plus").addEventListener("click", () => changeProTimer(1));
     el("pro-level-grid").addEventListener("click", event => {
@@ -1375,6 +1526,11 @@
       const button = event.target.closest(".filter-button");
       if (!button || !state.currentReviewAttempt) return;
       renderReview(state.currentReviewAttempt, state.reviewReturnView, button.dataset.filter || "all");
+    });
+    el("dialog-confirm").addEventListener("click", () => closeDialog(true));
+    el("dialog-cancel").addEventListener("click", () => closeDialog(false));
+    window.addEventListener("popstate", () => {
+      handleBrowserBack();
     });
   }
 
