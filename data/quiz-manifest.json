@@ -1,6 +1,16 @@
 {
   "quizzes": [
     {
+      "id": "history-of-constitution-dev-1",
+      "title": "History before Constitution",
+      "subject": "Polity",
+      "subjectKey": "polity",
+      "emoji": "📖",
+      "published": "2026-05-27",
+      "questionCount": 121,
+      "file": "data/quizzes/History-of-constitution-dev-1.json"
+    },
+    {
       "id": "ramsar-sites-99",
       "title": "Ramsar Sites 99",
       "subject": "Static GK & CA",
