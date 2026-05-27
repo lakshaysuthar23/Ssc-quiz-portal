@@ -91,7 +91,6 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      gap: 8px;
       aspect-ratio: 3 / 4;
       overflow: hidden;
       border: 1px solid var(--border-color);
@@ -120,17 +119,6 @@
     }
     .subject-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 24px rgba(15, 23, 42, 0.13); }
     .subject-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent), 0 12px 24px rgba(15, 23, 42, 0.15); }
-    .subject-icon {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 9px;
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
-      backdrop-filter: blur(5px);
-    }
-    .subject-icon svg { width: 19px; height: 19px; stroke-width: 2; }
     .subject-copy { display: block; min-width: 0; text-shadow: 0 1px 8px rgba(15, 23, 42, 0.45); }
     .subject-name { display: block; font-size: 0.82rem; font-weight: 800; line-height: 1.12; overflow-wrap: anywhere; }
     .subject-count { display: block; margin-top: 3px; color: rgba(255, 255, 255, 0.84); font-size: 0.68rem; font-weight: 700; line-height: 1.15; }
@@ -202,8 +190,6 @@
       .stat-card { padding: 10px 6px; }
       .subject-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
       .subject-card { border-radius: 10px; padding: 8px; }
-      .subject-icon { width: 28px; height: 28px; border-radius: 8px; }
-      .subject-icon svg { width: 16px; height: 16px; }
       .subject-name { font-size: 0.72rem; }
       .subject-count { font-size: 0.58rem; }
       .quiz-grid { grid-template-columns: 1fr; }
@@ -270,17 +256,6 @@
       default: { accent: "#2563eb", bg: "#eff6ff", text: "#1d4ed8" }
     };
 
-    const subjectIcons = {
-      history: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z"></path></svg>',
-      polity: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M5 21V9l7-5 7 5v12"></path><path d="M9 21v-7h6v7"></path></svg>',
-      economy: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16l3-4 3 2 5-7"></path></svg>',
-      chemistry: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 2h6"></path><path d="M10 2v6l-5 9a3 3 0 002.6 4.5h8.8A3 3 0 0019 17l-5-9V2"></path><path d="M7.5 15h9"></path></svg>',
-      physics: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.8"></circle><path d="M4.5 12c0-2.5 3.4-4.5 7.5-4.5s7.5 2 7.5 4.5-3.4 4.5-7.5 4.5-7.5-2-7.5-4.5z"></path><path d="M8.25 5.5c2.15-1.25 5.12.7 7.17 4.25s2.25 7.1.1 8.34-5.12-.7-7.17-4.25-2.25-7.1-.1-8.34z"></path><path d="M15.75 5.5c-2.15-1.25-5.12.7-7.17 4.25s-2.25 7.1-.1 8.34 5.12-.7 7.17-4.25 2.25-7.1.1-8.34z"></path></svg>',
-      static: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3.6 9h16.8"></path><path d="M3.6 15h16.8"></path><path d="M12 3a14 14 0 010 18"></path><path d="M12 3a14 14 0 000 18"></path></svg>',
-      "static-gk-ca": '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3.6 9h16.8"></path><path d="M3.6 15h16.8"></path><path d="M12 3a14 14 0 010 18"></path><path d="M12 3a14 14 0 000 18"></path></svg>',
-      default: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 3l8 4.5-8 4.5-8-4.5L12 3z"></path><path d="M4 12l8 4.5 8-4.5"></path><path d="M4 16.5l8 4.5 8-4.5"></path></svg>'
-    };
-
     const quizContainer = document.getElementById("quiz-container");
     const subjectGrid = document.getElementById("subject-grid");
     const clearSubjectFilter = document.getElementById("clear-subject-filter");
@@ -316,10 +291,6 @@
     function styleForSubject(quiz) {
       const key = quiz.subjectKey || slugify(quiz.subject) || "default";
       return subjectStyles[key] || colorForSubject(key);
-    }
-
-    function iconForSubject(key) {
-      return subjectIcons[key] || subjectIcons.default;
     }
 
     function coverForSubject(key) {
@@ -377,7 +348,6 @@
         const cover = coverForSubject(subject.key);
         return `
           <button class="subject-card${activeClass}" type="button" data-subject="${escapeHtml(subject.key)}" style="--accent:${style.accent};--tile-bg:${style.bg};--subject-image:url('${escapeHtml(cover)}');">
-            <span class="subject-icon" aria-hidden="true">${iconForSubject(subject.key)}</span>
             <span class="subject-copy">
               <span class="subject-name">${escapeHtml(subject.subject)}</span>
               <span class="subject-count">${subject.count} quizzes | ${subject.questions} Qs</span>
