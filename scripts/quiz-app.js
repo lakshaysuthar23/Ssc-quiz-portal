@@ -904,11 +904,10 @@
 
   function mistakeOptionNote(question, index, selected) {
     const previous = question.previousAnswer;
-    const notes = [];
-    if (index === question.ans) notes.push("Correct answer");
-    if (index === selected) notes.push("Your answer");
-    if (!unanswered(previous) && index === previous && previous !== selected && previous !== question.ans) notes.push("First attempt");
-    return notes.join(" | ");
+    const oldWrong = !unanswered(previous) && previous !== question.ans;
+    const newWrong = !unanswered(selected) && selected !== question.ans;
+    if (oldWrong && newWrong && previous !== selected && index === previous) return "First attempt";
+    return "";
   }
 
   function renderInlineMistakeScore() {
