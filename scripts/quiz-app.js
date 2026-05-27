@@ -905,8 +905,7 @@
   function mistakeOptionNote(question, index, selected) {
     const previous = question.previousAnswer;
     const oldWrong = !unanswered(previous) && previous !== question.ans;
-    const newWrong = !unanswered(selected) && selected !== question.ans;
-    if (oldWrong && newWrong && previous !== selected && index === previous) return "First attempt";
+    if (oldWrong && previous !== selected && index === previous) return "First attempt";
     return "";
   }
 
@@ -1270,14 +1269,15 @@
       const follow = document.createElement("div");
       follow.className = "followup-box";
       const result = state.reviewSessionResult.attempt;
-      if (state.reviewSessionResult.type === "reattempt") {
-        const toggle = document.createElement("button");
-        toggle.className = "followup-toggle";
-        toggle.type = "button";
-        toggle.textContent = "See reattempt score ↓";
-        const panel = document.createElement("div");
-        panel.className = "followup-panel";
-        panel.append(createCompactAnalysis(result, "Reattempt Score Analysis"));
+      const isReattemptResult = state.reviewSessionResult.type === "reattempt";
+      const toggle = document.createElement("button");
+      toggle.className = "followup-toggle";
+      toggle.type = "button";
+      toggle.textContent = isReattemptResult ? "See reattempt score \u2193" : "See practice mistakes score \u2193";
+      const panel = document.createElement("div");
+      panel.className = "followup-panel";
+      panel.append(createCompactAnalysis(result, isReattemptResult ? "Reattempt Score Analysis" : "Practice Mistakes Analysis"));
+      if (isReattemptResult) {
         const resultWeakness = getAttemptItems(result).filter(item => ["wrong", "skipped"].includes(itemStatus(item)));
         if (resultWeakness.length) {
           const textAction = document.createElement("button");
@@ -1287,14 +1287,16 @@
           textAction.addEventListener("click", () => startReviewPractice("quiet-mistakes", result));
           panel.append(textAction);
         }
-        toggle.addEventListener("click", () => {
-          const open = panel.classList.toggle("open");
-          toggle.textContent = open ? "Hide reattempt score ↑" : "See reattempt score ↓";
-        });
-        follow.append(toggle, panel);
-      } else {
-        follow.textContent = `Mistake Practice Score: ${formatScore(result.score)} | Accuracy ${result.accuracy}% | Correct ${result.correct}, Wrong ${result.wrong}, Skipped ${result.skip}`;
       }
+      toggle.addEventListener("click", () => {
+        const open = panel.classList.toggle("open");
+        if (isReattemptResult) {
+          toggle.textContent = open ? "Hide reattempt score \u2191" : "See reattempt score \u2193";
+        } else {
+          toggle.textContent = open ? "Hide practice mistakes score \u2191" : "See practice mistakes score \u2193";
+        }
+      });
+      follow.append(toggle, panel);
       card.append(follow);
     }
 
