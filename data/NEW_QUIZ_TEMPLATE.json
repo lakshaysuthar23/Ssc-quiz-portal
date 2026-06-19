@@ -3,5 +3,8 @@
   "subject": "History",
   "subjectKey": "history",
   "emoji": "",
+  "description": "",
+  "testMinutes": 0,
+  "shuffleQuestions": "yes",
   "questions": []
 }

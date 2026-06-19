@@ -3,6 +3,9 @@
   "subject": "English",
   "subjectKey": "english",
   "emoji": "ENG",
+  "description": "SSC CGL Tier 2 expected questions: Synonyms, Antonyms, One Word Substitution, Spelling Correction, Error Detection, and Reading Comprehension.",
+  "testMinutes": 30,
+  "shuffleQuestions": "no",
   "questions":[
 {"q":"Choose the word that is most similar in meaning to the given word: AGGRANDIZE","tag":"Expected SSC CGL Tier 2","level":"pro","opts":["Alleviate","Ennoble","Belittle","Consolidate"],"ansText":"Ennoble","why":"Aggrandize means to increase the power, status, or wealth of someone/something. 'Ennoble' is its closest synonym."}
 ,{"q":"Choose the word that is most similar in meaning to the given word: ACERBIC","tag":"Expected SSC CGL Tier 2","level":"pro","opts":["Mellifluous","Sardonic","Phlegmatic","Soporific"],"ansText":"Sardonic","why":"Acerbic means sharp, sarcastic, and direct in speaking. 'Sardonic' (grimly mocking or cynical) is the best synonym."}

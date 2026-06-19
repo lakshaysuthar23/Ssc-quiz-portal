@@ -161,6 +161,21 @@
     h1, h2, h3, p { margin: 0; }
     .quiz-title { font-size: 1.55rem; line-height: 1.2; font-weight: 700; color: #1e293b; }
     .quiz-subtitle { margin-top: 10px; color: var(--muted); font-size: 0.9rem; }
+    .quiz-description { margin-top: 8px; color: var(--muted); font-size: 0.8rem; line-height: 1.45; max-width: 340px; margin-left: auto; margin-right: auto; }
+    .test-mode-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 1px solid #fbbf24;
+      color: #92400e;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .test-mode-icon { font-size: 1.1rem; }
     .score-line { margin-top: 4px; font-size: 0.85rem; color: var(--muted); }
     .score-line strong:first-child { color: var(--green); }
     .score-line strong:last-child { color: var(--red); }
@@ -952,7 +967,12 @@
         <div class="quiz-emoji" id="quiz-emoji"></div>
         <h1 class="quiz-title" id="quiz-title">Quiz</h1>
         <p class="quiz-subtitle" id="quiz-meta">0 Quality Qs</p>
+        <p class="quiz-description" id="quiz-description" hidden></p>
         <p class="score-line"><strong>+1.0</strong> correct | <strong>-0.25</strong> wrong</p>
+        <div class="test-mode-info" id="test-mode-info" hidden>
+          <span class="test-mode-icon">⏱</span>
+          <span>Fixed Time Test — <strong id="test-mode-minutes">0</strong> minutes</span>
+        </div>
         <input class="name-input" type="text" id="username" placeholder="Enter Name" autocomplete="name">
         <button class="primary-button" id="continue-btn" type="button">Continue</button>
         <div class="resume-card" id="resume-card" hidden>

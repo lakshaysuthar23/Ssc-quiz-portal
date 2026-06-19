@@ -13,6 +13,7 @@
     rapid: "rapid",
     practice: "practice",
     pro: "practice-pro",
+    test: "test",
     mistakes: "mistake-practice",
     reattempt: "reattempt"
   };
@@ -209,6 +210,24 @@
     el("quiz-meta").textContent = `${visibleCount} Quality Qs | ${state.quiz.subject}`;
     el("total-q-num").textContent = state.questions.length;
 
+    const descriptionEl = el("quiz-description");
+    if (state.quiz.description) {
+      descriptionEl.textContent = state.quiz.description;
+      descriptionEl.hidden = false;
+    } else {
+      descriptionEl.hidden = true;
+    }
+
+    const testInfoEl = el("test-mode-info");
+    if (isTestMode()) {
+      el("test-mode-minutes").textContent = state.quiz.testMinutes;
+      testInfoEl.hidden = false;
+      el("continue-btn").textContent = "Start Test";
+    } else {
+      testInfoEl.hidden = true;
+      el("continue-btn").textContent = "Continue";
+    }
+
     loadLeaderboard();
 
     if (!state.questions.length) {
@@ -376,12 +395,14 @@
   function modeIcon(value) {
     if (value === modes.rapid) return "&#128293;";
     if (value === modes.pro) return '<span class="mode-pro-icon" title="Practice Pro">&#x2726;</span>';
+    if (value === modes.test) return "&#9201;";
     return "&#128218;";
   }
 
   function modeDisplayName(value) {
     if (value === modes.rapid) return "Rapid Fire";
     if (value === modes.pro) return "Practice Pro";
+    if (value === modes.test) return "Test Mode";
     if (value === modes.mistakes) return "Mistake Practice";
     if (value === modes.reattempt) return "Reattempt";
     return "Practice";
@@ -464,10 +485,24 @@
     if (!state.userName) {
       await appAlert({
         title: "Enter your name",
-        message: "Add a name before choosing a test mode."
+        message: "Add a name before starting."
       });
       return;
     }
+
+    if (isTestMode()) {
+      const minutes = Number(state.quiz.testMinutes);
+      const shouldStart = await appConfirm({
+        title: `${state.quiz.title}`,
+        message: `${state.questions.length} questions, ${minutes} minute${minutes !== 1 ? "s" : ""}. Your score will be saved to the leaderboard.`,
+        confirmText: "Start Test",
+        cancelText: "Cancel"
+      });
+      if (!shouldStart) return;
+      createAttempt(modes.test, { timerMinutes: minutes });
+      return;
+    }
+
     el("timer-panel").classList.remove("open");
     el("pro-panel").classList.remove("open");
     showView("mode");
@@ -600,11 +635,17 @@
   }
 
   function selectQuestionSet(mode, config = {}) {
+    const shouldShuffle = state.quiz.shuffleQuestions === "no" || state.quiz.shuffleQuestions === false ? false : true;
+    const processPool = (pool) => shouldShuffle ? shuffle([...pool]) : [...pool];
+
     if (mode === modes.pro) {
       const pool = config.level ? state.questions.filter(question => question.level === config.level) : state.questions;
-      return shuffle(pool).slice(0, Math.min(config.count || pool.length, pool.length)).map(question => prepareQuestion(question));
+      return processPool(pool).slice(0, Math.min(config.count || pool.length, pool.length)).map(question => prepareQuestion(question));
     }
-    return shuffle(state.questions).map(question => prepareQuestion(question));
+    if (mode === modes.test) {
+      return processPool(state.questions).map(question => prepareQuestion(question));
+    }
+    return processPool(state.questions).map(question => prepareQuestion(question));
   }
 
   function createAttempt(mode, config = {}) {
@@ -633,7 +674,7 @@
     state.revealedAnswers = Array(source.length).fill(false);
     state.timeLeft = Number(config.rapidSeconds || state.rapidSeconds || defaultTimePerQuestion);
     state.rapidSeconds = Number(config.rapidSeconds || state.rapidSeconds || defaultTimePerQuestion);
-    state.totalSeconds = mode === modes.pro ? Math.max(60, Number(config.timerMinutes || 1) * 60) : 0;
+    state.totalSeconds = (mode === modes.pro || mode === modes.test) ? Math.max(60, Number(config.timerMinutes || 1) * 60) : 0;
     state.totalRemaining = state.totalSeconds;
     state.saveToLeaderboard = config.saveToLeaderboard !== false;
     state.reviewParentAttempt = config.reviewParentAttempt || null;
@@ -656,6 +697,9 @@
   function startSummary(mode, config = {}) {
     if (mode === modes.rapid) {
       return `Rapid Fire will start with ${config.rapidSeconds || state.rapidSeconds}s per question. Answers, skips, and score will be saved to this quiz leaderboard.`;
+    }
+    if (mode === modes.test) {
+      return `Test Mode will start with ${state.questions.length} questions and a ${config.timerMinutes} minute countdown. Your score will be saved to the leaderboard.`;
     }
     if (mode === modes.pro) {
       const levelText = config.level ? `${levelLabels[config.level] || config.level} level` : "all levels";
@@ -685,19 +729,24 @@
 
   function modeTopLabel() {
     if (state.mode === modes.rapid) return `Rapid Fire ${state.rapidSeconds}s`;
+    if (state.mode === modes.test) return `Test ${formatClock(state.totalRemaining)}`;
     return modeDisplayName(state.mode);
   }
 
   function isMainMode() {
-    return [modes.rapid, modes.practice, modes.pro].includes(state.mode);
+    return [modes.rapid, modes.practice, modes.pro, modes.test].includes(state.mode);
   }
 
   function isPracticeLike() {
-    return [modes.practice, modes.pro, modes.mistakes, modes.reattempt].includes(state.mode);
+    return [modes.practice, modes.pro, modes.test, modes.mistakes, modes.reattempt].includes(state.mode);
   }
 
   function isPerQuestionTimingMode() {
-    return [modes.practice, modes.pro, modes.reattempt].includes(state.mode);
+    return [modes.practice, modes.pro, modes.test, modes.reattempt].includes(state.mode);
+  }
+
+  function isTestMode() {
+    return Number(state.quiz?.testMinutes || 0) > 0;
   }
 
   function stopClock() {
@@ -724,7 +773,7 @@
       }
     }
 
-    if (state.mode === modes.pro && state.totalRemaining > 0) {
+    if ((state.mode === modes.pro || state.mode === modes.test) && state.totalRemaining > 0) {
       state.totalRemaining = Math.max(0, state.totalRemaining - 1);
       updateTimerBadge();
       if (state.totalRemaining <= 0) {
@@ -745,7 +794,7 @@
       el("timer").textContent = `${state.timeLeft}s`;
       return;
     }
-    if (state.mode === modes.pro) {
+    if (state.mode === modes.pro || state.mode === modes.test) {
       badge.hidden = false;
       el("timer").textContent = formatClock(state.totalRemaining);
       return;
@@ -1078,6 +1127,9 @@
       practicePro: state.mode === modes.pro ? {
         count: state.config.count,
         level: state.config.level || "",
+        timerMinutes: state.config.timerMinutes
+      } : null,
+      testMode: state.mode === modes.test ? {
         timerMinutes: state.config.timerMinutes
       } : null,
       answers: [...state.userAnswers],

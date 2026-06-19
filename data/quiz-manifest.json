@@ -8,7 +8,9 @@
       "emoji": "ENG",
       "published": "2026-06-19",
       "questionCount": 50,
-      "file": "data/quizzes/english_test_1.json"
+      "file": "data/quizzes/english_test_1.json",
+      "description": "SSC CGL Tier 2 expected questions: Synonyms, Antonyms, One Word Substitution, Spelling Correction, Error Detection, and Reading Comprehension.",
+      "testMinutes": 30
     },
     {
       "id": "parajumbles-2025pyq",

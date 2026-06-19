@@ -77,7 +77,7 @@ for (const file of files) {
     ? questions.length
     : Number.isFinite(declaredCount) ? declaredCount : 0;
 
-  quizzes.push({
+  const entry = {
     id,
     title: quiz.title || titleFromSlug(id),
     subject: quiz.subject || "General",
@@ -86,7 +86,12 @@ for (const file of files) {
     published: quiz.published || previous?.published || today,
     questionCount,
     file: `data/quizzes/${file}`
-  });
+  };
+
+  if (quiz.description) entry.description = quiz.description;
+  if (Number(quiz.testMinutes) > 0) entry.testMinutes = Number(quiz.testMinutes);
+
+  quizzes.push(entry);
 }
 
 quizzes.sort((a, b) => {
