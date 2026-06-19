@@ -1,6 +1,16 @@
 {
   "quizzes": [
     {
+      "id": "english-test-1",
+      "title": "English Test 1",
+      "subject": "English",
+      "subjectKey": "english",
+      "emoji": "ENG",
+      "published": "2026-06-19",
+      "questionCount": 50,
+      "file": "data/quizzes/english_test_1.json"
+    },
+    {
       "id": "parajumbles-2025pyq",
       "title": "Parajumbles",
       "subject": "English",
