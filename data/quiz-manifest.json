@@ -1,6 +1,16 @@
 {
   "quizzes": [
     {
+      "id": "parajumbles-2025pyq",
+      "title": "Parajumbles",
+      "subject": "English",
+      "subjectKey": "english",
+      "emoji": "PQRS",
+      "published": "2026-06-19",
+      "questionCount": 53,
+      "file": "data/quizzes/parajumbles-2025pyq.json"
+    },
+    {
       "id": "history-of-constitution-dev-1",
       "title": "History before Constitution",
       "subject": "Polity",
