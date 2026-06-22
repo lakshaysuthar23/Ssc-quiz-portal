@@ -1,4 +1,12 @@
-[
+{
+  "title": "North India Festivals",
+  "subject": "Statik GK",
+  "subjectKey": "statik",
+  "emoji": "🎎",
+  "description": "",
+  "testMinutes": 0,
+  "shuffleQuestions": "yes",
+  "questions": [
 {"q":"The Hemis Festival, a major cultural event dedicated to Guru Padmasambhava, is predominantly celebrated in which region?","tag":"SSC CGL 2025 PYQ","level":"easy","opts":["Jammu and Kashmir","Ladakh","Himachal Pradesh","Uttarakhand"],"ansText":"Ladakh","why":"Hemis Festival is a colorful Buddhist celebration held at the Hemis Monastery in Ladakh to honor the birth of Guru Padmasambhava."}
 ,{"q":"Which of the following festivals marks the Tibetan New Year and is celebrated with immense fervor in Ladakh?","tag":"SSC CGL 2025 PYQ","level":"moderate","opts":["Dosmoche","Saka Dawa","Losar","Matho Nagrang"],"ansText":"Losar","why":"Losar is a 15-day long festival marking the Ladakhi and Tibetan New Year, involving offering prayers to the deities and lighting holy lamps."}
 ,{"q":"The Sindhu Darshan Festival is held every year on the banks of the Indus River in Ladakh during which full moon?","tag":"Expected SSC CGL 2026","level":"pro","opts":["Sharad Purnima","Kartik Purnima","Buddha Purnima","Guru Purnima"],"ansText":"Guru Purnima","why":"Sindhu Darshan is celebrated on Guru Purnima (usually in June) at Shey Manla in Leh to project the Indus River as a symbol of communal harmony."}
@@ -152,4 +160,4 @@
 ,{"q":"Eduquity Match: Match the UP District with its prominent Fair. A. Agra B. Meerut C. Ballia. 1. Nauchandi Mela 2. Dadri Mela 3. Bateshwar Fair","tag":"Expected SSC CGL 2026","level":"pro","opts":["A-3, B-1, C-2","A-1, B-2, C-3","A-2, B-3, C-1","A-3, B-2, C-1"],"ansText":"A-3, B-1, C-2","why":"Agra hosts the Bateshwar Fair; Meerut hosts the Nauchandi Mela; and Ballia hosts the massive Dadri Cattle Mela."}
 ,{"q":"Eduquity Chronology: Arrange these major UP festivals in chronological order: 1. Lathmar Holi 2. Magh Mela 3. Dev Deepawali","tag":"Expected SSC CGL 2026","level":"pro","opts":["2, 1, 3","1, 2, 3","3, 2, 1","2, 3, 1"],"ansText":"2, 1, 3","why":"Magh Mela is in Jan/Feb (Magh), Lathmar Holi is in March (Phalguna), and Dev Deepawali is in November (Kartik Purnima)."}
 ,{"q":"Eduquity Statement Based: 1. The Desert Festival is held in Jaisalmer. 2. The Camel Festival is held in Bikaner. Which is correct?","tag":"SSC CGL 2025 PYQ","level":"easy","opts":["Only 1","Only 2","Both 1 and 2","Neither 1 nor 2"],"ansText":"Both 1 and 2","why":"Both are correct. Jaisalmer hosts the broader Desert Festival at Sam Sand Dunes, while Bikaner hosts the specialized Camel Festival."}
-]
+]}
