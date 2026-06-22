@@ -1,6 +1,16 @@
 {
   "quizzes": [
     {
+      "id": "gemini-code-1782130164758",
+      "title": "Gemini Code 1782130164758",
+      "subject": "General",
+      "subjectKey": "general",
+      "emoji": "",
+      "published": "2026-06-22",
+      "questionCount": 0,
+      "file": "data/quizzes/gemini-code-1782130164758.json"
+    },
+    {
       "id": "english-test-1",
       "title": "English Test 1",
       "subject": "English",
