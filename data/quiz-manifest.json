@@ -1,14 +1,14 @@
 {
   "quizzes": [
     {
-      "id": "gemini-code-1782130164758",
-      "title": "Gemini Code 1782130164758",
-      "subject": "General",
-      "subjectKey": "general",
-      "emoji": "",
+      "id": "north-india-festival",
+      "title": "North India Festivals",
+      "subject": "Statik GK",
+      "subjectKey": "statik",
+      "emoji": "🎎",
       "published": "2026-06-22",
-      "questionCount": 0,
-      "file": "data/quizzes/gemini-code-1782130164758.json"
+      "questionCount": 153,
+      "file": "data/quizzes/North-india-festival.json"
     },
     {
       "id": "english-test-1",
